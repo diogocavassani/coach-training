@@ -14,7 +14,6 @@ public class HealthCheckController : ControllerBase
     /// </summary>
     /// <returns>A health status response with timestamp.</returns>
     [HttpGet]
-    [ProduceResponseType(StatusCodes.Status200OK)]
     public IActionResult Get()
     {
         return Ok(new
