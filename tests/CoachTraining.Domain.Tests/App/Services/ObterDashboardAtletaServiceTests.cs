@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using CoachTraining.App.DTOs;
 using CoachTraining.App.Services;
 using CoachTraining.Domain.Entities;
 using CoachTraining.Domain.Enums;
-using CoachTraining.Domain.Services;
 using CoachTraining.Domain.ValueObjects;
-using Xunit;
 
 namespace CoachTraining.Tests.App.Services;
 
@@ -24,7 +19,7 @@ public class ObterDashboardAtletaServiceTests
     {
         var atleta = new Atleta("João Silva");
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
-        
+
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(hoje.AddDays(-3), TipoDeTreino.Leve, 60, 5.0, new RPE(5)),
@@ -46,7 +41,7 @@ public class ObterDashboardAtletaServiceTests
     {
         var atleta = new Atleta("Maria Santos");
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
-        
+
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(hoje.AddDays(-6), TipoDeTreino.Leve, 60, 5.0, new RPE(4)),
@@ -69,7 +64,7 @@ public class ObterDashboardAtletaServiceTests
     {
         var atleta = new Atleta("Pedro Costa");
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
-        
+
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(hoje.AddDays(-3), TipoDeTreino.Intervalado, 120, 10.0, new RPE(9)),
@@ -106,7 +101,7 @@ public class ObterDashboardAtletaServiceTests
         var atleta = new Atleta("Carlos Mendes");
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var prova = new ProvaAlvo(hoje.AddDays(10), 42.0, "Maratona teste");
-        
+
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(hoje.AddDays(-7), TipoDeTreino.Longo, 180, 20.0, new RPE(7)),
@@ -132,7 +127,7 @@ public class ObterDashboardAtletaServiceTests
     {
         var atleta = new Atleta("Fabiana Oliveira");
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
-        
+
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(hoje.AddDays(-30), TipoDeTreino.Leve, 60, 5.0, new RPE(4)),
@@ -156,7 +151,7 @@ public class ObterDashboardAtletaServiceTests
     {
         var atleta = new Atleta("Roberto Silva");
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
-        
+
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(hoje.AddDays(-14), TipoDeTreino.Leve, 45, 5.0, new RPE(3)),
@@ -180,10 +175,10 @@ public class ObterDashboardAtletaServiceTests
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(
-                DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1), 
-                TipoDeTreino.Leve, 
-                60, 
-                5.0, 
+                DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
+                TipoDeTreino.Leve,
+                60,
+                5.0,
                 new RPE(4))
         };
 
@@ -201,10 +196,10 @@ public class ObterDashboardAtletaServiceTests
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(
-                DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1), 
-                TipoDeTreino.Ritmo, 
-                90, 
-                5.0, 
+                DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
+                TipoDeTreino.Ritmo,
+                90,
+                5.0,
                 new RPE(6))
         };
 
