@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -26,6 +26,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CoachTraining.App\CoachTraining.App.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Domain\\**\\*.cs" />
+    <Compile Include="App\\**\\*.cs" />
   </ItemGroup>
 
 </Project>
