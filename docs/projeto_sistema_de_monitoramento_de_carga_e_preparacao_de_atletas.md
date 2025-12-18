@@ -104,8 +104,8 @@ Carga semanal = Soma das cargas dos treinos da semana
 
 ### 6.3 Carga crônica
 
-Carga crônica = Média da carga semanal das últimas 4 semanas
-
+Carga crônica = Média da carga semanal das últimas 4 semanas COMPLETAS
+- Caso não tenha 4 semanas a carga é zerada.
 ---
 
 ### 6.4 Carga aguda
