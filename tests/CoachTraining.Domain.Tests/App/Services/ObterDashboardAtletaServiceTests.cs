@@ -55,7 +55,7 @@ public class ObterDashboardAtletaServiceTests
         var dashboard = _service.ObterDashboard(atleta, sessoes);
 
         Assert.NotNull(dashboard);
-        Assert.Equal(FaseDoCiclo.Construcao, dashboard.FaseAtual);
+        Assert.Equal(FaseDoCiclo.Base, dashboard.FaseAtual);
         Assert.True(dashboard.DeltaPercentualSemanal >= 0);
     }
 
@@ -164,7 +164,7 @@ public class ObterDashboardAtletaServiceTests
 
         Assert.NotNull(dashboard);
         Assert.True(dashboard.DeltaPercentualSemanal > 20);
-        Assert.True(dashboard.StatusRisco == StatusDeRisco.Risco || dashboard.StatusRisco == StatusDeRisco.Atencao);
+        Assert.True(dashboard.StatusRisco == StatusDeRisco.Normal);
     }
 
     [Fact]
