@@ -13,9 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachTraining.Infra", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachTraining.Domain.Tests", "tests\CoachTraining.Domain.Tests\CoachTraining.Domain.Tests.csproj", "{1A7F9952-EB5C-46A6-9B10-6405D231E185}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachTraining.Tests", "tests\CoachTraining.Domain.Tests\CoachTraining.Tests.csproj", "{1A7F9952-EB5C-46A6-9B10-6405D231E185}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

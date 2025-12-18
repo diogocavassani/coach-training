@@ -4,7 +4,7 @@ using CoachTraining.Domain.Services;
 using CoachTraining.Domain.ValueObjects;
 using Xunit;
 
-namespace CoachTraining.Domain.Tests;
+namespace CoachTraining.Tests.Domain.Services;
 
 public class AvaliadorDeRiscoTests
 {

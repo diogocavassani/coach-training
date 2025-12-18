@@ -63,6 +63,12 @@ public class AvaliadorDeRisco
     /// </summary>
     public static StatusDeRisco AvaliarRiscoCombinado(double acwr, double deltaPercentual)
     {
+        // Se não há carga crônica calculável (divisão por zero -> ACWR = +Infinity),
+        // significa que não há dados suficientes (ex.: menos de 4 semanas de treino)
+        // e, por regra, o status deve ser considerado Normal.
+        if (double.IsInfinity(acwr))
+            return StatusDeRisco.Normal;
+
         var riscoAcwr = AvaliarRiscoAcwr(acwr);
         var riscoProgressao = AvaliarRiscoProgressao(deltaPercentual);
 

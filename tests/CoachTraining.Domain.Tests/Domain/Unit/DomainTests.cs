@@ -1,19 +1,10 @@
-﻿using System;
+using System;
 using Xunit;
 using CoachTraining.Domain.ValueObjects;
 using CoachTraining.Domain.Entities;
 using CoachTraining.Domain.Enums;
 
-namespace CoachTraining.Domain.Tests;
-
-public class UnitTest1
-{
-        [Fact]
-        public void Test1()
-        {
-    
-        }
-    }
+namespace CoachTraining.Tests.Domain.Unit;
 
 public class DomainTests
 {

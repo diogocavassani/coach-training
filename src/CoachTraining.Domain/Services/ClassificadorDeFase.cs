@@ -17,6 +17,12 @@ public class ClassificadorDeFase
     private const double TaperReductionMin = 0.4;
     private const double TaperReductionMax = 0.6;
 
+    private const double LimiarCargaRelativaPico = 1.15;
+    private const double LimiarCargaAbsolutaElevada = 1000;
+    private const double LimiarReducaoCargaRelativa = 0.85;
+    private const double LimiarTendenciaCrescente = 0.10;
+    private const int MinimoSessoesParaTendencia = 3;
+
     /// <summary>
     /// Classifica a fase do treinamento baseado na tendência de carga
     /// Base: carga estável ou abaixo da média
@@ -26,32 +32,51 @@ public class ClassificadorDeFase
     /// </summary>
     public static FaseDoCiclo ClassificarFase(IEnumerable<CargaTreino> cargas, DateOnly referencia, ProvaAlvo? prova = null)
     {
+        // Sem dados suficientes para inferir tendência fisiológica,
+        // assume fase Base por segurança (regra conservadora)
         var cargasList = cargas.ToList();
         if (cargasList.Count < 2)
             return FaseDoCiclo.Base; // default if insufficient data
 
-        // Average of last 4 weeks
-        var mediaCarga = cargasList.TakeLast(Math.Min(4, cargasList.Count)).Average(c => c.Valor);
+        // Média das cargas recentes (janela móvel, até 4 períodos disponíveis)
+        // Usada como referência relativa para comparação da carga atual
+        var mediaCarga = cargasList
+            .TakeLast(Math.Min(4, cargasList.Count))
+            .Average(c => c.Valor);
         var ultimaCarga = cargasList.Last().Valor;
 
-        // If there's a target event, check if we're in taper window
+        // Se houver prova alvo e estivermos na janela pré-prova,
+        // assume fase de Polimento (taper), independentemente da tendência
         if (prova != null && IsInTaperWindow(referencia, prova.DataProva))
         {
             return FaseDoCiclo.Polimento;
         }
 
-        // Classify based on trend
-        if (ultimaCarga > mediaCarga * 1.15) // sustained high load
+
+        // Classificação baseada na relação da carga atual
+        // com a média recente (heurística fisiológica)
+
+        // Carga atual significativamente acima da média recente
+        // indica período de carga elevada sustentada (Pico)
+        if (ultimaCarga > mediaCarga * LimiarCargaRelativaPico) 
             return FaseDoCiclo.Pico;
 
-        if (ultimaCarga < mediaCarga * 0.85) // reduced load
+        // Pico por carga elevada sustentada (mesmo sem última sessão extrema)
+        if (cargasList.Count >= 3 && ultimaCarga > LimiarCargaAbsolutaElevada)
+            return FaseDoCiclo.Pico;
+
+        // Carga atual significativamente abaixo da média recente
+        // indica redução de carga ou estabilização (Base)
+        if (ultimaCarga < mediaCarga * LimiarReducaoCargaRelativa) 
             return FaseDoCiclo.Base;
 
-        // Check if trending upward (construção)
-        if (cargasList.Count >= 3)
+        // Verifica tendência de progressão da carga ao longo dos períodos recentes
+        // Construção exige crescimento consistente, não apenas sessões isoladas
+        if (cargasList.Count >= MinimoSessoesParaTendencia)
         {
+            // Tendência positiva acima do limiar indica progressão controlada
             var trend = CalcularTendencia(cargasList.TakeLast(4).Select(c => c.Valor).ToList());
-            if (trend > 0.10) // upward trend > 10%
+            if (trend > LimiarTendenciaCrescente) // upward trend > 10%
                 return FaseDoCiclo.Construcao;
         }
 

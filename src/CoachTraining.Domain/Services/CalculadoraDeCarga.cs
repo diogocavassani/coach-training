@@ -74,7 +74,7 @@ public static class CalculadoraDeCarga
             lastWeeks.Add(val);
         }
 
-        var cronicaValor = (int)Math.Round(lastWeeks.Average(c => c.Valor));
+        var cronicaValor = lastWeeks.Any(c => c.Valor == 0) ? 0 : (int)Math.Round(lastWeeks.Average(c => c.Valor));
         var cronica = new CargaTreino(cronicaValor);
 
         return (aguda, cronica);

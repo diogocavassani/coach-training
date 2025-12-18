@@ -6,7 +6,7 @@ using CoachTraining.Domain.Services;
 using CoachTraining.Domain.ValueObjects;
 using Xunit;
 
-namespace CoachTraining.Domain.Tests;
+namespace CoachTraining.Tests.Domain.Services;
 
 public class CalculadoraDeCargaTests
 {
@@ -31,7 +31,6 @@ public class CalculadoraDeCargaTests
         var semanal = CalculadoraDeCarga.AgregarCargaSemanal(sessoes);
 
         Assert.True(semanal.Count >= 2);
-        // find week of 2025-11-24
         var calendar = System.Globalization.CultureInfo.InvariantCulture.Calendar;
         var w1 = calendar.GetWeekOfYear(new DateTime(2025,11,24), System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         var w2 = calendar.GetWeekOfYear(new DateTime(2025,12,01), System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
@@ -45,20 +44,11 @@ public class CalculadoraDeCargaTests
     {
         var sessoes = new List<SessaoDeTreino>();
 
-        // build 4 weeks of data: weeks W-3 .. W
-        // week W-3: 100
-        // week W-2: 200
-        // week W-1: 300
-        // week W:   400
+        var baseDate = new DateTime(2025,12,14);
 
-        var baseDate = new DateTime(2025,12,14); // assume this is in week W
-
-        // helper to add one session with given total (duration*RPE)
         void AddSessionFor(DateTime dt, int total)
         {
-            // choose duracao 1 minute and rpe = total to produce total (not realistic but ok for test)
             var sess = new SessaoDeTreino(DateOnly.FromDateTime(dt), TipoDeTreino.Longo, 1, 0.1, new RPE(Math.Max(1, Math.Min(10, total))));
-            // if total > 10, create multiple sessions summing to total
             if (total <= 10)
             {
                 sessoes.Add(sess);

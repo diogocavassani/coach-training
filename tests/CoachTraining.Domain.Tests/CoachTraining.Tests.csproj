@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <AssemblyName>CoachTraining.Tests</AssemblyName>
+    <RootNamespace>CoachTraining.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +22,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CoachTraining.Domain\CoachTraining.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CoachTraining.App\CoachTraining.App.csproj" />
   </ItemGroup>
 
 </Project>

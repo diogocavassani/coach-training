@@ -6,7 +6,7 @@ using CoachTraining.Domain.Services;
 using CoachTraining.Domain.ValueObjects;
 using Xunit;
 
-namespace CoachTraining.Domain.Tests;
+namespace CoachTraining.Tests.Domain.Services;
 
 public class ClassificadorDeFaseTests
 {
@@ -194,7 +194,6 @@ public class ClassificadorDeFaseTests
     [Fact]
     public void AvaliarTaper_ForaDaJanela_RetornaNormal()
     {
-        // Mesmo com redução inadequada, fora da janela não há expectativa
         var risco = ClassificadorDeFase.AvaliarTaper(0.0, emJanelaDeYaper: false);
 
         Assert.Equal(StatusDeRisco.Normal, risco);
