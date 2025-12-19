@@ -91,4 +91,10 @@ public class DashboardAtletaDto
     /// Nível/categoria do atleta.
     /// </summary>
     public string? NivelAtleta { get; set; }
+
+    /// <summary>
+    /// Lista de insights gerados para o treinador, ordenados por criticidade.
+    /// Mensagens human-readable que explicam o que foi detectado e ações sugeridas.
+    /// </summary>
+    public IList<string> Insights { get; set; } = new List<string>();
 }
