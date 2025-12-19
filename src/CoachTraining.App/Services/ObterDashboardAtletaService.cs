@@ -63,7 +63,7 @@ public class ObterDashboardAtletaService
         }
 
         // Montar DTO
-        return new DashboardAtletaDto
+        var dto = new DashboardAtletaDto
         {
             AtletaId = atleta.Id,
             Nome = atleta.Nome,
@@ -82,6 +82,8 @@ public class ObterDashboardAtletaService
             ObservacoesClin = atleta.ObservacoesClinicas,
             NivelAtleta = atleta.NivelEsportivo
         };
+
+        return PreencherInsights(dto);
     }
 
     /// <summary>
@@ -164,5 +166,11 @@ public class ObterDashboardAtletaService
             ObservacoesClin = atleta.ObservacoesClinicas,
             NivelAtleta = atleta.NivelEsportivo
         };
+    }
+
+    private DashboardAtletaDto PreencherInsights(DashboardAtletaDto dto)
+    {
+        dto.Insights = GeradorDeInsights.GerarInsights(dto);
+        return dto;
     }
 }
