@@ -52,33 +52,32 @@ public class ClassificadorDeFase
             return FaseDoCiclo.Polimento;
         }
 
-
-        // Classificação baseada na relação da carga atual
-        // com a média recente (heurística fisiológica)
-
-        // Carga atual significativamente acima da média recente
-        // indica período de carga elevada sustentada (Pico)
-        if (ultimaCarga > mediaCarga * LimiarCargaRelativaPico) 
+        // --- Verifica critérios de Pico antes da verificação de tendência ---
+        // Carga elevada sustentada: média das últimas sessões acima da média recente
+        // evita classificar Pico por um único pico isolado
+        var mediaUltimasDuas = cargasList.TakeLast(2).Average(c => c.Valor);
+        if (mediaUltimasDuas > mediaCarga * LimiarCargaRelativaPico)
             return FaseDoCiclo.Pico;
 
         // Pico por carga elevada sustentada (mesmo sem última sessão extrema)
         if (cargasList.Count >= 3 && ultimaCarga > LimiarCargaAbsolutaElevada)
             return FaseDoCiclo.Pico;
 
-        // Carga atual significativamente abaixo da média recente
-        // indica redução de carga ou estabilização (Base)
-        if (ultimaCarga < mediaCarga * LimiarReducaoCargaRelativa) 
-            return FaseDoCiclo.Base;
-
         // Verifica tendência de progressão da carga ao longo dos períodos recentes
         // Construção exige crescimento consistente, não apenas sessões isoladas
         if (cargasList.Count >= MinimoSessoesParaTendencia)
         {
             // Tendência positiva acima do limiar indica progressão controlada
-            var trend = CalcularTendencia(cargasList.TakeLast(4).Select(c => c.Valor).ToList());
+            var trendWindow = cargasList.TakeLast(Math.Min(4, cargasList.Count)).Select(c => c.Valor).ToList();
+            var trend = CalcularTendencia(trendWindow);
             if (trend > LimiarTendenciaCrescente) // upward trend > 10%
                 return FaseDoCiclo.Construcao;
         }
+
+        // Carga atual significativamente abaixo da média recente
+        // indica redução de carga ou estabilização (Base)
+        if (ultimaCarga < mediaCarga * LimiarReducaoCargaRelativa) 
+            return FaseDoCiclo.Base;
 
         return FaseDoCiclo.Base;
     }

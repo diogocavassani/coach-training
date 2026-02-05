@@ -36,7 +36,7 @@ public class RealWorldScenariosTests
 
         var sessoes = new List<SessaoDeTreino>();
         // Gradually increasing workload across recent days
-        for (int i = 10; i >= 1; i--)
+        for (int i = 10; i >= 1; i--)  
         {
             var dur = 30 + (11 - i) * 10; // increasing duration
             sessoes.Add(new SessaoDeTreino(hoje.AddDays(-i), TipoDeTreino.Ritmo, dur, 5.0, new RPE(5 + (i % 2))));
