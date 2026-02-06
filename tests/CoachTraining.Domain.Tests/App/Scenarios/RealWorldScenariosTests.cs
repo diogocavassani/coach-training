@@ -1,3 +1,4 @@
+using System.Globalization;
 using CoachTraining.App.Services;
 using CoachTraining.Domain.Entities;
 using CoachTraining.Domain.Enums;
@@ -8,6 +9,35 @@ namespace CoachTraining.Tests.App.Scenarios;
 public class RealWorldScenariosTests
 {
     private readonly ObterDashboardAtletaService _service = new ObterDashboardAtletaService();
+
+    private static (int Ano, int Semana) ObterAnoSemana(DateOnly data)
+    {
+        var cal = CultureInfo.CurrentCulture.Calendar;
+        var numSemana = cal.GetWeekOfYear(
+            data.ToDateTime(TimeOnly.MinValue),
+            CalendarWeekRule.FirstFourDayWeek,
+            DayOfWeek.Monday);
+
+        return (data.Year, numSemana);
+    }
+
+    // Picks 3 dates from the last 7 days that fall in the same ISO week.
+    private static List<DateOnly> SelecionarDatasTaperMesmaSemana(DateOnly hoje)
+    {
+        var janelaTaper = Enumerable.Range(1, 7)
+            .Select(i => hoje.AddDays(-i))
+            .ToList();
+
+        var semanaComMaisDias = janelaTaper
+            .GroupBy(d => ObterAnoSemana(d))
+            .OrderByDescending(g => g.Count())
+            .First();
+
+        return semanaComMaisDias
+            .OrderBy(d => d)
+            .Take(3)
+            .ToList();
+    }
 
     [Fact]
     public void Cenario_Iniciante_RetornaBaseENormal()
@@ -92,6 +122,7 @@ public class RealWorldScenariosTests
     public void Cenario_TaperBemExecutado_RetornaPolimentoEValidacao()
     {
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
+        var datasTaper = SelecionarDatasTaperMesmaSemana(hoje);
         var prova = new ProvaAlvo(hoje.AddDays(14), 42.0, "Maratona");
         var atleta = new Atleta("Taper");
 
@@ -102,9 +133,9 @@ public class RealWorldScenariosTests
             new SessaoDeTreino(hoje.AddDays(-21), TipoDeTreino.Longo, 180, 20.0, new RPE(7)),
             new SessaoDeTreino(hoje.AddDays(-14), TipoDeTreino.Longo, 180, 20.0, new RPE(7)),
             // taper week: reduced volume ~50%
-            new SessaoDeTreino(hoje.AddDays(-7), TipoDeTreino.Leve, 60, 5.0, new RPE(4)),
-            new SessaoDeTreino(hoje.AddDays(-3), TipoDeTreino.Leve, 45, 5.0, new RPE(4)),
-            new SessaoDeTreino(hoje.AddDays(-1), TipoDeTreino.Leve, 30, 3.0, new RPE(3)),
+            new SessaoDeTreino(datasTaper[0], TipoDeTreino.Leve, 60, 5.0, new RPE(4)),
+            new SessaoDeTreino(datasTaper[1], TipoDeTreino.Leve, 45, 5.0, new RPE(4)),
+            new SessaoDeTreino(datasTaper[2], TipoDeTreino.Leve, 30, 3.0, new RPE(3)),
         };
 
         var dashboard = _service.ObterDashboard(atleta, sessoes, prova);
