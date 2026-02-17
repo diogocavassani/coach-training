@@ -9,7 +9,7 @@ namespace CoachTraining.Domain.Services;
 
 public static class CalculadoraDeCarga
 {
-    // Calcula a carga de uma sessão (Duração * RPE)
+    // Calcula a carga de uma sessao (Duracao * RPE)
     public static CargaTreino CalcularCargaSessao(SessaoDeTreino sessao)
     {
         return CargaTreino.FromDuracaoAndRpe(sessao.DuracaoMinutos, sessao.Rpe);
@@ -23,53 +23,37 @@ public static class CalculadoraDeCarga
             .ToDictionary(g => g.Key, g => new CargaTreino(g.Sum(s => CalcularCargaSessao(s).Valor)));
     }
 
-    // Agrega cargas por semana (ano, semana) usando Calendar.GetWeekOfYear
-    public static IDictionary<(int Year, int Week), CargaTreino> AgregarCargaSemanal(IEnumerable<SessaoDeTreino> sessoes, CalendarWeekRule weekRule = CalendarWeekRule.FirstFourDayWeek, DayOfWeek firstDayOfWeek = DayOfWeek.Monday)
+    // Agrega cargas por semana ISO (ano, semana)
+    public static IDictionary<(int Year, int Week), CargaTreino> AgregarCargaSemanal(IEnumerable<SessaoDeTreino> sessoes)
     {
-        var calendar = CultureInfo.InvariantCulture.Calendar;
-
         return sessoes
-            .GroupBy(s => {
-                var dt = s.Data.ToDateTime(TimeOnly.MinValue);
-                var week = calendar.GetWeekOfYear(dt, weekRule, firstDayOfWeek);
-                return (Year: dt.Year, Week: week);
-            })
+            .GroupBy(s => ObterAnoSemanaIso(s.Data))
             .ToDictionary(g => g.Key, g => new CargaTreino(g.Sum(s => CalcularCargaSessao(s).Valor)));
     }
 
-    // Calcula carga aguda (última semana) e carga crônica (média das últimas 4 semanas)
+    // Calcula carga aguda (ultima semana) e carga cronica (media das ultimas 4 semanas)
     // Retorna (aguda, cronica)
     public static (CargaTreino Aguda, CargaTreino Cronica) CalcularCargaAgudaECronica(IEnumerable<SessaoDeTreino> sessoes, DateOnly referencia)
     {
         var semanal = AgregarCargaSemanal(sessoes);
+        return CalcularCargaAgudaECronica(semanal, referencia);
+    }
 
-        var calendar = CultureInfo.InvariantCulture.Calendar;
-        var refDt = referencia.ToDateTime(TimeOnly.MinValue);
-        var refWeek = calendar.GetWeekOfYear(refDt, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-        var refYear = refDt.Year;
+    public static (CargaTreino Aguda, CargaTreino Cronica) CalcularCargaAgudaECronica(
+        IDictionary<(int Year, int Week), CargaTreino> cargaSemanal,
+        DateOnly referencia)
+    {
+        var (refYear, refWeek) = ObterAnoSemanaIso(referencia);
 
-        // carga aguda = soma da semana de referência
-        CargaTreino aguda;
-        if (!semanal.TryGetValue((refYear, refWeek), out aguda))
-            aguda = new CargaTreino(0);
+        var aguda = cargaSemanal.TryGetValue((refYear, refWeek), out var cargaAguda)
+            ? cargaAguda
+            : new CargaTreino(0);
 
-        // obter últimas 4 semanas (incluindo a semana de referência)
-        var lastWeeks = new List<CargaTreino>();
+        var lastWeeks = new List<CargaTreino>(capacity: 4);
         for (int i = 0; i < 4; i++)
         {
-            var week = refWeek - i;
-            var year = refYear;
-            // ajustar ano/semanas quando necessário
-            var w = week;
-            var y = year;
-            while (w <= 0)
-            {
-                y -= 1;
-                var lastYearWeeks = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(new DateTime(y,12,31), CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-                w += lastYearWeeks;
-            }
-
-            if (!semanal.TryGetValue((y, w), out var val))
+            var (year, week) = ObterAnoSemanaIso(referencia.AddDays(-7 * i));
+            if (!cargaSemanal.TryGetValue((year, week), out var val))
                 val = new CargaTreino(0);
             lastWeeks.Add(val);
         }
@@ -78,5 +62,11 @@ public static class CalculadoraDeCarga
         var cronica = new CargaTreino(cronicaValor);
 
         return (aguda, cronica);
+    }
+
+    private static (int Year, int Week) ObterAnoSemanaIso(DateOnly data)
+    {
+        var dt = data.ToDateTime(TimeOnly.MinValue);
+        return (ISOWeek.GetYear(dt), ISOWeek.GetWeekOfYear(dt));
     }
 }
