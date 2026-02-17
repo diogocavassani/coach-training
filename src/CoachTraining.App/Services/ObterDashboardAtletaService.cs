@@ -57,9 +57,12 @@ public class ObterDashboardAtletaService
         double? reducaoTaper = null;
         if (emTaper && prova != null)
         {
-            // Calcular redução entre última semana completa e semana anterior
-            var cargaSemanaAnteriorCompleta = ObterCargaSemanalAnterior(cargaDiaria, hoje);
-            reducaoTaper = ClassificadorDeFase.CalcularReducaoVolumeTaper(cargaSemanaAnteriorCompleta, cargaSemanal);
+            // Somar explicitamente janelas de 7 dias: [ref .. ref+6] ou [ref-6 .. ref-1] conforme intenção.
+            // Aqui escolhemos comparar a semana que começa em hoje.AddDays(-21) com a semana que começa em hoje.AddDays(-7)
+            var cargaAntesDeTaper = ObterCargaNoPeriodo(cargaDiaria, hoje.AddDays(-21), hoje.AddDays(-15)); // 7 dias: -21..-15
+            var cargaDuranteTaper = ObterCargaNoPeriodo(cargaDiaria, hoje.AddDays(-7), hoje.AddDays(-1));   // 7 dias: -7..-1
+
+            reducaoTaper = ClassificadorDeFase.CalcularReducaoVolumeTaper(cargaAntesDeTaper, cargaDuranteTaper);
         }
 
         // Montar DTO
@@ -84,6 +87,15 @@ public class ObterDashboardAtletaService
         };
 
         return PreencherInsights(dto);
+    }
+    private CargaTreino ObterCargaNoPeriodo(IDictionary<DateOnly, CargaTreino> cargaDiaria, DateOnly inicio, DateOnly fim)
+    {
+        // soma cargas de dias entre inicio e fim (inclusive)
+        var cargaSemanal = cargaDiaria
+            .Where(kvp => kvp.Key >= inicio && kvp.Key <= fim)
+            .Aggregate(new CargaTreino(0), (acc, kvp) => new CargaTreino(acc.Valor + kvp.Value.Valor));
+
+        return cargaSemanal;
     }
 
     /// <summary>

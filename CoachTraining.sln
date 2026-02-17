@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.3.11312.210
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachTraining.Api", "src\CoachTraining.Api\CoachTraining.Api.csproj", "{40BDEDC7-9F66-4160-9233-6446238A0541}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachTraining.Domain", "src\CoachTraining.Domain\CoachTraining.Domain.csproj", "{FA7A39E5-597D-4AF0-8570-72EFE5D81B5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachTraining.Infra", "src\CoachTraining.Infra\CoachTraining.Infra.csproj", "{2B704A50-28D4-4F4E-8ECF-75CD90441D9E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoachTraining.Tests", "tests\CoachTraining.Domain.Tests\CoachTraining.Tests.csproj", "{1A7F9952-EB5C-46A6-9B10-6405D231E185}"
 EndProject
@@ -88,9 +86,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{1A7F9952-EB5C-46A6-9B10-6405D231E185} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF3A9C81-D963-494E-A020-165D9688A6B9}
