@@ -108,13 +108,13 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ## 📅 Semana 6 — Read model e queries de dashboard
 **Objetivo:** Preparar dados consolidados para visualização.  
-**Status:** Em andamento — camada de aplicação pronta; HTTP ainda não integrado ao serviço.
+**Status:** Parcialmente concluída — endpoint HTTP funcional para atletas cadastrados em memória; persistência completa ainda pendente.
 
 ### Tarefas
 - [x] Definir DTO do dashboard do atleta (`DashboardAtletaDto`)
 - [x] Consolidar métricas no Application Layer (`ObterDashboardAtletaService`)
 - [x] Criar query de dashboard por atleta (serviço de aplicação + testes `ObterDashboardAtletaServiceTests`)
-- [ ] Implementar endpoint **funcional** `GET` de dashboard por atleta — *existe* `GET api/Dashboard/atleta/{id}`, mas hoje retorna sempre 404 (placeholder); não chama `ObterDashboardAtletaService` nem há persistência
+- [x] Implementar endpoint **funcional** `GET` de dashboard por atleta — integrado ao `ObterDashboardAtletaService` com recuperação de atleta via cadastro em memória
 - [ ] Validar performance e clareza dos dados (sem medição formal / carga real)
 
 **Entregável:** Endpoint de dashboard funcional.
@@ -138,7 +138,7 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ## 📅 Semana 8 — Testes de cenários reais
 **Objetivo:** Garantir confiabilidade das regras científicas.  
-**Status:** Quase concluída — cenários implementados; **2 testes falhando** na suíte atual (ver pendências).
+**Status:** Concluída — cenários implementados e suíte unitária verde.
 
 ### Tarefas
 - [x] Criar cenário de atleta iniciante
@@ -147,7 +147,7 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 - [x] Criar cenário de overreaching
 - [x] Criar cenário de taper bem executado
 - [x] Ajustar limiares conforme resultados (iterações em PRs recentes)
-- [ ] Garantir suíte verde (`dotnet test`) — *atualmente 2 falhas:* `ObterDashboard_ComSessoesEstavel_RetornaDashboardComRiscoNormal`, `Cenario_Iniciante_RetornaBaseENormal` (esperado `Normal`, obtido `Risco`)
+- [x] Garantir suíte verde (`dotnet test`) — suíte atual sem falhas
 
 **Entregável:** Regras validadas com múltiplos perfis.
 
@@ -170,14 +170,14 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ## 📅 Semana 10 — Documentação e fechamento
 **Objetivo:** Finalizar o projeto com qualidade profissional.  
-**Status:** Majoritariamente concluída na documentação de produto; README ainda indica “em desenvolvimento”.
+**Status:** Concluída no escopo de documentação do MVP.
 
 ### Tarefas
 - [x] Documentar regras científicas utilizadas (`docs/projeto_sistema_de_monitoramento_de_carga_e_preparacao_de_atletas.md` — secs. 5–6)
 - [x] Documentar limitações do sistema (escopo MVP / fora do MVP no mesmo doc)
 - [x] Documentar possíveis evoluções futuras (sec. 9 do doc de projeto)
 - [x] Atualizar README (visão, arquitetura, stack; status em evolução)
-- [ ] Criar overview do projeto (portfólio) — *opcional:* página ou seção dedicada além do README
+- [x] Criar overview do projeto (portfólio) — `docs/overview_do_projeto.md`
 
 **Entregável final:** Projeto completo, documentado e pronto para apresentação.
 
@@ -185,15 +185,14 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ## ⚠️ Pendências consolidadas (além dos itens `[ ]` acima)
 
-1. **API de dashboard:** conectar `DashboardController` a `ObterDashboardAtletaService` e, quando existir, repositório/Infra para carregar atleta + sessões (hoje não há persistência de cadastro entre requisições).
-2. **Testes:** alinhar expectativas ou regras em `AvaliadorDeRisco` / `ObterDashboardAtletaService` para os 2 testes que falham (`dotnet test` — 57 aprovados, 2 falhos na última execução).
-3. **Infra:** projeto `CoachTraining.Infra` existe na solução, mas ainda sem implementação de persistência (repositórios, EF, etc.) alinhada ao MVP descrito no doc de projeto.
-4. **Extras do MVP (doc de projeto):** prova alvo por atleta, planejamento semanal, registro de sessões via API — ainda não mapeados como entregues neste roadmap por semana; considerar nova sprint ou extensão do roadmap.
+1. **Persistência real:** substituir armazenamento em memória por implementação em `CoachTraining.Infra` (repositórios + banco).
+2. **Performance e qualidade de dados:** medir carga real, validar volumes maiores e evoluir observabilidade.
+3. **Extras do MVP (doc de projeto):** prova alvo por atleta, planejamento semanal e registro de sessões via API.
 
 ---
 
 ## ✅ Resumo Final
 
 - **Duração planejada:** 10 semanas · **Dedicação média:** 5 h/semana
-- **Progresso estimado:** Semanas 1–5 e 7 **concluídas**; Semana 6 **parcial** (HTTP); Semana 8 **quase** (cenários ok, suíte com 2 falhas); Semanas 9–10 **parciais** (refino contínuo + doc de produto forte, portfólio opcional pendente).
+- **Progresso estimado:** Semanas 1–5, 7, 8 e 10 **concluídas**; Semana 6 **parcial** (sem persistência); Semana 9 **contínua** (refino e robustez).
 - **Resultado alvo:** Sistema funcional de apoio à decisão para treinadores, baseado em ciência do esporte, com arquitetura limpa e regras bem documentadas.
