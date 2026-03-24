@@ -138,10 +138,17 @@ public class AvaliadorDeRiscoTests
     }
 
     [Fact]
-    public void AvaliarRiscoCombinado_AcwrInfinitoEProgressaoAlta_RetornaRisco()
+public void AvaliarRiscoCombinado_AcwrInfinitoEDelta100_RetornaNormal()
     {
         var risco = AvaliadorDeRisco.AvaliarRiscoCombinado(double.PositiveInfinity, 100.0);
-        Assert.Equal(StatusDeRisco.Risco, risco);
+    Assert.Equal(StatusDeRisco.Normal, risco);
+}
+
+[Fact]
+public void AvaliarRiscoCombinado_AcwrInfinitoEDeltaMaiorQue100_RetornaRisco()
+{
+    var risco = AvaliadorDeRisco.AvaliarRiscoCombinado(double.PositiveInfinity, 150.0);
+    Assert.Equal(StatusDeRisco.Risco, risco);
     }
 
     [Fact]

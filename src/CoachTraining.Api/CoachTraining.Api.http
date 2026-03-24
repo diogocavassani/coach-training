@@ -1,5 +1,52 @@
 @CoachTraining.Api_HostAddress = http://localhost:5096
 
+### Health Check - Dashboard Service
+GET {{CoachTraining.Api_HostAddress}}/api/dashboard/health
+Accept: application/json
+
+###
+
+### Health Check - Atleta Service
+GET {{CoachTraining.Api_HostAddress}}/api/atleta/health
+Accept: application/json
+
+###
+
+### Cadastrar Novo Atleta
+POST {{CoachTraining.Api_HostAddress}}/api/atleta
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "nivelEsportivo": "Elite",
+  "observacoesClinicas": "Histórico de lesão no joelho esquerdo"
+}
+
+###
+
+### Cadastrar Atleta (Minimal)
+POST {{CoachTraining.Api_HostAddress}}/api/atleta
+Content-Type: application/json
+
+{
+  "nome": "Maria Santos"
+}
+
+###
+
+### Obter Dashboard do Atleta
+GET {{CoachTraining.Api_HostAddress}}/api/dashboard/atleta/550e8400-e29b-41d4-a716-446655440000
+Accept: application/json
+
+###
+
+### Health Check Geral
+GET {{CoachTraining.Api_HostAddress}}/api/healthcheck
+Accept: application/json
+
+###
+
+### Weather Forecast (Legacy)
 GET {{CoachTraining.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 

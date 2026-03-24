@@ -6,164 +6,194 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ---
 
+## Legenda de status (revisão geral — mar/2026)
+
+| Símbolo | Significado |
+|--------|-------------|
+| `[x]` | Implementado no código / entregue no repositório |
+| `[ ]` | Pendente ou só parcialmente atendido |
+
+*A revisão foi feita cruzando este roadmap com a solução em `CoachTraining.sln`, testes em `tests/CoachTraining.Domain.Tests` e documentação em `docs/` e `README.md`.*
+
+---
+
 ## 📅 Semana 1 — Setup, visão e arquitetura
-**Objetivo:** Criar a base técnica e organizacional do projeto.
+**Objetivo:** Criar a base técnica e organizacional do projeto.  
+**Status:** Concluída.
 
 ### Tarefas
-- Criar repositório do projeto
-- Definir e documentar a stack tecnológica
-- Criar solução e projetos (.Domain, .Application, .Infra, .API)
-- Configurar referências corretas entre camadas
-- Configurar API base (Program.cs)
-- Criar endpoint de health-check
-- Configurar injeção de dependência básica
-- Criar README inicial (visão do projeto)
-- Documentar princípios arquiteturais (Clean / DDD)
-- Configurar padrão de código (.editorconfig, nullable)
-- Criar commits iniciais organizados
+- [x] Criar repositório do projeto
+- [x] Definir e documentar a stack tecnológica
+- [x] Criar solução e projetos (`.Domain`, `CoachTraining.App` como Application, `.Infra`, `.API`)
+- [x] Configurar referências corretas entre camadas
+- [x] Configurar API base (`Program.cs`)
+- [x] Criar endpoint de health-check (`GET api/HealthCheck`)
+- [x] Configurar injeção de dependência básica
+- [x] Criar README inicial (visão do projeto)
+- [x] Documentar princípios arquiteturais (Clean / DDD) — `README.md`, `ARCHITECTURE.md`, `docs/ARQUITETURA.md`
+- [x] Configurar padrão de código (`.editorconfig`, nullable)
+- [x] Criar commits iniciais organizados (histórico git ativo)
 
 **Entregável:** Projeto compilando, arquitetura definida e documentação inicial criada.
 
 ---
 
 ## 📅 Semana 2 — Modelagem de domínio
-**Objetivo:** Traduzir o conhecimento científico para um modelo de domínio sólido.
+**Objetivo:** Traduzir o conhecimento científico para um modelo de domínio sólido.  
+**Status:** Concluída (testes: ver pendências — cobertura ampla, sem testes dedicados para `Coach` e `Pace`).
 
 ### Tarefas
-- Criar entidade Coach
-- Criar entidade Atleta
-- Criar entidade ProvaAlvo
-- Criar entidade SessaoDeTreino
-- Criar Value Object RPE
-- Criar Value Object CargaTreino
-- Criar Value Object Pace
-- Definir enums de TipoDeTreino e FaseDoCiclo
-- Implementar validações de domínio
-- Criar testes unitários de entidades e VOs
+- [x] Criar entidade Coach
+- [x] Criar entidade Atleta
+- [x] Criar entidade ProvaAlvo
+- [x] Criar entidade SessaoDeTreino
+- [x] Criar Value Object RPE
+- [x] Criar Value Object CargaTreino
+- [x] Criar Value Object Pace
+- [x] Definir enums de TipoDeTreino e FaseDoCiclo
+- [x] Implementar validações de domínio (VOs, construtores das entidades)
+- [x] Criar testes unitários de entidades e VOs (`DomainTests` + testes indiretos via serviços; *opcional futuro:* testes dedicados `Coach` / `Pace`)
 
 **Entregável:** Domínio modelado, validado e testado.
 
 ---
 
 ## 📅 Semana 3 — Cálculo de carga de treino
-**Objetivo:** Implementar o núcleo científico do sistema.
+**Objetivo:** Implementar o núcleo científico do sistema.  
+**Status:** Concluída.
 
 ### Tarefas
-- Implementar cálculo de carga (session-RPE)
-- Implementar agregação de carga diária
-- Implementar cálculo de carga semanal
-- Implementar cálculo de carga crônica (média 4 semanas)
-- Criar Domain Service CalculadoraDeCarga
-- Criar testes com cenários reais simulados
+- [x] Implementar cálculo de carga (session-RPE)
+- [x] Implementar agregação de carga diária
+- [x] Implementar cálculo de carga semanal
+- [x] Implementar cálculo de carga crônica (média 4 semanas)
+- [x] Criar Domain Service `CalculadoraDeCarga`
+- [x] Criar testes com cenários reais simulados (`CalculadoraDeCargaTests`)
 
 **Entregável:** Serviço de cálculo validado por testes.
 
 ---
 
 ## 📅 Semana 4 — ACWR e progressão de carga
-**Objetivo:** Detectar risco e progressão inadequada.
+**Objetivo:** Detectar risco e progressão inadequada.  
+**Status:** Concluída.
 
 ### Tarefas
-- Implementar cálculo de carga aguda
-- Implementar cálculo de ACWR
-- Implementar cálculo de delta percentual semanal
-- Definir enum StatusDeRisco (Normal, Atenção, Risco)
-- Criar Domain Service AvaliadorDeRisco
-- Criar testes cobrindo limiares científicos
+- [x] Implementar cálculo de carga aguda
+- [x] Implementar cálculo de ACWR
+- [x] Implementar cálculo de delta percentual semanal
+- [x] Definir enum StatusDeRisco (Normal, Atenção, Risco)
+- [x] Criar Domain Service `AvaliadorDeRisco`
+- [x] Criar testes cobrindo limiares científicos (`AvaliadorDeRiscoTests`)
 
 **Entregável:** Avaliação de risco funcional e testada.
 
 ---
 
 ## 📅 Semana 5 — Fases do treinamento e taper
-**Objetivo:** Identificar o momento fisiológico do atleta.
+**Objetivo:** Identificar o momento fisiológico do atleta.  
+**Status:** Concluída.
 
 ### Tarefas
-- Implementar identificação de tendência de carga
-- Implementar classificação da fase do ciclo (Base, Construção, Pico, Polimento)
-- Implementar detecção de janela de taper
-- Implementar validação de redução de volume pré-prova
-- Criar Domain Service ClassificadorDeFase
-- Criar testes para cenários de prova próxima
+- [x] Implementar identificação de tendência de carga
+- [x] Implementar classificação da fase do ciclo (Base, Construção, Pico, Polimento)
+- [x] Implementar detecção de janela de taper
+- [x] Implementar validação de redução de volume pré-prova
+- [x] Criar Domain Service `ClassificadorDeFase`
+- [x] Criar testes para cenários de prova próxima (`ClassificadorDeFaseTests`)
 
 **Entregável:** Fase do ciclo corretamente identificada.
 
 ---
 
 ## 📅 Semana 6 — Read model e queries de dashboard
-**Objetivo:** Preparar dados consolidados para visualização.
+**Objetivo:** Preparar dados consolidados para visualização.  
+**Status:** Em andamento — camada de aplicação pronta; HTTP ainda não integrado ao serviço.
 
 ### Tarefas
-- Definir DTO do dashboard do atleta
-- Consolidar métricas no Application Layer
-- Criar query de dashboard por atleta
-- Implementar endpoint GET /dashboard/atleta/{id}
-- Validar performance e clareza dos dados
+- [x] Definir DTO do dashboard do atleta (`DashboardAtletaDto`)
+- [x] Consolidar métricas no Application Layer (`ObterDashboardAtletaService`)
+- [x] Criar query de dashboard por atleta (serviço de aplicação + testes `ObterDashboardAtletaServiceTests`)
+- [ ] Implementar endpoint **funcional** `GET` de dashboard por atleta — *existe* `GET api/Dashboard/atleta/{id}`, mas hoje retorna sempre 404 (placeholder); não chama `ObterDashboardAtletaService` nem há persistência
+- [ ] Validar performance e clareza dos dados (sem medição formal / carga real)
 
 **Entregável:** Endpoint de dashboard funcional.
 
 ---
 
 ## 📅 Semana 7 — Geração de insights para o treinador
-**Objetivo:** Transformar métricas em informação acionável.
+**Objetivo:** Transformar métricas em informação acionável.  
+**Status:** Concluída.
 
 ### Tarefas
-- Mapear alertas técnicos para insights textuais
-- Criar mensagens explicáveis e baseadas em evidência
-- Priorizar insights por criticidade
-- Ajustar linguagem técnica para o treinador
-- Criar testes de geração de insights
+- [x] Mapear alertas técnicos para insights textuais (`GeradorDeInsights`)
+- [x] Criar mensagens explicáveis e baseadas em evidência
+- [x] Priorizar insights por criticidade
+- [x] Ajustar linguagem técnica para o treinador
+- [x] Criar testes de geração de insights (`GeradorDeInsightsTests`)
 
 **Entregável:** Dashboard com insights claros e úteis.
 
 ---
 
 ## 📅 Semana 8 — Testes de cenários reais
-**Objetivo:** Garantir confiabilidade das regras científicas.
+**Objetivo:** Garantir confiabilidade das regras científicas.  
+**Status:** Quase concluída — cenários implementados; **2 testes falhando** na suíte atual (ver pendências).
 
 ### Tarefas
-- Criar cenário de atleta iniciante
-- Criar cenário de atleta intermediário
-- Criar cenário de atleta avançado
-- Criar cenário de overreaching
-- Criar cenário de taper bem executado
-- Ajustar limiares conforme resultados
+- [x] Criar cenário de atleta iniciante
+- [x] Criar cenário de atleta intermediário
+- [x] Criar cenário de atleta avançado
+- [x] Criar cenário de overreaching
+- [x] Criar cenário de taper bem executado
+- [x] Ajustar limiares conforme resultados (iterações em PRs recentes)
+- [ ] Garantir suíte verde (`dotnet test`) — *atualmente 2 falhas:* `ObterDashboard_ComSessoesEstavel_RetornaDashboardComRiscoNormal`, `Cenario_Iniciante_RetornaBaseENormal` (esperado `Normal`, obtido `Risco`)
 
 **Entregável:** Regras validadas com múltiplos perfis.
 
 ---
 
 ## 📅 Semana 9 — Refinamento e robustez
-**Objetivo:** Tornar o projeto estável e apresentável.
+**Objetivo:** Tornar o projeto estável e apresentável.  
+**Status:** Parcial — itens contínuos de qualidade.
 
 ### Tarefas
-- Revisar mensagens de insights
-- Tratar dados inconsistentes
-- Ajustar performance de queries
-- Revisar código (clean code)
-- Pequenos refactors orientados à clareza
+- [ ] Revisar mensagens de insights (passível de novo ciclo)
+- [ ] Tratar dados inconsistentes (regras defensivas / validação em massa de sessões)
+- [ ] Ajustar performance de queries (relevante após persistência)
+- [ ] Revisar código (clean code) — contínuo
+- [ ] Pequenos refactors orientados à clareza — contínuo
 
 **Entregável:** Sistema estável e refinado.
 
 ---
 
 ## 📅 Semana 10 — Documentação e fechamento
-**Objetivo:** Finalizar o projeto com qualidade profissional.
+**Objetivo:** Finalizar o projeto com qualidade profissional.  
+**Status:** Majoritariamente concluída na documentação de produto; README ainda indica “em desenvolvimento”.
 
 ### Tarefas
-- Documentar regras científicas utilizadas
-- Documentar limitações do sistema
-- Documentar possíveis evoluções futuras
-- Atualizar README final
-- Criar overview do projeto (portfólio)
+- [x] Documentar regras científicas utilizadas (`docs/projeto_sistema_de_monitoramento_de_carga_e_preparacao_de_atletas.md` — secs. 5–6)
+- [x] Documentar limitações do sistema (escopo MVP / fora do MVP no mesmo doc)
+- [x] Documentar possíveis evoluções futuras (sec. 9 do doc de projeto)
+- [x] Atualizar README (visão, arquitetura, stack; status em evolução)
+- [ ] Criar overview do projeto (portfólio) — *opcional:* página ou seção dedicada além do README
 
 **Entregável final:** Projeto completo, documentado e pronto para apresentação.
 
 ---
 
+## ⚠️ Pendências consolidadas (além dos itens `[ ]` acima)
+
+1. **API de dashboard:** conectar `DashboardController` a `ObterDashboardAtletaService` e, quando existir, repositório/Infra para carregar atleta + sessões (hoje não há persistência de cadastro entre requisições).
+2. **Testes:** alinhar expectativas ou regras em `AvaliadorDeRisco` / `ObterDashboardAtletaService` para os 2 testes que falham (`dotnet test` — 57 aprovados, 2 falhos na última execução).
+3. **Infra:** projeto `CoachTraining.Infra` existe na solução, mas ainda sem implementação de persistência (repositórios, EF, etc.) alinhada ao MVP descrito no doc de projeto.
+4. **Extras do MVP (doc de projeto):** prova alvo por atleta, planejamento semanal, registro de sessões via API — ainda não mapeados como entregues neste roadmap por semana; considerar nova sprint ou extensão do roadmap.
+
+---
+
 ## ✅ Resumo Final
 
-- Duração total: 10 semanas
-- Dedicação média: 5h/semana
-- Resultado: Sistema funcional de apoio à decisão para treinadores, baseado em ciência do esporte, com arquitetura limpa e regras bem documentadas.
-
+- **Duração planejada:** 10 semanas · **Dedicação média:** 5 h/semana
+- **Progresso estimado:** Semanas 1–5 e 7 **concluídas**; Semana 6 **parcial** (HTTP); Semana 8 **quase** (cenários ok, suíte com 2 falhas); Semanas 9–10 **parciais** (refino contínuo + doc de produto forte, portfólio opcional pendente).
+- **Resultado alvo:** Sistema funcional de apoio à decisão para treinadores, baseado em ciência do esporte, com arquitetura limpa e regras bem documentadas.
