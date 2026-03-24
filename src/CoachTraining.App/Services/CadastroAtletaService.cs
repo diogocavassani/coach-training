@@ -1,5 +1,6 @@
 using CoachTraining.App.DTOs;
 using CoachTraining.Domain.Entities;
+using System.Collections.Concurrent;
 
 namespace CoachTraining.App.Services;
 
@@ -9,6 +10,8 @@ namespace CoachTraining.App.Services;
 /// </summary>
 public class CadastroAtletaService
 {
+    private static readonly ConcurrentDictionary<Guid, Atleta> _atletas = new();
+
     public CadastroAtletaService() { }
 
     /// <summary>
@@ -30,9 +33,23 @@ public class CadastroAtletaService
             observacoesClinicas: dto.ObservacoesClinicas,
             nivelEsportivo: dto.NivelEsportivo
         );
+        _atletas[atleta.Id] = atleta;
 
         // Mapeia para DTO de resposta
         return MapearAtletaParaDto(atleta);
+    }
+
+    /// <summary>
+    /// Obtém entidade de atleta por identificador.
+    /// </summary>
+    /// <param name="id">Identificador do atleta</param>
+    /// <returns>Entidade de atleta, ou nulo se não encontrado</returns>
+    public Atleta? ObterEntidadePorId(Guid id)
+    {
+        if (id == Guid.Empty)
+            return null;
+
+        return _atletas.TryGetValue(id, out var atleta) ? atleta : null;
     }
 
     /// <summary>

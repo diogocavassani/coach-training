@@ -1,5 +1,6 @@
 using CoachTraining.App.DTOs;
 using CoachTraining.App.Services;
+using CoachTraining.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
@@ -15,12 +16,15 @@ namespace CoachTraining.Api.Controllers;
 public class DashboardController : ControllerBase
 {
     private readonly ObterDashboardAtletaService _dashboardService;
+    private readonly CadastroAtletaService _cadastroAtletaService;
     private readonly ILogger<DashboardController> _logger;
 
     public DashboardController(
+        CadastroAtletaService cadastroAtletaService,
         ObterDashboardAtletaService dashboardService,
         ILogger<DashboardController> logger)
     {
+        _cadastroAtletaService = cadastroAtletaService ?? throw new ArgumentNullException(nameof(cadastroAtletaService));
         _dashboardService = dashboardService ?? throw new ArgumentNullException(nameof(dashboardService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -47,10 +51,16 @@ public class DashboardController : ControllerBase
                 return BadRequest(new { erro = "AtletaId inválido" });
             }
 
-            // Placeholder: Em produção, seria carregado do banco de dados
-            // Para demonstração, retornar 404 indicando que dados não foram encontrados
-            _logger.LogInformation("Atleta {AtletaId} não encontrado no banco de dados", id);
-            return NotFound(new { erro = "Atleta não encontrado" });
+            var atleta = _cadastroAtletaService.ObterEntidadePorId(id);
+            if (atleta == null)
+            {
+                _logger.LogInformation("Atleta {AtletaId} não encontrado", id);
+                return NotFound(new { erro = "Atleta não encontrado" });
+            }
+
+            // Enquanto não houver persistência de sessões/prova, o dashboard é calculado com histórico vazio.
+            var dashboard = _dashboardService.ObterDashboard(atleta, Array.Empty<SessaoDeTreino>());
+            return Ok(dashboard);
         }
         catch (Exception ex)
         {
