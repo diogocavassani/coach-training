@@ -155,11 +155,11 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ## 📅 Semana 9 — Refinamento e robustez
 **Objetivo:** Tornar o projeto estável e apresentável.  
-**Status:** Parcial — itens contínuos de qualidade.
+**Status:** Parcial — com evolução em regras defensivas no dashboard.
 
 ### Tarefas
 - [ ] Revisar mensagens de insights (passível de novo ciclo)
-- [ ] Tratar dados inconsistentes (regras defensivas / validação em massa de sessões)
+- [x] Tratar dados inconsistentes (regras defensivas no dashboard para ignorar sessões inválidas no cálculo)
 - [ ] Ajustar performance de queries (relevante após persistência)
 - [ ] Revisar código (clean code) — contínuo
 - [ ] Pequenos refactors orientados à clareza — contínuo

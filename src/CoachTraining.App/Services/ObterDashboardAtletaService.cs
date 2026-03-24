@@ -93,7 +93,7 @@ public class ObterDashboardAtletaService
     private static List<SessaoDeTreino> FiltrarOrdenarSessoes(IEnumerable<SessaoDeTreino> sessoes, DateOnly referencia)
     {
         return sessoes
-            .Where(s => s != null && s.Data <= referencia)
+            .Where(s => s != null && s.Data <= referencia && s.DuracaoMinutos > 0)
             .OrderBy(s => s.Data)
             .ToList();
     }

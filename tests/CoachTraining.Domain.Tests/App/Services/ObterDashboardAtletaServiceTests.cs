@@ -210,6 +210,24 @@ public class ObterDashboardAtletaServiceTests
     }
 
     [Fact]
+    public void ObterDashboard_ComSessaoInconsistente_DuracaoZero_IgnoraSessao()
+    {
+        var atleta = new Atleta("Atleta com dado inconsistente");
+        var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
+        var sessoes = new List<SessaoDeTreino>
+        {
+            new SessaoDeTreino(hoje.AddDays(-1), TipoDeTreino.Leve, 0, 0.0, new RPE(4)),
+            new SessaoDeTreino(hoje.AddDays(-1), TipoDeTreino.Ritmo, 60, 8.0, new RPE(5))
+        };
+
+        var dashboard = _service.ObterDashboard(atleta, sessoes);
+
+        Assert.NotNull(dashboard);
+        Assert.Equal(300, dashboard.CargaUltimaSessao);
+        Assert.Equal(300, dashboard.CargaSemanal);
+    }
+
+    [Fact]
     public void ObterDashboard_LancaArgumentNullException_SeAtletaNull()
     {
         var sessoes = new List<SessaoDeTreino>();
