@@ -164,7 +164,7 @@ public class ObterDashboardAtletaServiceTests
 
         Assert.NotNull(dashboard);
         Assert.True(dashboard.DeltaPercentualSemanal > 20);
-        Assert.True(dashboard.StatusRisco == StatusDeRisco.Normal);
+        Assert.Equal(StatusDeRisco.Risco, dashboard.StatusRisco);
     }
 
     [Fact]

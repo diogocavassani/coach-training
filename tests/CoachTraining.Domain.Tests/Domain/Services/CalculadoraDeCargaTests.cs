@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using CoachTraining.Domain.Entities;
 using CoachTraining.Domain.Enums;
 using CoachTraining.Domain.Services;
@@ -31,12 +32,13 @@ public class CalculadoraDeCargaTests
         var semanal = CalculadoraDeCarga.AgregarCargaSemanal(sessoes);
 
         Assert.True(semanal.Count >= 2);
-        var calendar = System.Globalization.CultureInfo.InvariantCulture.Calendar;
-        var w1 = calendar.GetWeekOfYear(new DateTime(2025,11,24), System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-        var w2 = calendar.GetWeekOfYear(new DateTime(2025,12,01), System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        var w1 = ISOWeek.GetWeekOfYear(new DateTime(2025,11,24));
+        var y1 = ISOWeek.GetYear(new DateTime(2025,11,24));
+        var w2 = ISOWeek.GetWeekOfYear(new DateTime(2025,12,01));
+        var y2 = ISOWeek.GetYear(new DateTime(2025,12,01));
 
-        Assert.Equal(30*5 + 45*6, semanal[(2025,w1)].Valor);
-        Assert.Equal(60*7, semanal[(2025,w2)].Valor);
+        Assert.Equal(30*5 + 45*6, semanal[(y1, w1)].Valor);
+        Assert.Equal(60*7, semanal[(y2, w2)].Valor);
     }
 
     [Fact]

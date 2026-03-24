@@ -1,6 +1,5 @@
 using System.Globalization;
 using CoachTraining.App.DTOs;
-using CoachTraining.Domain.Enums;
 
 namespace CoachTraining.App.Services;
 
@@ -11,23 +10,36 @@ public static class GeradorDeInsights
         var insights = new List<(int priority, string msg)>();
 
         // 1. Risco por ACWR
-        if (dto.ACWR >= 1.5 || dto.StatusRisco == StatusDeRisco.Risco)
+        var acwrDisponivel = !double.IsNaN(dto.ACWR) && !double.IsInfinity(dto.ACWR) && dto.CargaCronica > 0;
+        if (acwrDisponivel)
         {
-            insights.Add((1, $"Risco aumentado: ACWR alto ({dto.ACWR.ToString("0.##", CultureInfo.InvariantCulture)}). Considere reduzir volume e priorizar recuperação."));
+            if (dto.ACWR >= 1.5)
+            {
+                insights.Add((1, $"Risco elevado: ACWR alto ({FormatNumber(dto.ACWR)}). Reduzir volume e priorizar recuperacao."));
+            }
+            else if (dto.ACWR < 0.8)
+            {
+                insights.Add((2, $"Atencao: ACWR baixo ({FormatNumber(dto.ACWR)}), risco de destreinamento. Reforcar estimulos."));
+            }
         }
-        else if (dto.ACWR < 0.8)
+        else if (dto.CargaAguda > 0)
         {
-            insights.Add((2, $"Atenção: ACWR baixo ({dto.ACWR.ToString("0.##", CultureInfo.InvariantCulture)}), risco de destreinamento. Avaliar estímulos."));
+            insights.Add((4, "ACWR indisponivel: carga cronica insuficiente para comparacao."));
         }
 
         // 2. Delta percentual semanal
         if (dto.DeltaPercentualSemanal > 20)
         {
-            insights.Add((1, $"Aumento de carga >20% na semana ({dto.DeltaPercentualSemanal}%) — risco de sobrecarga. Rever progressão."));
+            insights.Add((1, $"Aumento de carga >20% na semana ({FormatPercent(dto.DeltaPercentualSemanal)}): risco de sobrecarga. Rever progressao."));
         }
         else if (dto.DeltaPercentualSemanal < -30)
         {
-            insights.Add((3, $"Redução de carga acentuada ({dto.DeltaPercentualSemanal}%) — possível polimento ou queda de forma."));
+            insights.Add((3, $"Reducao de carga acentuada ({FormatPercent(dto.DeltaPercentualSemanal)}): possivel polimento ou queda de forma."));
+        }
+
+        if (dto.CargaSemanalAnterior == 0 && dto.CargaSemanal > 0)
+        {
+            insights.Add((4, "Semana anterior sem carga registrada; comparar progressao com cautela."));
         }
 
         // 3. Taper
@@ -36,31 +48,40 @@ public static class GeradorDeInsights
             if (dto.ReducaoVolumeTaper.HasValue)
             {
                 var r = dto.ReducaoVolumeTaper.Value;
+                var percent = FormatPercent(r * 100);
                 if (r < 0.4)
-                    insights.Add((1, $"Taper: redução de volume insuficiente ({Math.Round(r * 100)}%). Esperado 40–60%."));
-                else if (r >= 0.4 && r <= 0.6)
-                    insights.Add((3, $"Taper: redução de volume adequada ({Math.Round(r * 100)}%). Polimento possivelmente adequado."));
+                    insights.Add((1, $"Taper: reducao de volume insuficiente ({percent}). Esperado 40-60%."));
+                else if (r <= 0.6)
+                    insights.Add((3, $"Taper: reducao de volume adequada ({percent}). Polimento possivelmente adequado."));
                 else
-                    insights.Add((2, $"Taper: redução de volume elevada ({Math.Round(r * 100)}%). Monitorar fadiga e percepção do atleta."));
+                    insights.Add((2, $"Taper: reducao de volume elevada ({percent}). Monitorar fadiga e percepcao do atleta."));
             }
             else
             {
-                insights.Add((2, "Taper: atleta em janela de prova mas sem redução de volume detectada."));
+                insights.Add((2, "Taper: atleta em janela de prova, mas sem dados suficientes para avaliar reducao de volume."));
             }
         }
 
-        // 4. Observações clínicas
+        // 4. Observacoes clinicas
         if (!string.IsNullOrWhiteSpace(dto.ObservacoesClin))
         {
-            insights.Add((1, $"Observações clínicas: {dto.ObservacoesClin}. Considere ajustar plano conforme restrições."));
+            insights.Add((1, $"Observacoes clinicas: {dto.ObservacoesClin}. Ajustar plano conforme restricoes."));
         }
 
-        // 5. Informação geral
+        // 5. Informacao geral
         if (insights.Count == 0)
-            insights.Add((5, "Nenhum alerta crítico detectado. Treinamento dentro de parâmetros esperados."));
+            insights.Add((5, "Nenhum alerta critico detectado. Treinamento dentro de parametros esperados."));
 
-        // Ordenar por prioridade (menor = mais crítico)
-        var ordered = insights.OrderBy(i => i.priority).ThenBy(i => i.msg).Select(i => i.msg).ToList();
-        return ordered;
+        return insights
+            .OrderBy(i => i.priority)
+            .ThenBy(i => i.msg)
+            .Select(i => i.msg)
+            .ToList();
     }
+
+    private static string FormatNumber(double value)
+        => value.ToString("0.##", CultureInfo.InvariantCulture);
+
+    private static string FormatPercent(double value)
+        => value.ToString("0.#", CultureInfo.InvariantCulture) + "%";
 }
