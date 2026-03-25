@@ -64,20 +64,10 @@ public class AvaliadorDeRisco
     public static StatusDeRisco AvaliarRiscoCombinado(double acwr, double deltaPercentual)
     {
         // Se não há carga crônica calculável (divisão por zero -> ACWR = +Infinity),
-        // isso indica sem histórico anterior (atleta muito iniciante ou recuperando)
+        // avalia-se apenas a progressão para evitar falso negativo em picos reais.
         if (double.IsInfinity(acwr))
         {
-            // Neste caso, apenas a progressão é relevante
-            // Delta exatamente 100 = começando do zero (não é risco)
-            // Mas delta > 100 ou entre progressões reais é risco
-            if (deltaPercentual == 100)
-                return StatusDeRisco.Normal; // Iniciante puro, sem risco inerente
-            
-            // Qualquer outro delta ainda passa pela avaliação normal
-            if (Math.Abs(deltaPercentual) > DeltaPercentualAlerta)
-                return StatusDeRisco.Risco;
-            
-            return StatusDeRisco.Normal;
+            return AvaliarRiscoProgressao(deltaPercentual);
         }
 
         var riscoAcwr = AvaliarRiscoAcwr(acwr);
