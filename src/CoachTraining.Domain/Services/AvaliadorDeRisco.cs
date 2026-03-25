@@ -63,10 +63,14 @@ public class AvaliadorDeRisco
     /// </summary>
     public static StatusDeRisco AvaliarRiscoCombinado(double acwr, double deltaPercentual)
     {
-        // Se não há carga crônica calculável (divisão por zero -> ACWR = +Infinity),
-        // avalia-se apenas a progressão para evitar falso negativo em picos reais.
+        // Sem carga crônica (ACWR = +Infinity): sem histórico suficiente para razão aguda/crônica.
+        // Delta exatamente 100 = semana anterior zerada e semana atual com carga (início de registro),
+        // não equivale a salto de >20% sobre base existente.
         if (double.IsInfinity(acwr))
         {
+            if (deltaPercentual == 100)
+                return StatusDeRisco.Normal;
+
             return AvaliarRiscoProgressao(deltaPercentual);
         }
 
