@@ -1,6 +1,6 @@
 # coach-training
 
-![Status](https://img.shields.io/badge/status-em_desenvolvimento-blue)
+![Status](https://img.shields.io/badge/status-MVP_funcional-brightgreen)
 ![.NET Version](https://img.shields.io/badge/.NET-10.0-512BD4)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -130,6 +130,7 @@ O sistema implementa regras baseadas em literatura científica:
 ## 📚 Documentação
 
 - [Visão Geral do Projeto](docs/projeto_sistema_de_monitoramento_de_carga_e_preparacao_de_atletas.md)
+- [Overview do Projeto (Portfólio)](docs/overview_do_projeto.md)
 - [Roadmap de Implementação](docs/roadmap_de_implementacao_tarefas_por_semana.md)
 - [Princípios Arquiteturais](docs/ARQUITETURA.md)
 
@@ -175,4 +176,4 @@ Desenvolvido como projeto de estudo em arquitetura de software e ciência do esp
 
 ---
 
-**Status**: Em desenvolvimento (Semana 1 completada) ✅
+**Status**: MVP funcional com backlog de evoluções em andamento ✅
