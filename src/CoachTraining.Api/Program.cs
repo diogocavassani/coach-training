@@ -29,7 +29,11 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// Imagens Docker oficiais definem DOTNET_RUNNING_IN_CONTAINER; sem TLS no contêiner, HTTPS redirect quebra o cliente HTTP.
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") != "true")
+{
+    app.UseHttpsRedirection();
+}
 app.UseRouting();
 app.UseAuthorization();
 

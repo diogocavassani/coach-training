@@ -16,30 +16,15 @@
 
 ## 🏛️ Arquitetura
 
-O projeto segue os princípios de **Clean Architecture** e **Domain-Driven Design (DDD)**:
+O projeto segue os princípios de **Clean Architecture** e **Domain-Driven Design (DDD)** no backend:
 
 ```
-CoachTraining.Api/              # Presentation Layer (Controllers, HTTP)
-├── Controllers/
-├── Middleware/
-└── Program.cs
-
-CoachTraining.App/              # Application Layer (Use Cases, DTOs)
-├── UseCases/
-├── DTOs/
-└── Services/
-
-CoachTraining.Domain/           # Domain Layer (Entities, Value Objects, Rules)
-├── Entities/
-├── ValueObjects/
-├── Services/
-├── Enums/
-└── Exceptions/
-
-CoachTraining.Infra/            # Infrastructure Layer (Database, External Services)
-├── Persistence/
-├── Repositories/
-└── Services/
+src/CoachTraining.Api/          # Presentation Layer (Controllers, HTTP)
+src/CoachTraining.App/          # Application Layer (Use Cases, Services)
+src/CoachTraining.Domain/       # Domain Layer (Entidades, Regras, Value Objects)
+src/CoachTraining.Infra/        # Infrastructure Layer (Persistencia, Integracoes)
+frontend/                       # Front-end Angular (SPA)
+infra/                          # Docker Compose e configuracoes de ambiente
 ```
 
 ### Dependências Entre Camadas
@@ -50,14 +35,15 @@ Infrastructure → Domain
 Domain → (sem dependências)
 ```
 
-## 🚀 Começando
+## 🚀 Comecando
 
 ### Pré-requisitos
 - .NET 10.0 SDK
-- SQL Server (ou SQL Server Express)
+- Docker Desktop (ou Docker Engine + Compose)
+- Node.js 22+ (opcional, para rodar front-end fora do Docker)
 - Git
 
-### Setup Inicial
+### Setup inicial
 
 1. Clone o repositório:
 ```bash
@@ -65,30 +51,39 @@ git clone https://github.com/seu-usuario/coach-training.git
 cd coach-training
 ```
 
-2. Restaure as dependências:
+2. (Opcional) Copie o arquivo de variaveis do Docker:
+```bash
+cd infra
+cp .env.example .env
+```
+
+3. Suba todo o ambiente (banco + API + front-end):
+```bash
+docker compose up --build
+```
+
+Servicos disponiveis:
+- Front-end: `http://localhost:4200`
+- API: `http://localhost:8080`
+- PostgreSQL: `localhost:5432`
+
+### Execucao local sem Docker (backend)
+
 ```bash
 dotnet restore
-```
-
-3. Build da solução:
-```bash
 dotnet build
-```
-
-4. Execute a API:
-```bash
 cd src/CoachTraining.Api
 dotnet run
 ```
 
-A API estará disponível em: `https://localhost:5001`
+Por padrao, a API local usa o perfil de desenvolvimento do ASP.NET Core.
 
-## 📊 Health Check
+## 📊 Health check
 
 Verifique se a API está rodando:
 
-```bash
-GET /health-check
+```http
+GET http://localhost:8080/health-check
 ```
 
 Resposta esperada:
@@ -114,7 +109,24 @@ O sistema implementa regras baseadas em literatura científica:
 
 - **Fases do Treinamento**: Base, Construção, Pico, Polimento (Taper)
 
-## 📅 Roadmap (10 Semanas)
+## 🐳 Docker compose
+
+O `docker-compose.yml` em `infra/` orquestra 3 servicos:
+
+- `db`: PostgreSQL 16 (volume persistente `postgres_data`)
+- `api`: ASP.NET Core (.NET 10) em porta `8080`
+- `frontend`: Angular buildado e servido por Nginx em porta `4200`
+
+Comandos uteis:
+
+```bash
+cd infra
+docker compose up --build
+docker compose down
+docker compose logs -f api
+```
+
+## 📅 Roadmap (10 semanas)
 
 - **Semana 1**: Setup, Arquitetura, Health Check ✅
 - **Semana 2**: Modelagem de Domínio (Entidades, Value Objects)
@@ -134,14 +146,17 @@ O sistema implementa regras baseadas em literatura científica:
 - [Roadmap de Implementação](docs/roadmap_de_implementacao_tarefas_por_semana.md)
 - [Princípios Arquiteturais](docs/ARQUITETURA.md)
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Stack tecnologico
 
 | Camada | Tecnologia |
 |--------|-----------|
-| **Backend** | .NET 10.0 (C#) |
+| **Backend** | .NET 10 (C#) |
 | **API** | ASP.NET Core |
-| **Banco** | SQL Server |
+| **Front-end** | Angular |
+| **Web server (front)** | Nginx |
+| **Banco** | PostgreSQL 16 |
 | **ORM** | Entity Framework Core |
+| **Orquestracao local** | Docker Compose |
 | **Testes** | XUnit |
 | **Logging** | Serilog (planejado) |
 
@@ -153,7 +168,7 @@ Execute os testes da solução:
 dotnet test
 ```
 
-## 📝 Padrões de Código
+## 📝 Padroes de codigo
 
 O projeto segue:
 - ✅ Padrão de código C# conforme `.editorconfig`
@@ -176,4 +191,4 @@ Desenvolvido como projeto de estudo em arquitetura de software e ciência do esp
 
 ---
 
-**Status**: MVP funcional com backlog de evoluções em andamento ✅
+**Status**: stack base definida (API + Angular + PostgreSQL + Docker Compose) e evolucao funcional em andamento ✅
