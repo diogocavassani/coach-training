@@ -42,7 +42,7 @@ public class RealWorldScenariosTests
     [Fact]
     public void Cenario_Iniciante_RetornaBaseENormal()
     {
-        var atleta = new Atleta("Iniciante");
+        var atleta = new Atleta("Iniciante", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         // Low volume, few sessions
         var sessoes = new List<SessaoDeTreino>
@@ -61,7 +61,7 @@ public class RealWorldScenariosTests
     [Fact]
     public void Cenario_Intermediario_RetornaConstrucao()
     {
-        var atleta = new Atleta("Intermediario");
+        var atleta = new Atleta("Intermediario", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>();
@@ -80,7 +80,7 @@ public class RealWorldScenariosTests
     [Fact]
     public void Cenario_Avancado_RetornaPico()
     {
-        var atleta = new Atleta("Avancado");
+        var atleta = new Atleta("Avancado", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>
@@ -99,7 +99,7 @@ public class RealWorldScenariosTests
     [Fact]
     public void Cenario_Overreaching_RetornaRisco()
     {
-        var atleta = new Atleta("Overreaching");
+        var atleta = new Atleta("Overreaching", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>
@@ -124,7 +124,7 @@ public class RealWorldScenariosTests
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var datasTaper = SelecionarDatasTaperMesmaSemana(hoje);
         var prova = new ProvaAlvo(hoje.AddDays(14), 42.0, "Maratona");
-        var atleta = new Atleta("Taper");
+        var atleta = new Atleta("Taper", Guid.NewGuid());
 
         var sessoes = new List<SessaoDeTreino>
         {

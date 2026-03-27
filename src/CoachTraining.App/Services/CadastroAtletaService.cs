@@ -33,6 +33,7 @@ public class CadastroAtletaService
         // Cria a entidade de domínio (que faz validações)
         var atleta = new Atleta(
             nome: dto.Nome,
+            professorId: Guid.NewGuid(),
             observacoesClinicas: dto.ObservacoesClinicas,
             nivelEsportivo: dto.NivelEsportivo
         );

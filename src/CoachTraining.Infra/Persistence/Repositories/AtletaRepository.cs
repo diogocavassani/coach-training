@@ -41,6 +41,7 @@ public class AtletaRepository : IAtletaRepository
 
         return new Atleta(
             nome: model.Nome,
+            professorId: Guid.NewGuid(),
             observacoesClinicas: model.ObservacoesClinicas,
             nivelEsportivo: model.NivelEsportivo,
             id: model.Id);
