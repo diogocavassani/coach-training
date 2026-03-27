@@ -13,6 +13,11 @@ public class AtletaDto
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Identificador do professor dono do atleta.
+    /// </summary>
+    public Guid ProfessorId { get; set; }
+
+    /// <summary>
     /// Nome completo do atleta.
     /// </summary>
     public string Nome { get; set; } = string.Empty;

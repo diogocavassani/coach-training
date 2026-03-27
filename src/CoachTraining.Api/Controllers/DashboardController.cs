@@ -57,7 +57,7 @@ public class DashboardController : ControllerBase
                 return BadRequest(new { erro = "AtletaId inválido" });
             }
 
-            var atleta = _atletaRepository.ObterPorId(id);
+            var atleta = _atletaRepository.ObterPorId(id, Guid.NewGuid());
             if (atleta == null)
             {
                 _logger.LogInformation("Atleta {AtletaId} não encontrado", id);

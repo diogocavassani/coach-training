@@ -40,7 +40,7 @@ public class AtletaController : ControllerBase
 
             _logger.LogInformation("Recebida requisicao de cadastro de atleta: {NomeAtleta}", dto.Nome);
 
-            var atleta = _cadastroService.Cadastrar(dto);
+            var atleta = _cadastroService.Cadastrar(dto, Guid.NewGuid());
 
             _logger.LogInformation("Atleta {AtletaId} cadastrado com sucesso via API", atleta.Id);
 
@@ -69,7 +69,7 @@ public class AtletaController : ControllerBase
             return BadRequest(new { erro = "Id do atleta invalido" });
         }
 
-        var atleta = _cadastroService.ObterPorId(id);
+        var atleta = _cadastroService.ObterPorId(id, Guid.NewGuid());
         if (atleta == null)
         {
             _logger.LogInformation("Atleta {AtletaId} nao encontrado", id);

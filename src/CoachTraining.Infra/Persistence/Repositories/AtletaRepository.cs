@@ -28,7 +28,7 @@ public class AtletaRepository : IAtletaRepository
         _context.SaveChanges();
     }
 
-    public Atleta? ObterPorId(Guid atletaId)
+    public Atleta? ObterPorId(Guid atletaId, Guid professorId)
     {
         var model = _context.Atletas
             .AsNoTracking()
@@ -41,7 +41,7 @@ public class AtletaRepository : IAtletaRepository
 
         return new Atleta(
             nome: model.Nome,
-            professorId: Guid.NewGuid(),
+            professorId: professorId,
             observacoesClinicas: model.ObservacoesClinicas,
             nivelEsportivo: model.NivelEsportivo,
             id: model.Id);
