@@ -31,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<ISessaoDeTreinoRepository, SessaoDeTreinoRepository>();
         services.AddScoped<IProvaAlvoRepository, ProvaAlvoRepository>();
         services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+        services.AddScoped<ITokenService, JwtTokenService>();
 
         return services;
     }

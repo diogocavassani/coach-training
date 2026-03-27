@@ -49,6 +49,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<CadastroAtletaService>();
 builder.Services.AddScoped<CadastroProfessorService>();
+builder.Services.AddScoped<LoginProfessorService>();
 builder.Services.AddScoped<ObterDashboardAtletaService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
