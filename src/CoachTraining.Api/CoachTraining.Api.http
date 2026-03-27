@@ -12,6 +12,17 @@ Content-Type: application/json
 
 ###
 
+### Login de Professor
+POST {{CoachTraining.Api_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "professor@teste.com",
+  "senha": "123456"
+}
+
+###
+
 ### Health Check - Dashboard Service
 GET {{CoachTraining.Api_HostAddress}}/api/dashboard/health
 Accept: application/json
