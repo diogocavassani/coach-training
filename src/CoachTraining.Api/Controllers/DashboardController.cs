@@ -1,6 +1,6 @@
 using CoachTraining.App.DTOs;
+using CoachTraining.App.Abstractions.Persistence;
 using CoachTraining.App.Services;
-using CoachTraining.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
@@ -16,15 +16,21 @@ namespace CoachTraining.Api.Controllers;
 public class DashboardController : ControllerBase
 {
     private readonly ObterDashboardAtletaService _dashboardService;
-    private readonly CadastroAtletaService _cadastroAtletaService;
+    private readonly IAtletaRepository _atletaRepository;
+    private readonly ISessaoDeTreinoRepository _sessaoDeTreinoRepository;
+    private readonly IProvaAlvoRepository _provaAlvoRepository;
     private readonly ILogger<DashboardController> _logger;
 
     public DashboardController(
-        CadastroAtletaService cadastroAtletaService,
+        IAtletaRepository atletaRepository,
+        ISessaoDeTreinoRepository sessaoDeTreinoRepository,
+        IProvaAlvoRepository provaAlvoRepository,
         ObterDashboardAtletaService dashboardService,
         ILogger<DashboardController> logger)
     {
-        _cadastroAtletaService = cadastroAtletaService ?? throw new ArgumentNullException(nameof(cadastroAtletaService));
+        _atletaRepository = atletaRepository ?? throw new ArgumentNullException(nameof(atletaRepository));
+        _sessaoDeTreinoRepository = sessaoDeTreinoRepository ?? throw new ArgumentNullException(nameof(sessaoDeTreinoRepository));
+        _provaAlvoRepository = provaAlvoRepository ?? throw new ArgumentNullException(nameof(provaAlvoRepository));
         _dashboardService = dashboardService ?? throw new ArgumentNullException(nameof(dashboardService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -51,15 +57,16 @@ public class DashboardController : ControllerBase
                 return BadRequest(new { erro = "AtletaId inválido" });
             }
 
-            var atleta = _cadastroAtletaService.ObterEntidadePorId(id);
+            var atleta = _atletaRepository.ObterPorId(id);
             if (atleta == null)
             {
                 _logger.LogInformation("Atleta {AtletaId} não encontrado", id);
                 return NotFound(new { erro = "Atleta não encontrado" });
             }
 
-            // Enquanto não houver persistência de sessões/prova, o dashboard é calculado com histórico vazio.
-            var dashboard = _dashboardService.ObterDashboard(atleta, Array.Empty<SessaoDeTreino>());
+            var sessoes = _sessaoDeTreinoRepository.ObterPorAtletaId(id);
+            var provaAlvo = _provaAlvoRepository.ObterPorAtletaId(id);
+            var dashboard = _dashboardService.ObterDashboard(atleta, sessoes, provaAlvo);
             return Ok(dashboard);
         }
         catch (Exception ex)

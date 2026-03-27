@@ -1,4 +1,7 @@
 using CoachTraining.App.Services;
+using CoachTraining.Infra;
+using CoachTraining.Infra.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +15,18 @@ builder.Services.AddLogging(config =>
 // Registrar Application Services
 builder.Services.AddScoped<CadastroAtletaService>();
 builder.Services.AddScoped<ObterDashboardAtletaService>();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CoachTrainingDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 if (app.Environment.IsDevelopment())
 {
