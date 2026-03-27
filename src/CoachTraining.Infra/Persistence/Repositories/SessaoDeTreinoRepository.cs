@@ -15,11 +15,14 @@ public class SessaoDeTreinoRepository : ISessaoDeTreinoRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public IReadOnlyCollection<SessaoDeTreino> ObterPorAtletaId(Guid atletaId)
+    public IReadOnlyCollection<SessaoDeTreino> ObterPorAtletaId(Guid atletaId, Guid professorId)
     {
-        return _context.SessoesDeTreino
-            .AsNoTracking()
-            .Where(s => s.AtletaId == atletaId)
+        var query = from sessao in _context.SessoesDeTreino.AsNoTracking()
+                    join atleta in _context.Atletas.AsNoTracking() on sessao.AtletaId equals atleta.Id
+                    where sessao.AtletaId == atletaId && atleta.ProfessorId == professorId
+                    select sessao;
+
+        return query
             .OrderBy(s => s.Data)
             .AsEnumerable()
             .Select(s => new SessaoDeTreino(

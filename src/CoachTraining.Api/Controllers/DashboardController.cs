@@ -57,15 +57,16 @@ public class DashboardController : ControllerBase
                 return BadRequest(new { erro = "AtletaId inválido" });
             }
 
-            var atleta = _atletaRepository.ObterPorId(id, Guid.NewGuid());
+            var professorId = Guid.NewGuid();
+            var atleta = _atletaRepository.ObterPorId(id, professorId);
             if (atleta == null)
             {
                 _logger.LogInformation("Atleta {AtletaId} não encontrado", id);
                 return NotFound(new { erro = "Atleta não encontrado" });
             }
 
-            var sessoes = _sessaoDeTreinoRepository.ObterPorAtletaId(id);
-            var provaAlvo = _provaAlvoRepository.ObterPorAtletaId(id);
+            var sessoes = _sessaoDeTreinoRepository.ObterPorAtletaId(id, professorId);
+            var provaAlvo = _provaAlvoRepository.ObterPorAtletaId(id, professorId);
             var dashboard = _dashboardService.ObterDashboard(atleta, sessoes, provaAlvo);
             return Ok(dashboard);
         }

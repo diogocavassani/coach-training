@@ -4,5 +4,5 @@ namespace CoachTraining.App.Abstractions.Persistence;
 
 public interface ISessaoDeTreinoRepository
 {
-    IReadOnlyCollection<SessaoDeTreino> ObterPorAtletaId(Guid atletaId);
+    IReadOnlyCollection<SessaoDeTreino> ObterPorAtletaId(Guid atletaId, Guid professorId);
 }
