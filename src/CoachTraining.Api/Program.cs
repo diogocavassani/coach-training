@@ -48,6 +48,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<CadastroAtletaService>();
+builder.Services.AddScoped<CadastroProfessorService>();
 builder.Services.AddScoped<ObterDashboardAtletaService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 

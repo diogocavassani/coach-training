@@ -1,6 +1,8 @@
 using CoachTraining.App.Abstractions.Persistence;
+using CoachTraining.App.Abstractions.Security;
 using CoachTraining.Infra.Persistence;
 using CoachTraining.Infra.Persistence.Repositories;
+using CoachTraining.Infra.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IProfessorRepository, ProfessorRepository>();
         services.AddScoped<ISessaoDeTreinoRepository, SessaoDeTreinoRepository>();
         services.AddScoped<IProvaAlvoRepository, ProvaAlvoRepository>();
+        services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
         return services;
     }
