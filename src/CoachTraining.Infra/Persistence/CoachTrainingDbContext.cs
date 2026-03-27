@@ -11,6 +11,7 @@ public class CoachTrainingDbContext : DbContext
     }
 
     public DbSet<AtletaModel> Atletas => Set<AtletaModel>();
+    public DbSet<ProfessorModel> Professores => Set<ProfessorModel>();
     public DbSet<SessaoDeTreinoModel> SessoesDeTreino => Set<SessaoDeTreinoModel>();
     public DbSet<ProvaAlvoModel> ProvasAlvo => Set<ProvaAlvoModel>();
 
