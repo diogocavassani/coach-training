@@ -38,4 +38,39 @@ public class DomainTests
         var carga = sessao.CalcularCarga();
         Assert.Equal(540, carga.Valor);
     }
+
+    [Fact]
+    public void Professor_DeveCriarComDadosValidos()
+    {
+        var professor = new Professor(
+            nome: "Professor Teste",
+            email: "Professor@Teste.com",
+            senhaHash: "hash-seguro");
+
+        Assert.NotEqual(Guid.Empty, professor.Id);
+        Assert.Equal("Professor Teste", professor.Nome);
+        Assert.Equal("professor@teste.com", professor.Email);
+        Assert.Equal("hash-seguro", professor.SenhaHash);
+    }
+
+    [Fact]
+    public void Professor_ComEmailInvalido_DeveLancarExcecao()
+    {
+        Assert.Throws<ArgumentException>(
+            () => new Professor("Professor", "email-invalido", "hash-seguro"));
+    }
+
+    [Fact]
+    public void Professor_ComNomeVazio_DeveLancarExcecao()
+    {
+        Assert.Throws<ArgumentException>(
+            () => new Professor(" ", "professor@teste.com", "hash-seguro"));
+    }
+
+    [Fact]
+    public void Professor_ComSenhaHashVazia_DeveLancarExcecao()
+    {
+        Assert.Throws<ArgumentException>(
+            () => new Professor("Professor", "professor@teste.com", " "));
+    }
 }
