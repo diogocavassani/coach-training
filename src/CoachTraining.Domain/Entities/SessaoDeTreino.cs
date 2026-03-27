@@ -13,12 +13,12 @@ public class SessaoDeTreino
     public double DistanciaKm { get; private set; }
     public RPE Rpe { get; private set; }
 
-    public SessaoDeTreino(DateOnly data, TipoDeTreino tipo, int duracaoMinutos, double distanciaKm, RPE rpe)
+    public SessaoDeTreino(DateOnly data, TipoDeTreino tipo, int duracaoMinutos, double distanciaKm, RPE rpe, Guid? id = null)
     {
         if (duracaoMinutos < 0) throw new ArgumentOutOfRangeException(nameof(duracaoMinutos));
         if (distanciaKm < 0) throw new ArgumentOutOfRangeException(nameof(distanciaKm));
 
-        Id = Guid.NewGuid();
+        Id = id ?? Guid.NewGuid();
         Data = data;
         Tipo = tipo;
         DuracaoMinutos = duracaoMinutos;

@@ -1,6 +1,6 @@
 using CoachTraining.App.DTOs;
+using CoachTraining.App.Abstractions.Persistence;
 using CoachTraining.Domain.Entities;
-using System.Collections.Concurrent;
 
 namespace CoachTraining.App.Services;
 
@@ -10,9 +10,12 @@ namespace CoachTraining.App.Services;
 /// </summary>
 public class CadastroAtletaService
 {
-    private static readonly ConcurrentDictionary<Guid, Atleta> _atletas = new();
+    private readonly IAtletaRepository _atletaRepository;
 
-    public CadastroAtletaService() { }
+    public CadastroAtletaService(IAtletaRepository atletaRepository)
+    {
+        _atletaRepository = atletaRepository ?? throw new ArgumentNullException(nameof(atletaRepository));
+    }
 
     /// <summary>
     /// Cadastra um novo atleta a partir dos dados fornecidos.
@@ -33,7 +36,7 @@ public class CadastroAtletaService
             observacoesClinicas: dto.ObservacoesClinicas,
             nivelEsportivo: dto.NivelEsportivo
         );
-        _atletas[atleta.Id] = atleta;
+        _atletaRepository.Adicionar(atleta);
 
         // Mapeia para DTO de resposta
         return MapearAtletaParaDto(atleta);
@@ -49,7 +52,7 @@ public class CadastroAtletaService
         if (id == Guid.Empty)
             return null;
 
-        return _atletas.TryGetValue(id, out var atleta) ? atleta : null;
+        return _atletaRepository.ObterPorId(id);
     }
 
     /// <summary>

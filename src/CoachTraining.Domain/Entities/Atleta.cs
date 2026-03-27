@@ -10,9 +10,9 @@ public class Atleta
     public string? ObservacoesClinicas { get; private set; }
     public string? NivelEsportivo { get; private set; }
 
-    public Atleta(string nome, string? observacoesClinicas = null, string? nivelEsportivo = null)
+    public Atleta(string nome, string? observacoesClinicas = null, string? nivelEsportivo = null, Guid? id = null)
     {
-        Id = Guid.NewGuid();
+        Id = id ?? Guid.NewGuid();
         Nome = string.IsNullOrWhiteSpace(nome) ? throw new ArgumentException("Nome obrigatório", nameof(nome)) : nome.Trim();
         ObservacoesClinicas = observacoesClinicas?.Trim();
         NivelEsportivo = nivelEsportivo?.Trim();
