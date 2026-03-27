@@ -1,18 +1,16 @@
-using CoachTraining.App.DTOs;
+using CoachTraining.Api.Security;
 using CoachTraining.App.Abstractions.Persistence;
 using CoachTraining.App.Services;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoachTraining.Api.Controllers;
 
-/// <summary>
-/// Controlador responsável por servir as métricas consolidadas do dashboard.
-/// Fornece visão holística da saúde e progressão do treinamento do atleta.
-/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class DashboardController : ControllerBase
 {
     private readonly ObterDashboardAtletaService _dashboardService;
@@ -35,53 +33,42 @@ public class DashboardController : ControllerBase
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    /// <summary>
-    /// Obtém o dashboard consolidado de um atleta.
-    /// Retorna carga de treino, ACWR, fase do ciclo, risco e informações de taper.
-    /// </summary>
-    /// <param name="id">Identificador único do atleta (GUID)</param>
-    /// <returns>DTO com métricas consolidadas do atleta</returns>
-    /// <response code="200">Dashboard recuperado com sucesso</response>
-    /// <response code="404">Atleta não encontrado</response>
-    /// <response code="500">Erro interno do servidor</response>
-    [HttpGet("atleta/{id}")]
+    [HttpGet("atleta/{id:guid}")]
     public IActionResult ObterDashboard(Guid id)
     {
         try
         {
-            _logger.LogInformation("Requisição de dashboard para atleta {AtletaId}", id);
-
             if (id == Guid.Empty)
             {
-                _logger.LogWarning("AtletaId vazio recebido");
-                return BadRequest(new { erro = "AtletaId inválido" });
+                return BadRequest(new { erro = "AtletaId invalido." });
             }
 
-            var professorId = Guid.NewGuid();
+            if (!User.TryGetProfessorId(out var professorId))
+            {
+                return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+            }
+
             var atleta = _atletaRepository.ObterPorId(id, professorId);
             if (atleta == null)
             {
-                _logger.LogInformation("Atleta {AtletaId} não encontrado", id);
-                return NotFound(new { erro = "Atleta não encontrado" });
+                return NotFound(new { erro = "Atleta nao encontrado." });
             }
 
             var sessoes = _sessaoDeTreinoRepository.ObterPorAtletaId(id, professorId);
             var provaAlvo = _provaAlvoRepository.ObterPorAtletaId(id, professorId);
             var dashboard = _dashboardService.ObterDashboard(atleta, sessoes, provaAlvo);
+
             return Ok(dashboard);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro ao obter dashboard para atleta {AtletaId}", id);
-            return StatusCode(StatusCodes.Status500InternalServerError, 
-                new { erro = "Erro ao processar requisição" });
+            _logger.LogError(ex, "Erro ao obter dashboard para atleta {AtletaId}.", id);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { erro = "Erro ao processar requisicao." });
         }
     }
 
-    /// <summary>
-    /// Health check para validar disponibilidade do serviço de dashboard.
-    /// </summary>
     [HttpGet("health")]
+    [AllowAnonymous]
     public IActionResult Health()
     {
         return Ok(new { status = "Dashboard service is healthy" });
