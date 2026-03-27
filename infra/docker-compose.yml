@@ -34,8 +34,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
       ASPNETCORE_URLS: http://+:8080
-      # Quando o EF Core for configurado, use a mesma chave em AddDbContext.
-      ConnectionStrings__Default: >-
+      # Deve corresponder a GetConnectionString("DefaultConnection").
+      ConnectionStrings__DefaultConnection: >-
         Host=db;Port=5432;Database=${POSTGRES_DB:-coachtraining};Username=${POSTGRES_USER:-coach};Password=${POSTGRES_PASSWORD:-coach}
     depends_on:
       db:
