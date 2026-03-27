@@ -21,13 +21,25 @@ public class SessaoDeTreinoRepository : ISessaoDeTreinoRepository
             .AsNoTracking()
             .Where(s => s.AtletaId == atletaId)
             .OrderBy(s => s.Data)
+            .AsEnumerable()
             .Select(s => new SessaoDeTreino(
                 data: s.Data,
-                tipo: (TipoDeTreino)s.Tipo,
+                tipo: ObterTipoDeTreinoValido(s.Tipo, s.Id),
                 duracaoMinutos: s.DuracaoMinutos,
                 distanciaKm: s.DistanciaKm,
                 rpe: new RPE(s.Rpe),
                 id: s.Id))
             .ToList();
+    }
+
+    private static TipoDeTreino ObterTipoDeTreinoValido(int tipoPersistido, Guid sessaoId)
+    {
+        if (!Enum.IsDefined(typeof(TipoDeTreino), tipoPersistido))
+        {
+            throw new InvalidOperationException(
+                $"Erro de integridade: tipo de treino invalido '{tipoPersistido}' na sessao '{sessaoId}'.");
+        }
+
+        return (TipoDeTreino)tipoPersistido;
     }
 }
