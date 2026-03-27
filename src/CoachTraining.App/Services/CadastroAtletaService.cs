@@ -47,6 +47,15 @@ public class CadastroAtletaService
     /// </summary>
     /// <param name="id">Identificador do atleta</param>
     /// <returns>Entidade de atleta, ou nulo se não encontrado</returns>
+    public AtletaDto? ObterPorId(Guid id)
+    {
+        var atleta = ObterEntidadePorId(id);
+        if (atleta == null)
+            return null;
+
+        return MapearAtletaParaDto(atleta);
+    }
+
     public Atleta? ObterEntidadePorId(Guid id)
     {
         if (id == Guid.Empty)
@@ -72,3 +81,4 @@ public class CadastroAtletaService
         };
     }
 }
+
