@@ -18,7 +18,6 @@
     <ItemGroup>
       <ProjectReference Include="../CoachTraining.App/CoachTraining.App.csproj" />
       <ProjectReference Include="../CoachTraining.Infra/CoachTraining.Infra.csproj" />
-      <ProjectReference Include="../CoachTraining.Domain/CoachTraining.Domain.csproj" />
     </ItemGroup>
 
 </Project>
