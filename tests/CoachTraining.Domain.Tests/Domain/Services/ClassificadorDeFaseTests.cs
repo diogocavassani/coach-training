@@ -170,7 +170,7 @@ public class ClassificadorDeFaseTests
     [Fact]
     public void AvaliarTaper_TaperCorreto_RetornaNormal()
     {
-        var risco = ClassificadorDeFase.AvaliarTaper(0.5, emJanelaDeYaper: true);
+        var risco = ClassificadorDeFase.AvaliarTaper(0.5, emJanelaDeTaper: true);
 
         Assert.Equal(StatusDeRisco.Normal, risco);
     }
@@ -178,7 +178,7 @@ public class ClassificadorDeFaseTests
     [Fact]
     public void AvaliarTaper_SemReducao_RetornaRisco()
     {
-        var risco = ClassificadorDeFase.AvaliarTaper(0.0, emJanelaDeYaper: true);
+        var risco = ClassificadorDeFase.AvaliarTaper(0.0, emJanelaDeTaper: true);
 
         Assert.Equal(StatusDeRisco.Risco, risco);
     }
@@ -186,7 +186,7 @@ public class ClassificadorDeFaseTests
     [Fact]
     public void AvaliarTaper_ReducaoInadequada_RetornaAtencao()
     {
-        var risco = ClassificadorDeFase.AvaliarTaper(0.2, emJanelaDeYaper: true);
+        var risco = ClassificadorDeFase.AvaliarTaper(0.2, emJanelaDeTaper: true);
 
         Assert.Equal(StatusDeRisco.Atencao, risco);
     }
@@ -194,8 +194,9 @@ public class ClassificadorDeFaseTests
     [Fact]
     public void AvaliarTaper_ForaDaJanela_RetornaNormal()
     {
-        var risco = ClassificadorDeFase.AvaliarTaper(0.0, emJanelaDeYaper: false);
+        var risco = ClassificadorDeFase.AvaliarTaper(0.0, emJanelaDeTaper: false);
 
         Assert.Equal(StatusDeRisco.Normal, risco);
     }
 }
+

@@ -117,9 +117,9 @@ public class ClassificadorDeFase
     /// Detecta alertas de taper inadequado
     /// Retorna: Normal (execução correta), Atencao (redução fora de intervalo), Risco (sem redução)
     /// </summary>
-    public static StatusDeRisco AvaliarTaper(double reducaoPercentual, bool emJanelaDeYaper)
+    public static StatusDeRisco AvaliarTaper(double reducaoPercentual, bool emJanelaDeTaper)
     {
-        if (!emJanelaDeYaper)
+        if (!emJanelaDeTaper)
             return StatusDeRisco.Normal; // fora da janela, não há expectativa
 
         if (reducaoPercentual < 0.1) // quase nenhuma redução
@@ -156,3 +156,4 @@ public class ClassificadorDeFase
         return numerador / denominador;
     }
 }
+
