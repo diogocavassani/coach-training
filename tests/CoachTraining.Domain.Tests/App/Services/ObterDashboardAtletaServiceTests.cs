@@ -210,7 +210,7 @@ public class ObterDashboardAtletaServiceTests
     }
 
     [Fact]
-    public void ObterDashboard_ComSessaoInconsistente_DuracaoZero_IgnoraSessao()
+    public void ObterDashboard_ComSessaoInconsistente_DuracaoZero_LancaErroDeIntegridade()
     {
         var atleta = new Atleta("Atleta com dado inconsistente");
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -220,11 +220,11 @@ public class ObterDashboardAtletaServiceTests
             new SessaoDeTreino(hoje.AddDays(-1), TipoDeTreino.Ritmo, 60, 8.0, new RPE(5))
         };
 
-        var dashboard = _service.ObterDashboard(atleta, sessoes);
+        var exception = Assert.Throws<InvalidOperationException>(
+            () => _service.ObterDashboard(atleta, sessoes));
 
-        Assert.NotNull(dashboard);
-        Assert.Equal(300, dashboard.CargaUltimaSessao);
-        Assert.Equal(300, dashboard.CargaSemanal);
+        Assert.Contains("Erro de integridade", exception.Message);
+        Assert.Contains("DuracaoMinutos <= 0", exception.Message);
     }
 
     [Fact]

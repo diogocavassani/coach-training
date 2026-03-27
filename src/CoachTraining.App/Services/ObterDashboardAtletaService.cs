@@ -29,7 +29,9 @@ public class ObterDashboardAtletaService
 
         var agora = DateTime.UtcNow;
         var hoje = DateOnly.FromDateTime(agora);
-        var sessoesList = FiltrarOrdenarSessoes(sessoes, hoje);
+        var sessoesListEntrada = sessoes.ToList();
+        ValidarIntegridadeDasSessoes(sessoesListEntrada);
+        var sessoesList = FiltrarOrdenarSessoes(sessoesListEntrada, hoje);
 
         // Se nao houver sessoes validas, retornar dashboard vazio
         if (sessoesList.Count == 0)
@@ -93,9 +95,32 @@ public class ObterDashboardAtletaService
     private static List<SessaoDeTreino> FiltrarOrdenarSessoes(IEnumerable<SessaoDeTreino> sessoes, DateOnly referencia)
     {
         return sessoes
-            .Where(s => s != null && s.Data <= referencia && s.DuracaoMinutos > 0)
+            .Where(s => s != null && s.Data <= referencia)
             .OrderBy(s => s.Data)
             .ToList();
+    }
+
+    private static void ValidarIntegridadeDasSessoes(IEnumerable<SessaoDeTreino> sessoes)
+    {
+        var sessoesInvalidas = sessoes
+            .Where(s => s == null || s.DuracaoMinutos <= 0)
+            .ToList();
+
+        if (sessoesInvalidas.Count == 0)
+        {
+            return;
+        }
+
+        var exemplos = string.Join(
+            ", ",
+            sessoesInvalidas
+                .Take(3)
+                .Select(s => s == null
+                    ? "{Id: null, DuracaoMinutos: null}"
+                    : $"{{Id: {s.Id}, DuracaoMinutos: {s.DuracaoMinutos}}}"));
+
+        throw new InvalidOperationException(
+            $"Erro de integridade: sessoes com DuracaoMinutos <= 0 foram encontradas ({sessoesInvalidas.Count}). Exemplos: {exemplos}.");
     }
 
     private CargaTreino ObterCargaNoPeriodo(IDictionary<DateOnly, CargaTreino> cargaDiaria, DateOnly inicio, DateOnly fim)
