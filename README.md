@@ -212,3 +212,28 @@ Desenvolvido como projeto de estudo em arquitetura de software e ciência do esp
 ---
 
 **Status**: stack base definida (API + Angular + PostgreSQL + Docker Compose) e evolucao funcional em andamento ✅
+
+## Frontend - Area do Professor (Sprint atual)
+
+### Fluxo implementado
+
+- Landing publica com cadastro de professor (`/`)
+- Login com JWT (`/login`)
+- Dashboard base protegido por autenticacao (`/dashboard`)
+
+### Execucao local do frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+O `npm start` usa proxy para `http://localhost:5096` nos paths `/professores`, `/auth` e `/api`.
+
+### Documentacao tecnica do frontend
+
+- [Estrutura do frontend](docs/frontend/estrutura.md)
+- [Fluxo de autenticacao](docs/frontend/autenticacao.md)
+- [Integracao com API](docs/frontend/integracao-api.md)
+- [Design System (padrao visual oficial)](docs/frontend/design-system.md)

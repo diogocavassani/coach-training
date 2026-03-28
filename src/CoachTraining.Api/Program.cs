@@ -31,7 +31,8 @@ if (string.IsNullOrWhiteSpace(jwtOptions.Issuer) ||
     string.IsNullOrWhiteSpace(jwtOptions.Audience) ||
     string.IsNullOrWhiteSpace(jwtOptions.Key))
 {
-    throw new InvalidOperationException("Configuracao Jwt invalida.");
+    throw new InvalidOperationException(
+        "Configuracao Jwt invalida: defina Jwt:Issuer, Jwt:Audience e Jwt:Key (ou variaveis Jwt__Issuer, Jwt__Audience e Jwt__Key).");
 }
 
 if (disallowedJwtKeys.Contains(jwtOptions.Key) || jwtOptions.Key.Length < 32)

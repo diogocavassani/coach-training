@@ -1,0 +1,86 @@
+﻿<div class="landing-page">
+  <header class="topbar">
+    <p class="brand">CoachTraining</p>
+    <a mat-stroked-button routerLink="/login">Entrar</a>
+  </header>
+
+  <section class="hero" aria-label="Apresentacao da plataforma">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Area do Professor</p>
+      <h1>Controle o ciclo de alta performance dos seus atletas em um unico painel.</h1>
+      <p class="subtitle">
+        Cadastre-se, acompanhe indicadores e mantenha foco nas decisoes que realmente mudam o resultado da prova.
+      </p>
+      <div class="hero-actions">
+        <a mat-flat-button href="#cadastro">Comecar cadastro</a>
+        <a mat-button routerLink="/login">Ja tenho conta</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="benefits" aria-label="Beneficios principais">
+    <article>
+      <h2>Visao consolidada</h2>
+      <p>Centralize carga de treino e leitura de progresso em um fluxo simples.</p>
+    </article>
+    <article>
+      <h2>Ritmo de decisao</h2>
+      <p>Reduza ruido operacional com um workspace feito para o dia a dia do treinador.</p>
+    </article>
+    <article>
+      <h2>Escala com metodo</h2>
+      <p>Mantenha consistencia de acompanhamento mesmo com varios atletas ativos.</p>
+    </article>
+  </section>
+
+  <section id="cadastro" class="signup-intro" aria-label="Inicio do cadastro">
+    <h2>Crie sua conta de professor</h2>
+    <p>Preencha os dados abaixo para habilitar seu acesso.</p>
+
+    <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="signup-form" novalidate>
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome" autocomplete="name" />
+        @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('required')) {
+          <mat-error>Nome e obrigatorio.</mat-error>
+        }
+        @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('minlength')) {
+          <mat-error>Nome deve ter ao menos 3 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('required')) {
+          <mat-error>Email e obrigatorio.</mat-error>
+        }
+        @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('email')) {
+          <mat-error>Informe um email valido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="senha" autocomplete="new-password" />
+        @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('required')) {
+          <mat-error>Senha e obrigatoria.</mat-error>
+        }
+        @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('minlength')) {
+          <mat-error>Senha deve ter no minimo 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="signup-actions">
+        <button mat-flat-button type="submit" [disabled]="carregandoCadastro">
+          {{ carregandoCadastro ? 'Enviando...' : 'Cadastrar professor' }}
+        </button>
+      </div>
+
+      @if (mensagemErro) {
+        <p class="signup-error">{{ mensagemErro }}</p>
+      }
+    </form>
+  </section>
+</div>

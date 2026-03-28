@@ -1,0 +1,22 @@
+﻿<div class="shell-layout">
+  <header class="shell-header">
+    <button class="menu-button" type="button" (click)="toggleSidebar()" aria-label="Abrir menu">
+      ☰
+    </button>
+    <div class="header-brand">
+      <p class="brand">CoachTraining</p>
+      <p class="context">Workspace do Professor</p>
+    </div>
+    <button mat-stroked-button type="button" (click)="logout()">Sair</button>
+  </header>
+
+  <div class="shell-body">
+    <aside class="shell-sidebar" [class.open]="sidebarAberta">
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="fecharSidebar()">Dashboard</a>
+    </aside>
+
+    <main class="shell-main" (click)="fecharSidebar()">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+.shell-layout {
+  min-height: 100dvh;
+  background: var(--color-bg);
+}
+
+.shell-header {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  background:
+    linear-gradient(90deg, rgb(11 18 32 / 98%) 0%, rgb(17 24 39 / 96%) 58%, rgb(20 83 45 / 22%) 100%);
+}
+
+.menu-button {
+  display: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.3rem;
+}
+
+.header-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  margin: 0;
+  font-size: var(--font-size-label);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: var(--font-weight-bold);
+}
+
+.context {
+  margin-top: 2px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.shell-body {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: calc(100dvh - 72px);
+}
+
+.shell-sidebar {
+  border-right: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  padding: var(--space-4) var(--space-3);
+}
+
+.shell-sidebar a {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  border: 1px solid transparent;
+}
+
+.shell-sidebar a.active,
+.shell-sidebar a:hover {
+  color: var(--color-text);
+  border-color: var(--color-primary-500);
+  background: rgb(22 101 52 / 18%);
+}
+
+.shell-main {
+  padding: var(--space-6);
+}
+
+@media (max-width: 920px) {
+  .menu-button {
+    display: inline-flex;
+  }
+
+  .shell-header {
+    padding: 0 var(--space-4);
+  }
+
+  .shell-body {
+    grid-template-columns: 1fr;
+  }
+
+  .shell-sidebar {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: -240px;
+    width: 240px;
+    z-index: 20;
+    transition: left 200ms ease;
+  }
+
+  .shell-sidebar.open {
+    left: 0;
+  }
+
+  .shell-main {
+    padding: var(--space-4);
+  }
+}
