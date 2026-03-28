@@ -10,6 +10,14 @@ Alvos de proxy:
 - `/auth` -> `http://localhost:5096/auth`
 - `/api` -> `http://localhost:5096/api`
 
+## Ambiente Docker Compose
+
+Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas de API sao encaminhadas para o servico `api` na rede interna:
+
+- `/professores` -> `http://api:8080/professores`
+- `/auth` -> `http://api:8080/auth`
+- `/api` -> `http://api:8080/api`
+
 ## Endpoints usados na sprint
 
 ### Cadastro de professor

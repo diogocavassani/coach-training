@@ -24,6 +24,8 @@ O script `npm start` usa `proxy.conf.json` para rotear chamadas ao backend local
 - `/auth` -> `http://localhost:5096`
 - `/api` -> `http://localhost:5096`
 
+No ambiente Docker (`docker compose`), o `nginx` do frontend faz proxy para o servico `api` em `http://api:8080` (conforme rede interna do compose).
+
 ## Rotas implementadas
 
 - `/`: landing + cadastro de professor
