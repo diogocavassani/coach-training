@@ -73,11 +73,17 @@
       </mat-form-field>
 
       <div class="signup-actions">
-        <button mat-flat-button type="submit">Cadastrar professor</button>
+        <button mat-flat-button type="submit" [disabled]="carregandoCadastro">
+          {{ carregandoCadastro ? 'Enviando...' : 'Cadastrar professor' }}
+        </button>
       </div>
 
-      @if (enviouFormulario && cadastroForm.valid) {
-        <p class="signup-feedback">Validacao concluida. Integracao com API no proximo passo.</p>
+      @if (mensagemErro) {
+        <p class="signup-error">{{ mensagemErro }}</p>
+      }
+
+      @if (cadastroConcluido) {
+        <p class="signup-feedback">Cadastro concluido com sucesso. Agora voce pode entrar na plataforma.</p>
       }
     </form>
   </section>

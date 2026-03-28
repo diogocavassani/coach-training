@@ -131,6 +131,12 @@ h1 {
   font-weight: 600;
 }
 
+.signup-error {
+  margin: 0.8rem 0 0;
+  color: #ff9d9d;
+  font-weight: 600;
+}
+
 @keyframes hero-enter {
   from {
     transform: translateY(24px);
