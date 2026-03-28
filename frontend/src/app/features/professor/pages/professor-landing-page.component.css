@@ -1,4 +1,4 @@
-.landing-page {
+﻿.landing-page {
   min-height: 100dvh;
   background: var(--ct-bg);
 }
@@ -99,7 +99,7 @@ h1 {
 }
 
 .signup-intro {
-  padding: 3.2rem clamp(1.2rem, 3vw, 4rem) 1.8rem;
+  padding: 3.2rem clamp(1.2rem, 3vw, 4rem) 2.8rem;
 }
 
 .signup-intro h2 {
@@ -108,6 +108,27 @@ h1 {
 
 .signup-intro p {
   color: var(--ct-text-muted);
+}
+
+.signup-form {
+  margin-top: 1.5rem;
+  width: min(720px, 100%);
+  display: grid;
+  gap: 0.8rem;
+}
+
+.signup-form mat-form-field {
+  width: 100%;
+}
+
+.signup-actions {
+  margin-top: 0.7rem;
+}
+
+.signup-feedback {
+  margin: 0.8rem 0 0;
+  color: var(--ct-accent);
+  font-weight: 600;
 }
 
 @keyframes hero-enter {

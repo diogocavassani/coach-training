@@ -1,4 +1,4 @@
-<div class="landing-page">
+ï»¿<div class="landing-page">
   <header class="topbar">
     <p class="brand">CoachTraining</p>
     <a mat-stroked-button routerLink="/login">Entrar</a>
@@ -26,7 +26,7 @@
     </article>
     <article>
       <h2>Ritmo de decisao</h2>
-      <p>Reduza ruído operacional com um workspace feito para o dia a dia do treinador.</p>
+      <p>Reduza ruido operacional com um workspace feito para o dia a dia do treinador.</p>
     </article>
     <article>
       <h2>Escala com metodo</h2>
@@ -36,6 +36,49 @@
 
   <section id="cadastro" class="signup-intro" aria-label="Inicio do cadastro">
     <h2>Crie sua conta de professor</h2>
-    <p>O formulario de cadastro aparece logo abaixo nesta pagina.</p>
+    <p>Preencha os dados abaixo para habilitar seu acesso.</p>
+
+    <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="signup-form" novalidate>
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome" autocomplete="name" />
+        @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('required')) {
+          <mat-error>Nome e obrigatorio.</mat-error>
+        }
+        @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('minlength')) {
+          <mat-error>Nome deve ter ao menos 3 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('required')) {
+          <mat-error>Email e obrigatorio.</mat-error>
+        }
+        @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('email')) {
+          <mat-error>Informe um email valido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="senha" autocomplete="new-password" />
+        @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('required')) {
+          <mat-error>Senha e obrigatoria.</mat-error>
+        }
+        @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('minlength')) {
+          <mat-error>Senha deve ter no minimo 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="signup-actions">
+        <button mat-flat-button type="submit">Cadastrar professor</button>
+      </div>
+
+      @if (enviouFormulario && cadastroForm.valid) {
+        <p class="signup-feedback">Validacao concluida. Integracao com API no proximo passo.</p>
+      }
+    </form>
   </section>
 </div>
