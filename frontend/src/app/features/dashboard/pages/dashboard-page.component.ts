@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  template: `<p>Dashboard page</p>`
+  templateUrl: './dashboard-page.component.html',
+  styleUrl: './dashboard-page.component.css'
 })
 export class DashboardPageComponent {}

@@ -1,0 +1,97 @@
+﻿.shell-layout {
+  min-height: 100dvh;
+  background: #060f1c;
+}
+
+.shell-header {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1.2rem;
+  border-bottom: 1px solid #1a3048;
+  background: linear-gradient(90deg, #071526 0%, #0d243d 58%, #123454 100%);
+}
+
+.menu-button {
+  display: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.3rem;
+}
+
+.header-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  margin: 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+}
+
+.context {
+  margin: 0;
+  color: var(--ct-text-muted);
+  font-size: 0.85rem;
+}
+
+.shell-body {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: calc(100dvh - 72px);
+}
+
+.shell-sidebar {
+  border-right: 1px solid #1a3048;
+  background: #0a1626;
+  padding: 1.1rem 0.9rem;
+}
+
+.shell-sidebar a {
+  display: block;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.55rem;
+  color: var(--ct-text-muted);
+  text-decoration: none;
+  transition: background-color 180ms ease;
+}
+
+.shell-sidebar a.active,
+.shell-sidebar a:hover {
+  color: var(--ct-text);
+  background: #16314f;
+}
+
+.shell-main {
+  padding: 1.3rem;
+}
+
+@media (max-width: 920px) {
+  .menu-button {
+    display: inline-flex;
+  }
+
+  .shell-body {
+    grid-template-columns: 1fr;
+  }
+
+  .shell-sidebar {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: -240px;
+    width: 240px;
+    z-index: 20;
+    transition: left 200ms ease;
+  }
+
+  .shell-sidebar.open {
+    left: 0;
+  }
+}
