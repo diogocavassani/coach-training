@@ -37,6 +37,10 @@ services:
       # Deve corresponder a GetConnectionString("DefaultConnection").
       ConnectionStrings__DefaultConnection: >-
         Host=db;Port=5432;Database=${POSTGRES_DB:-coachtraining};Username=${POSTGRES_USER:-coach};Password=${POSTGRES_PASSWORD:-coach}
+      Jwt__Issuer: ${JWT_ISSUER:-CoachTraining}
+      Jwt__Audience: ${JWT_AUDIENCE:-CoachTraining.Client}
+      Jwt__ExpirationHours: ${JWT_EXPIRATION_HOURS:-8}
+      Jwt__Key: ${JWT_KEY:-coach-training-local-docker-jwt-key-change-this-2026}
     depends_on:
       db:
         condition: service_healthy
