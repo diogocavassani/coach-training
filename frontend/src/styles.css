@@ -1,1 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+  --ct-bg: #08121f;
+  --ct-bg-muted: #0f2034;
+  --ct-surface: #11253d;
+  --ct-text: #f4f7fb;
+  --ct-text-muted: #9db1c7;
+  --ct-accent: #06d6a0;
+  --ct-danger: #ff5c5c;
+  --ct-gradient: linear-gradient(125deg, #08121f 0%, #0f2a44 58%, #194365 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  color: var(--ct-text);
+  background: var(--ct-bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: 'Barlow Condensed', 'Segoe UI', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: inherit;
+}
