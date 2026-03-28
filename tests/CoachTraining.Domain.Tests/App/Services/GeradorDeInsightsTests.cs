@@ -12,7 +12,7 @@ public class GeradorDeInsightsTests
     [Fact]
     public void Insights_IncludesAcwrHigh_WhenAcwrHigh()
     {
-        var atleta = new Atleta("Teste ACWR");
+        var atleta = new Atleta("Teste ACWR", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var sessoes = new List<SessaoDeTreino>
         {
@@ -29,7 +29,7 @@ public class GeradorDeInsightsTests
     [Fact]
     public void Insights_IncludesDeltaHigh_WhenDeltaHigh()
     {
-        var atleta = new Atleta("Teste Delta");
+        var atleta = new Atleta("Teste Delta", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var sessoes = new List<SessaoDeTreino>
         {
@@ -47,7 +47,7 @@ public class GeradorDeInsightsTests
     [Fact]
     public void Insights_TaperMessage_WhenInTaperWindow()
     {
-        var atleta = new Atleta("Teste Taper");
+        var atleta = new Atleta("Teste Taper", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var prova = new ProvaAlvo(hoje.AddDays(10), 42.0, "Maratona teste");
 

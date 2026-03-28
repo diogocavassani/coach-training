@@ -7,4 +7,5 @@ public class ProvaAlvoModel
     public DateOnly DataProva { get; set; }
     public double DistanciaKm { get; set; }
     public string? Objetivo { get; set; }
+    public AtletaModel Atleta { get; set; } = null!;
 }

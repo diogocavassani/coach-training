@@ -13,11 +13,14 @@ public class ProvaAlvoRepository : IProvaAlvoRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public ProvaAlvo? ObterPorAtletaId(Guid atletaId)
+    public ProvaAlvo? ObterPorAtletaId(Guid atletaId, Guid professorId)
     {
-        var model = _context.ProvasAlvo
-            .AsNoTracking()
-            .FirstOrDefault(p => p.AtletaId == atletaId);
+        var model = (
+            from prova in _context.ProvasAlvo.AsNoTracking()
+            join atleta in _context.Atletas.AsNoTracking() on prova.AtletaId equals atleta.Id
+            where prova.AtletaId == atletaId && atleta.ProfessorId == professorId
+            select prova)
+            .FirstOrDefault();
 
         if (model == null)
         {

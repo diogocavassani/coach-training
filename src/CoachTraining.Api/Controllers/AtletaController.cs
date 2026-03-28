@@ -1,5 +1,7 @@
+using CoachTraining.Api.Security;
 using CoachTraining.App.DTOs;
 using CoachTraining.App.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +10,7 @@ namespace CoachTraining.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class AtletaController : ControllerBase
 {
     private readonly CadastroAtletaService _cadastroService;
@@ -40,7 +43,12 @@ public class AtletaController : ControllerBase
 
             _logger.LogInformation("Recebida requisicao de cadastro de atleta: {NomeAtleta}", dto.Nome);
 
-            var atleta = _cadastroService.Cadastrar(dto);
+            if (!User.TryGetProfessorId(out var professorId))
+            {
+                return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+            }
+
+            var atleta = _cadastroService.Cadastrar(dto, professorId);
 
             _logger.LogInformation("Atleta {AtletaId} cadastrado com sucesso via API", atleta.Id);
 
@@ -69,7 +77,12 @@ public class AtletaController : ControllerBase
             return BadRequest(new { erro = "Id do atleta invalido" });
         }
 
-        var atleta = _cadastroService.ObterPorId(id);
+        if (!User.TryGetProfessorId(out var professorId))
+        {
+            return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+        }
+
+        var atleta = _cadastroService.ObterPorId(id, professorId);
         if (atleta == null)
         {
             _logger.LogInformation("Atleta {AtletaId} nao encontrado", id);
@@ -80,6 +93,7 @@ public class AtletaController : ControllerBase
     }
 
     [HttpGet("health")]
+    [AllowAnonymous]
     public IActionResult Health()
     {
         return Ok(new { status = "Atleta service is healthy" });

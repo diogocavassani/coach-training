@@ -17,7 +17,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_ComSessoesEstavel_RetornaDashboardComRiscoNormal()
     {
-        var atleta = new Atleta("João Silva");
+        var atleta = new Atleta("João Silva", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>
@@ -39,7 +39,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_ComCargaCrescente_RetornaConstrucao()
     {
-        var atleta = new Atleta("Maria Santos");
+        var atleta = new Atleta("Maria Santos", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>
@@ -62,7 +62,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_ComCargaElevada_RetornaPico()
     {
-        var atleta = new Atleta("Pedro Costa");
+        var atleta = new Atleta("Pedro Costa", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>
@@ -82,7 +82,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_SemSessoes_RetornaDashboardVazio()
     {
-        var atleta = new Atleta("Ana Paula");
+        var atleta = new Atleta("Ana Paula", Guid.NewGuid());
         var sessoes = new List<SessaoDeTreino>();
 
         var dashboard = _service.ObterDashboard(atleta, sessoes);
@@ -98,7 +98,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_EmTaper_RetornaPolimentoEReducaoVolume()
     {
-        var atleta = new Atleta("Carlos Mendes");
+        var atleta = new Atleta("Carlos Mendes", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var prova = new ProvaAlvo(hoje.AddDays(10), 42.0, "Maratona teste");
 
@@ -125,7 +125,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_ACWRAlto_RetornaRisco()
     {
-        var atleta = new Atleta("Fabiana Oliveira");
+        var atleta = new Atleta("Fabiana Oliveira", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>
@@ -149,7 +149,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_DeltaPercentualAlto_RetornaRisco()
     {
-        var atleta = new Atleta("Roberto Silva");
+        var atleta = new Atleta("Roberto Silva", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var sessoes = new List<SessaoDeTreino>
@@ -171,7 +171,7 @@ public class ObterDashboardAtletaServiceTests
     public void ObterDashboard_ComObservacoesClin_AsservaAsObservacoes()
     {
         var observacoes = "Atleta com histórico de lesão no joelho";
-        var atleta = new Atleta("Gustavo Pereira", observacoesClinicas: observacoes);
+        var atleta = new Atleta("Gustavo Pereira", Guid.NewGuid(), observacoesClinicas: observacoes);
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(
@@ -192,7 +192,7 @@ public class ObterDashboardAtletaServiceTests
     public void ObterDashboard_ComNivelAtleta_AssertaNivel()
     {
         var nivel = "Intermediário";
-        var atleta = new Atleta("Lucia Ferreira", nivelEsportivo: nivel);
+        var atleta = new Atleta("Lucia Ferreira", Guid.NewGuid(), nivelEsportivo: nivel);
         var sessoes = new List<SessaoDeTreino>
         {
             new SessaoDeTreino(
@@ -212,7 +212,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_ComSessaoInconsistente_DuracaoZero_LancaErroDeIntegridade()
     {
-        var atleta = new Atleta("Atleta com dado inconsistente");
+        var atleta = new Atleta("Atleta com dado inconsistente", Guid.NewGuid());
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var sessoes = new List<SessaoDeTreino>
         {
@@ -241,7 +241,7 @@ public class ObterDashboardAtletaServiceTests
     [Fact]
     public void ObterDashboard_LancaArgumentNullException_SeSessoesNull()
     {
-        var atleta = new Atleta("Test");
+        var atleta = new Atleta("Test", Guid.NewGuid());
 
         var exception = Assert.Throws<ArgumentNullException>(
             () => _service.ObterDashboard(atleta, null!));

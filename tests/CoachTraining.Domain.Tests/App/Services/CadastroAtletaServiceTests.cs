@@ -1,5 +1,5 @@
-using CoachTraining.App.DTOs;
 using CoachTraining.App.Abstractions.Persistence;
+using CoachTraining.App.DTOs;
 using CoachTraining.App.Services;
 using CoachTraining.Domain.Entities;
 
@@ -13,8 +13,8 @@ public class CadastroAtletaServiceTests
 
         public void Adicionar(Atleta atleta) => _atletas[atleta.Id] = atleta;
 
-        public Atleta? ObterPorId(Guid atletaId)
-            => _atletas.TryGetValue(atletaId, out var atleta) ? atleta : null;
+        public Atleta? ObterPorId(Guid atletaId, Guid professorId)
+            => _atletas.TryGetValue(atletaId, out var atleta) && atleta.ProfessorId == professorId ? atleta : null;
     }
 
     [Fact]
@@ -24,16 +24,18 @@ public class CadastroAtletaServiceTests
         var dto = new CriarAtletaDto
         {
             Nome = "Diogo Teste",
-            ObservacoesClinicas = "Sem restrições",
-            NivelEsportivo = "Intermediário"
+            ObservacoesClinicas = "Sem restricoes",
+            NivelEsportivo = "Intermediario"
         };
+        var professorId = Guid.NewGuid();
 
-        var atletaCadastrado = service.Cadastrar(dto);
-        var entidadeRecuperada = service.ObterEntidadePorId(atletaCadastrado.Id);
+        var atletaCadastrado = service.Cadastrar(dto, professorId);
+        var entidadeRecuperada = service.ObterEntidadePorId(atletaCadastrado.Id, professorId);
 
         Assert.NotNull(entidadeRecuperada);
         Assert.Equal(atletaCadastrado.Id, entidadeRecuperada!.Id);
         Assert.Equal(dto.Nome, entidadeRecuperada.Nome);
+        Assert.Equal(professorId, entidadeRecuperada.ProfessorId);
     }
 
     [Fact]
@@ -41,7 +43,7 @@ public class CadastroAtletaServiceTests
     {
         var service = new CadastroAtletaService(new AtletaRepositoryFake());
 
-        var entidade = service.ObterEntidadePorId(Guid.NewGuid());
+        var entidade = service.ObterEntidadePorId(Guid.NewGuid(), Guid.NewGuid());
 
         Assert.Null(entidade);
     }

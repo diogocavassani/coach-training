@@ -19,6 +19,7 @@ public class AtletaRepository : IAtletaRepository
         var model = new AtletaModel
         {
             Id = atleta.Id,
+            ProfessorId = atleta.ProfessorId,
             Nome = atleta.Nome,
             ObservacoesClinicas = atleta.ObservacoesClinicas,
             NivelEsportivo = atleta.NivelEsportivo
@@ -28,11 +29,11 @@ public class AtletaRepository : IAtletaRepository
         _context.SaveChanges();
     }
 
-    public Atleta? ObterPorId(Guid atletaId)
+    public Atleta? ObterPorId(Guid atletaId, Guid professorId)
     {
         var model = _context.Atletas
             .AsNoTracking()
-            .FirstOrDefault(a => a.Id == atletaId);
+            .FirstOrDefault(a => a.Id == atletaId && a.ProfessorId == professorId);
 
         if (model == null)
         {
@@ -41,6 +42,7 @@ public class AtletaRepository : IAtletaRepository
 
         return new Atleta(
             nome: model.Nome,
+            professorId: model.ProfessorId,
             observacoesClinicas: model.ObservacoesClinicas,
             nivelEsportivo: model.NivelEsportivo,
             id: model.Id);

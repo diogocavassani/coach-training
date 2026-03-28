@@ -5,5 +5,5 @@ namespace CoachTraining.App.Abstractions.Persistence;
 public interface IAtletaRepository
 {
     void Adicionar(Atleta atleta);
-    Atleta? ObterPorId(Guid atletaId);
+    Atleta? ObterPorId(Guid atletaId, Guid professorId);
 }

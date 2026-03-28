@@ -1,5 +1,28 @@
 @CoachTraining.Api_HostAddress = http://localhost:5096
 
+### Cadastro de Professor
+POST {{CoachTraining.Api_HostAddress}}/professores
+Content-Type: application/json
+
+{
+  "nome": "Professor Teste",
+  "email": "professor@teste.com",
+  "senha": "123456"
+}
+
+###
+
+### Login de Professor
+POST {{CoachTraining.Api_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "professor@teste.com",
+  "senha": "123456"
+}
+
+###
+
 ### Health Check - Dashboard Service
 GET {{CoachTraining.Api_HostAddress}}/api/dashboard/health
 Accept: application/json

@@ -141,10 +141,30 @@ docker compose logs -f api
 
 ## 📚 Documentação
 
-- [Visão Geral do Projeto](docs/projeto_sistema_de_monitoramento_de_carga_e_preparacao_de_atletas.md)
-- [Overview do Projeto (Portfólio)](docs/overview_do_projeto.md)
-- [Roadmap de Implementação](docs/roadmap_de_implementacao_tarefas_por_semana.md)
-- [Princípios Arquiteturais](docs/ARQUITETURA.md)
+- Arquitetura:
+  - [Overview](docs/architecture/overview.md)
+  - [ADR-001 - Professor Auth](docs/architecture/decisions/adr-001-professor-auth.md)
+  - [ADR-002 - Multi-tenant](docs/architecture/decisions/adr-002-multi-tenant.md)
+- Domínios:
+  - [Professor](docs/domains/professor.md)
+  - [Aluno (Atleta no código)](docs/domains/aluno.md)
+  - [Treino](docs/domains/treino.md)
+- Casos de uso:
+  - [Cadastrar Professor](docs/use-cases/cadastrar-professor.md)
+  - [Cadastrar Aluno](docs/use-cases/cadastrar-aluno.md)
+  - [Montar Treino](docs/use-cases/montar-treino.md)
+- APIs:
+  - [Professor API](docs/apis/professor-api.md)
+  - [Aluno API](docs/apis/aluno-api.md)
+- Fluxos:
+  - [Cadastro de Professor](docs/flows/cadastro-professor.md)
+  - [Fluxo de Treino](docs/flows/fluxo-treino.md)
+- Modelo de dados:
+  - [Entidades](docs/data-model/entidades.md)
+  - [Diagramas](docs/data-model/diagramas.md)
+- Operação:
+  - [Regras de Negócio](docs/rules/regras-negocio.md)
+  - [Setup de Ambiente](docs/setup/ambiente.md)
 
 ## 🛠️ Stack tecnologico
 
