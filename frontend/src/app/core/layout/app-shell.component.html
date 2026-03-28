@@ -12,7 +12,9 @@
 
   <div class="shell-body">
     <aside class="shell-sidebar" [class.open]="sidebarAberta">
-      <a routerLink="/dashboard" routerLinkActive="active" (click)="fecharSidebar()">Dashboard</a>
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSidebar()">Dashboard</a>
+      <a routerLink="/dashboard/alunos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSidebar()">Alunos</a>
+      <a routerLink="/dashboard/alunos/novo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSidebar()">Novo aluno</a>
     </aside>
 
     <main class="shell-main" (click)="fecharSidebar()">

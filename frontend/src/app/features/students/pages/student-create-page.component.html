@@ -1,0 +1,27 @@
+<section class="student-create" aria-label="Cadastro de aluno">
+  <header>
+    <p class="eyebrow">Sprint 3</p>
+    <h1>Novo aluno</h1>
+    <p>Preencha os dados basicos para cadastrar um novo aluno no seu workspace.</p>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="salvar()" novalidate>
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="nome" placeholder="Ex.: Joao Silva" />
+      <mat-error *ngIf="form.controls.nome.hasError('required')">O nome e obrigatorio.</mat-error>
+      <mat-error *ngIf="form.controls.nome.hasError('minlength')">Informe ao menos 3 caracteres.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email (opcional)</mat-label>
+      <input matInput formControlName="email" placeholder="aluno@email.com" />
+      <mat-error *ngIf="form.controls.email.hasError('email')">Informe um email valido.</mat-error>
+    </mat-form-field>
+
+    <div class="actions">
+      <a mat-button routerLink="/dashboard/alunos">Cancelar</a>
+      <button mat-flat-button type="submit" [disabled]="enviando">{{ enviando ? 'Salvando...' : 'Cadastrar aluno' }}</button>
+    </div>
+  </form>
+</section>

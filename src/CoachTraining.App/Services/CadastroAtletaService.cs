@@ -57,6 +57,17 @@ public class CadastroAtletaService
         return _atletaRepository.ObterPorId(id, professorId);
     }
 
+    public IReadOnlyList<AtletaDto> ListarPorProfessor(Guid professorId)
+    {
+        if (professorId == Guid.Empty)
+        {
+            return [];
+        }
+
+        var atletas = _atletaRepository.ListarPorProfessor(professorId);
+        return atletas.Select(MapearAtletaParaDto).ToList();
+    }
+
     private static AtletaDto MapearAtletaParaDto(Atleta atleta)
     {
         return new AtletaDto
