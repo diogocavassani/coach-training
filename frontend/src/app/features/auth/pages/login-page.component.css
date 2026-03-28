@@ -41,9 +41,9 @@ h1 {
   width: 100%;
 }
 
-.valid-feedback {
+.error-feedback {
   margin: 0.4rem 0 0;
-  color: var(--ct-accent);
+  color: #ff9d9d;
   font-weight: 600;
 }
 
