@@ -1,0 +1,39 @@
+﻿<section class="login-page" aria-label="Acesso de professor">
+  <div class="login-content">
+    <p class="eyebrow">CoachTraining</p>
+    <h1>Entre para continuar o monitoramento dos seus atletas.</h1>
+    <p class="description">Use o email cadastrado e sua senha para acessar a area protegida.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('required')) {
+          <mat-error>Email e obrigatorio.</mat-error>
+        }
+        @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('email')) {
+          <mat-error>Informe um email valido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="senha" autocomplete="current-password" />
+        @if (loginForm.controls.senha.touched && loginForm.controls.senha.hasError('required')) {
+          <mat-error>Senha e obrigatoria.</mat-error>
+        }
+        @if (loginForm.controls.senha.touched && loginForm.controls.senha.hasError('minlength')) {
+          <mat-error>Senha deve ter no minimo 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-flat-button type="submit">Entrar</button>
+
+      @if (enviouFormulario && loginForm.valid) {
+        <p class="valid-feedback">Validacao concluida. Integracao de login no proximo passo.</p>
+      }
+    </form>
+
+    <a class="register-link" routerLink="/">Ainda nao tem conta? Cadastre-se.</a>
+  </div>
+</section>
