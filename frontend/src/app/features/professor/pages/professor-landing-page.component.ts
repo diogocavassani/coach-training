@@ -4,9 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { finalize } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
+import { finalize, switchMap, tap } from 'rxjs';
 
+import { AuthService } from '../../../services/auth/auth.service';
 import { ProfessorApiService } from '../../../services/api/professor-api.service';
 
 @Component({
@@ -22,11 +23,12 @@ export class ProfessorLandingPageComponent {
   enviouFormulario = false;
   carregandoCadastro = false;
   mensagemErro = '';
-  cadastroConcluido = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly professorApiService: ProfessorApiService
+    private readonly professorApiService: ProfessorApiService,
+    private readonly authService: AuthService,
+    private readonly router: Router
   ) {
     this.cadastroForm = this.formBuilder.nonNullable.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -45,19 +47,37 @@ export class ProfessorLandingPageComponent {
 
     this.carregandoCadastro = true;
     this.mensagemErro = '';
-    this.cadastroConcluido = false;
+
+    const payload = this.cadastroForm.getRawValue();
+    let cadastroEfetuado = false;
 
     this.professorApiService
-      .cadastrar(this.cadastroForm.getRawValue())
-      .pipe(finalize(() => (this.carregandoCadastro = false)))
+      .cadastrar(payload)
+      .pipe(
+        tap(() => {
+          cadastroEfetuado = true;
+        }),
+        switchMap(() =>
+          this.authService.login({
+            email: payload.email,
+            senha: payload.senha
+          })
+        ),
+        finalize(() => (this.carregandoCadastro = false))
+      )
       .subscribe({
         next: () => {
-          this.cadastroConcluido = true;
-          this.cadastroForm.reset({ nome: '', email: '', senha: '' });
-          this.enviouFormulario = false;
+          void this.router.navigateByUrl('/dashboard');
         },
-        error: (error: HttpErrorResponse) => {
-          this.mensagemErro = error.error?.erro ?? 'Nao foi possivel concluir o cadastro.';
+        error: (error: unknown) => {
+          if (cadastroEfetuado) {
+            this.mensagemErro =
+              'Cadastro concluido, mas nao foi possivel entrar automaticamente. Tente fazer login.';
+            return;
+          }
+
+          const httpError = error as HttpErrorResponse;
+          this.mensagemErro = httpError.error?.erro ?? 'Nao foi possivel concluir o cadastro.';
         }
       });
   }
