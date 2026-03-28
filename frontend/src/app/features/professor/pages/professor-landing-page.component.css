@@ -1,6 +1,8 @@
-﻿.landing-page {
+.landing-page {
   min-height: 100dvh;
-  background: var(--ct-bg);
+  background:
+    linear-gradient(155deg, rgb(11 18 32 / 96%) 0%, rgb(17 24 39 / 92%) 50%, rgb(22 101 52 / 16%) 100%),
+    var(--color-bg);
 }
 
 .topbar {
@@ -10,14 +12,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem clamp(1.2rem, 3vw, 3rem);
-  background: linear-gradient(180deg, rgb(5 11 18 / 72%) 0%, rgb(5 11 18 / 0%) 100%);
+  padding: var(--space-4) clamp(1.2rem, 3vw, 3rem);
+  border-bottom: 1px solid rgb(255 255 255 / 6%);
+  backdrop-filter: blur(8px);
+  background: rgb(11 18 32 / 74%);
 }
 
 .brand {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -25,10 +29,10 @@
 .hero {
   position: relative;
   min-height: 100dvh;
-  padding: min(16vh, 8rem) clamp(1.2rem, 4vw, 4rem) 4rem;
+  padding: min(16vh, 8rem) clamp(1.2rem, 4vw, 4rem) var(--space-12);
   display: grid;
   align-items: end;
-  background-image: url('https://images.unsplash.com/photo-1517960413843-0aee8e2b3285?auto=format&fit=crop&w=1600&q=80');
+  background-image: url('https://images.unsplash.com/photo-1517960413843-0aee8e2b3285?auto=format&fit=crop&w=1800&q=80');
   background-size: cover;
   background-position: center;
 }
@@ -37,84 +41,95 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(120deg, rgb(4 10 17 / 90%) 22%, rgb(4 10 17 / 40%) 62%, rgb(11 35 61 / 84%) 100%),
-    linear-gradient(180deg, rgb(8 18 31 / 20%) 0%, rgb(8 18 31 / 85%) 100%);
+    linear-gradient(118deg, rgb(11 18 32 / 95%) 20%, rgb(17 24 39 / 62%) 62%, rgb(20 83 45 / 75%) 100%),
+    linear-gradient(180deg, rgb(11 18 32 / 30%) 0%, rgb(11 18 32 / 90%) 100%);
 }
 
 .hero-content {
   position: relative;
-  width: min(680px, 100%);
-  animation: hero-enter 720ms ease-out;
+  width: min(720px, 100%);
+  animation: hero-enter 700ms ease-out;
 }
 
 .eyebrow {
-  margin: 0;
-  color: var(--ct-accent);
+  color: var(--color-primary-300);
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-size: 0.85rem;
-  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-bold);
 }
 
 h1 {
-  margin-top: 0.75rem;
-  font-size: clamp(2.3rem, 7vw, 5rem);
-  line-height: 0.92;
+  margin-top: var(--space-3);
   max-width: 12ch;
 }
 
 .subtitle {
-  margin: 1.4rem 0 0;
-  max-width: 46ch;
-  color: #e7eef6;
-  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  margin-top: var(--space-6);
+  max-width: 48ch;
+  color: var(--color-text-muted);
+  font-size: 1.0625rem;
 }
 
 .hero-actions {
-  margin-top: 1.9rem;
+  margin-top: var(--space-8);
   display: flex;
-  gap: 0.8rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
 
 .benefits {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
-  background: #19324f;
+  gap: var(--space-4);
+  padding: var(--space-6) clamp(1.2rem, 3vw, 4rem);
 }
 
 .benefits article {
-  padding: 1.6rem clamp(1.2rem, 3vw, 2.2rem);
-  background: #0f2135;
+  padding: var(--space-6);
+  background: rgb(31 41 55 / 86%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.benefits article:hover {
+  border-color: var(--color-primary-500);
+  transform: translateY(-2px);
 }
 
 .benefits h2 {
-  font-size: 1.45rem;
+  font-size: 1.25rem;
 }
 
 .benefits p {
-  margin: 0.55rem 0 0;
-  color: var(--ct-text-muted);
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
 }
 
 .signup-intro {
-  padding: 3.2rem clamp(1.2rem, 3vw, 4rem) 2.8rem;
+  padding: var(--space-8) clamp(1.2rem, 3vw, 4rem) var(--space-12);
 }
 
-.signup-intro h2 {
-  font-size: clamp(2rem, 4.8vw, 2.8rem);
+.signup-intro > h2 {
+  font-size: clamp(2rem, 5vw, 2.4rem);
 }
 
-.signup-intro p {
-  color: var(--ct-text-muted);
+.signup-intro > p {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
 }
 
 .signup-form {
-  margin-top: 1.5rem;
-  width: min(720px, 100%);
+  margin-top: var(--space-6);
+  width: min(760px, 100%);
+  padding: var(--space-6);
   display: grid;
-  gap: 0.8rem;
+  gap: var(--space-3);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background: rgb(31 41 55 / 78%);
+  box-shadow: var(--shadow-elevated);
 }
 
 .signup-form mat-form-field {
@@ -122,19 +137,13 @@ h1 {
 }
 
 .signup-actions {
-  margin-top: 0.7rem;
-}
-
-.signup-feedback {
-  margin: 0.8rem 0 0;
-  color: var(--ct-accent);
-  font-weight: 600;
+  margin-top: var(--space-2);
 }
 
 .signup-error {
-  margin: 0.8rem 0 0;
-  color: #ff9d9d;
-  font-weight: 600;
+  margin-top: var(--space-2);
+  color: #f87171;
+  font-weight: var(--font-weight-semibold);
 }
 
 @keyframes hero-enter {
@@ -151,11 +160,15 @@ h1 {
 
 @media (max-width: 900px) {
   .hero {
-    min-height: 86dvh;
-    padding-top: 8.8rem;
+    min-height: 88dvh;
+    padding-top: 8.5rem;
   }
 
   .benefits {
     grid-template-columns: 1fr;
+  }
+
+  .signup-form {
+    padding: var(--space-4);
   }
 }

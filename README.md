@@ -236,3 +236,4 @@ O `npm start` usa proxy para `http://localhost:5096` nos paths `/professores`, `
 - [Estrutura do frontend](docs/frontend/estrutura.md)
 - [Fluxo de autenticacao](docs/frontend/autenticacao.md)
 - [Integracao com API](docs/frontend/integracao-api.md)
+- [Design System (padrao visual oficial)](docs/frontend/design-system.md)

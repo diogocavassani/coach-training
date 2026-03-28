@@ -1,40 +1,46 @@
-﻿.login-page {
+.login-page {
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: 2rem 1.2rem;
-  background: radial-gradient(circle at 10% 0%, #153e63 0%, #08121f 48%, #050b14 100%);
+  padding: var(--space-8) var(--space-4);
+  background:
+    radial-gradient(circle at 92% 2%, rgb(34 197 94 / 24%) 0%, rgb(11 18 32 / 0%) 35%),
+    radial-gradient(circle at 8% 8%, rgb(59 130 246 / 16%) 0%, rgb(11 18 32 / 0%) 28%),
+    var(--color-bg);
 }
 
 .login-content {
-  width: min(520px, 100%);
-  animation: login-enter 500ms ease-out;
+  width: min(540px, 100%);
+  padding: clamp(1.25rem, 2.6vw, 2rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: rgb(31 41 55 / 82%);
+  box-shadow: var(--shadow-elevated);
+  animation: login-enter 520ms ease-out;
 }
 
 .eyebrow {
-  margin: 0;
-  color: var(--ct-accent);
-  font-size: 0.82rem;
+  color: var(--color-primary-300);
+  font-size: var(--font-size-caption);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
 }
 
 h1 {
-  margin-top: 0.7rem;
-  font-size: clamp(2.1rem, 5vw, 3rem);
-  line-height: 0.95;
+  margin-top: var(--space-3);
+  font-size: clamp(2rem, 5vw, 2.5rem);
 }
 
 .description {
-  margin: 1rem 0 0;
-  color: var(--ct-text-muted);
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
 }
 
 .login-form {
-  margin-top: 1.5rem;
+  margin-top: var(--space-6);
   display: grid;
-  gap: 0.8rem;
+  gap: var(--space-3);
 }
 
 .login-form mat-form-field {
@@ -42,15 +48,20 @@ h1 {
 }
 
 .error-feedback {
-  margin: 0.4rem 0 0;
-  color: #ff9d9d;
-  font-weight: 600;
+  margin-top: var(--space-2);
+  color: #f87171;
+  font-weight: var(--font-weight-semibold);
 }
 
 .register-link {
   display: inline-block;
-  margin-top: 1.3rem;
-  color: var(--ct-text-muted);
+  margin-top: var(--space-6);
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.register-link:hover {
+  color: var(--color-primary-300);
 }
 
 @keyframes login-enter {
