@@ -22,7 +22,7 @@ public class ApiWebApplicationFactory : WebApplicationFactory<Program>
             {
                 ["Jwt:Issuer"] = "CoachTraining",
                 ["Jwt:Audience"] = "CoachTraining.Client",
-                ["Jwt:Key"] = "coach-training-dev-key-change-this-to-32-plus-chars",
+                ["Jwt:Key"] = "testing-jwt-secret-key-with-32-plus-characters",
                 ["Jwt:ExpirationHours"] = "8",
                 ["ConnectionStrings:DefaultConnection"] = string.Empty
             });

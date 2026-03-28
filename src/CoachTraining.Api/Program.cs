@@ -20,11 +20,24 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptio
 var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
     ?? throw new InvalidOperationException("Configuracao Jwt nao encontrada.");
 
+var disallowedJwtKeys = new HashSet<string>(StringComparer.Ordinal)
+{
+    "coach-training-dev-key-change-this-to-32-plus-chars",
+    "change-me",
+    "your-strong-jwt-key"
+};
+
 if (string.IsNullOrWhiteSpace(jwtOptions.Issuer) ||
     string.IsNullOrWhiteSpace(jwtOptions.Audience) ||
     string.IsNullOrWhiteSpace(jwtOptions.Key))
 {
     throw new InvalidOperationException("Configuracao Jwt invalida.");
+}
+
+if (disallowedJwtKeys.Contains(jwtOptions.Key) || jwtOptions.Key.Length < 32)
+{
+    throw new InvalidOperationException(
+        "Configuracao Jwt invalida: Jwt:Key deve vir de uma fonte secreta e ter pelo menos 32 caracteres.");
 }
 
 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
