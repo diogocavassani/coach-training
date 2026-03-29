@@ -68,6 +68,19 @@ public class AtletaController : ControllerBase
         }
     }
 
+
+    [HttpGet]
+    public IActionResult Listar()
+    {
+        if (!User.TryGetProfessorId(out var professorId))
+        {
+            return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+        }
+
+        var atletas = _cadastroService.ListarPorProfessor(professorId);
+        return Ok(atletas);
+    }
+
     [HttpGet("{id:guid}")]
     public IActionResult ObterPorId(Guid id)
     {

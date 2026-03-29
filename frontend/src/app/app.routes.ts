@@ -5,6 +5,8 @@ import { LoginPageComponent } from './features/auth/pages/login-page.component';
 import { DashboardPageComponent } from './features/dashboard/pages/dashboard-page.component';
 import { ProfessorLandingPageComponent } from './features/professor/pages/professor-landing-page.component';
 import { AppShellComponent } from './core/layout/app-shell.component';
+import { StudentsListPageComponent } from './features/students/pages/students-list-page.component';
+import { StudentCreatePageComponent } from './features/students/pages/student-create-page.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +25,14 @@ export const routes: Routes = [
       {
         path: '',
         component: DashboardPageComponent
+      },
+      {
+        path: 'alunos',
+        component: StudentsListPageComponent
+      },
+      {
+        path: 'alunos/novo',
+        component: StudentCreatePageComponent
       }
     ]
   },

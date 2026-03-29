@@ -21,6 +21,7 @@ public class AtletaRepository : IAtletaRepository
             Id = atleta.Id,
             ProfessorId = atleta.ProfessorId,
             Nome = atleta.Nome,
+            Email = atleta.Email,
             ObservacoesClinicas = atleta.ObservacoesClinicas,
             NivelEsportivo = atleta.NivelEsportivo
         };
@@ -45,6 +46,23 @@ public class AtletaRepository : IAtletaRepository
             professorId: model.ProfessorId,
             observacoesClinicas: model.ObservacoesClinicas,
             nivelEsportivo: model.NivelEsportivo,
+            email: model.Email,
             id: model.Id);
+    }
+
+    public IReadOnlyList<Atleta> ListarPorProfessor(Guid professorId)
+    {
+        return _context.Atletas
+            .AsNoTracking()
+            .Where(a => a.ProfessorId == professorId)
+            .OrderBy(a => a.Nome)
+            .Select(model => new Atleta(
+                nome: model.Nome,
+                professorId: model.ProfessorId,
+                observacoesClinicas: model.ObservacoesClinicas,
+                nivelEsportivo: model.NivelEsportivo,
+                email: model.Email,
+                id: model.Id))
+            .ToList();
     }
 }

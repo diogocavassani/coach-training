@@ -11,6 +11,7 @@
 - `id` (PK)
 - `professor_id` (FK -> professores.id)
 - `nome`
+- `email`
 - `observacoes_clinicas`
 - `nivel_esportivo`
 

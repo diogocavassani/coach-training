@@ -18,6 +18,7 @@ erDiagram
         uuid id PK
         uuid professor_id FK
         string nome
+        string email
         string observacoes_clinicas
         string nivel_esportivo
     }

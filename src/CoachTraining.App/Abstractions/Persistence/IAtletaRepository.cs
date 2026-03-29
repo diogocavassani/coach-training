@@ -6,4 +6,5 @@ public interface IAtletaRepository
 {
     void Adicionar(Atleta atleta);
     Atleta? ObterPorId(Guid atletaId, Guid professorId);
+    IReadOnlyList<Atleta> ListarPorProfessor(Guid professorId);
 }

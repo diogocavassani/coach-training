@@ -63,6 +63,32 @@ Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas
   - `400`: validacao de payload
   - `401`: credenciais invalidas
 
+### Alunos - Cadastro
+
+- Metodo: `POST /api/atleta`
+- Request:
+
+```json
+{
+  "nome": "Atleta Exemplo",
+  "email": "atleta@coach.com",
+  "observacoesClinicas": "Sem restricoes",
+  "nivelEsportivo": "Intermediario"
+}
+```
+
+- Response esperado: `201 Created` com `id`, `professorId`, `nome`, `email`, `observacoesClinicas`, `nivelEsportivo`, `dataCriacao`.
+- Erros tratados:
+  - `400`: validacao (nome vazio, email invalido)
+  - `401`: token ausente/invalido
+
+### Alunos - Listagem
+
+- Metodo: `GET /api/atleta`
+- Response esperado: `200 OK` com lista de alunos vinculados ao professor autenticado.
+- Erros tratados:
+  - `401`: token ausente/invalido
+
 ## Requests autenticadas
 
 Chamadas para recursos privados usam header:

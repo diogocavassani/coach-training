@@ -135,6 +135,47 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
         Assert.Equal(HttpStatusCode.NotFound, dashboardResponse.StatusCode);
     }
 
+    [Fact]
+    public async Task ListagemDeAtletas_DeveRetornarSomenteAtletasDoProfessorAutenticado()
+    {
+        using var client = _factory.CreateClient();
+        var professorA = await CadastrarProfessorAsync(client, "professor.list.a@teste.com");
+        var professorB = await CadastrarProfessorAsync(client, "professor.list.b@teste.com");
+
+        var tokenA = await LoginAsync(client, professorA.Email, "123456");
+        var tokenB = await LoginAsync(client, professorB.Email, "123456");
+
+        var atletaA = await CadastrarAtletaAsync(
+            client,
+            tokenA,
+            "Atleta Professor A",
+            email: "atleta.a@teste.com",
+            observacoesClinicas: "Sem restricoes",
+            nivelEsportivo: "Intermediario");
+        await CadastrarAtletaAsync(
+            client,
+            tokenB,
+            "Atleta Professor B",
+            email: "atleta.b@teste.com",
+            observacoesClinicas: "Com acompanhamento",
+            nivelEsportivo: "Avancado");
+
+        var listarAtletasRequest = new HttpRequestMessage(HttpMethod.Get, "/api/atleta");
+        listarAtletasRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenA);
+
+        var response = await client.SendAsync(listarAtletasRequest);
+        response.EnsureSuccessStatusCode();
+
+        var atletas = await response.Content.ReadFromJsonAsync<List<AtletaDto>>();
+        Assert.NotNull(atletas);
+        Assert.Single(atletas!);
+        Assert.Equal(atletaA.Id, atletas[0].Id);
+        Assert.Equal(professorA.Id, atletas[0].ProfessorId);
+        Assert.Equal("atleta.a@teste.com", atletas[0].Email);
+        Assert.Equal("Sem restricoes", atletas[0].ObservacoesClinicas);
+        Assert.Equal("Intermediario", atletas[0].NivelEsportivo);
+    }
+
     private static async Task<ProfessorDto> CadastrarProfessorAsync(HttpClient client, string email)
     {
         var response = await client.PostAsJsonAsync("/professores", new CriarProfessorDto
@@ -165,5 +206,32 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
         }
 
         return dto.Token;
+    }
+
+    private static async Task<AtletaDto> CadastrarAtletaAsync(
+        HttpClient client,
+        string token,
+        string nome,
+        string? email = null,
+        string? observacoesClinicas = null,
+        string? nivelEsportivo = "Intermediario")
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/atleta")
+        {
+            Content = JsonContent.Create(new CriarAtletaDto
+            {
+                Nome = nome,
+                Email = email,
+                ObservacoesClinicas = observacoesClinicas,
+                NivelEsportivo = nivelEsportivo
+            })
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+
+        var atleta = await response.Content.ReadFromJsonAsync<AtletaDto>();
+        return atleta ?? throw new InvalidOperationException("Resposta de cadastro de atleta sem corpo.");
     }
 }
