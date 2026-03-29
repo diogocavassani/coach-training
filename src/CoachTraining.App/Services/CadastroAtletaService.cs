@@ -29,7 +29,8 @@ public class CadastroAtletaService
             nome: dto.Nome,
             professorId: professorId,
             observacoesClinicas: dto.ObservacoesClinicas,
-            nivelEsportivo: dto.NivelEsportivo
+            nivelEsportivo: dto.NivelEsportivo,
+            email: dto.Email
         );
 
         _atletaRepository.Adicionar(atleta);
@@ -75,6 +76,7 @@ public class CadastroAtletaService
             Id = atleta.Id,
             ProfessorId = atleta.ProfessorId,
             Nome = atleta.Nome,
+            Email = atleta.Email,
             ObservacoesClinicas = atleta.ObservacoesClinicas,
             NivelEsportivo = atleta.NivelEsportivo,
             DataCriacao = DateTime.UtcNow

@@ -29,7 +29,9 @@ export class StudentCreatePageComponent {
   ) {
     this.form = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.email]]
+      email: ['', [Validators.email]],
+      observacoesClinicas: [''],
+      nivelEsportivo: ['']
     });
   }
 
@@ -45,7 +47,9 @@ export class StudentCreatePageComponent {
     this.studentsApiService
       .cadastrar({
         nome: valor.nome?.trim() ?? '',
-        email: valor.email?.trim() || undefined
+        email: valor.email?.trim() || undefined,
+        observacoesClinicas: valor.observacoesClinicas?.trim() || undefined,
+        nivelEsportivo: valor.nivelEsportivo?.trim() || undefined
       })
       .subscribe({
         next: () => {

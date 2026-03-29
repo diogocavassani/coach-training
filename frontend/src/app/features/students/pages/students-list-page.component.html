@@ -21,6 +21,9 @@
       <thead>
         <tr>
           <th>Nome</th>
+          <th>Email</th>
+          <th>Nivel</th>
+          <th>Observacoes clinicas</th>
           <th>Data de cadastro</th>
           <th>Acao</th>
         </tr>
@@ -28,6 +31,9 @@
       <tbody>
         <tr *ngFor="let aluno of alunos">
           <td>{{ aluno.nome }}</td>
+          <td>{{ aluno.email || '-' }}</td>
+          <td>{{ aluno.nivelEsportivo || '-' }}</td>
+          <td>{{ aluno.observacoesClinicas || '-' }}</td>
           <td>{{ formatarData(aluno.dataCriacao) }}</td>
           <td><span class="muted">Ver dashboard (proxima sprint)</span></td>
         </tr>

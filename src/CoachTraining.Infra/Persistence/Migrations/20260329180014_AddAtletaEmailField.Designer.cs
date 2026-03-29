@@ -3,6 +3,7 @@ using System;
 using CoachTraining.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoachTraining.Infra.Persistence.Migrations
 {
     [DbContext(typeof(CoachTrainingDbContext))]
-    partial class CoachTrainingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260329180014_AddAtletaEmailField")]
+    partial class AddAtletaEmailField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

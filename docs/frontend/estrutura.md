@@ -16,6 +16,10 @@ frontend/src/app
     auth/pages/
     professor/pages/
     dashboard/pages/
+    students/
+      models/
+      pages/
+      services/
   shared/
     components/
   services/
@@ -31,6 +35,7 @@ frontend/src/app
 - `features/auth`: tela de login e validacoes.
 - `features/professor`: landing publica e formulario de cadastro do professor.
 - `features/dashboard`: tela inicial autenticada com placeholder operacional.
+- `features/students`: cadastro e listagem de alunos do professor autenticado.
 - `services/api`: contratos e chamadas HTTP orientadas ao backend.
 - `services/auth`: sessao local (token/expiracao), login e logout.
 
@@ -39,3 +44,5 @@ frontend/src/app
 - `/`: landing + cadastro de professor.
 - `/login`: autenticacao.
 - `/dashboard`: area protegida com layout autenticado.
+- `/dashboard/alunos`: listagem de alunos do professor.
+- `/dashboard/alunos/novo`: cadastro de aluno.

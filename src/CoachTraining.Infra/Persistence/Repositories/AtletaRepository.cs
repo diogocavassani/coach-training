@@ -21,6 +21,7 @@ public class AtletaRepository : IAtletaRepository
             Id = atleta.Id,
             ProfessorId = atleta.ProfessorId,
             Nome = atleta.Nome,
+            Email = atleta.Email,
             ObservacoesClinicas = atleta.ObservacoesClinicas,
             NivelEsportivo = atleta.NivelEsportivo
         };
@@ -45,6 +46,7 @@ public class AtletaRepository : IAtletaRepository
             professorId: model.ProfessorId,
             observacoesClinicas: model.ObservacoesClinicas,
             nivelEsportivo: model.NivelEsportivo,
+            email: model.Email,
             id: model.Id);
     }
 
@@ -59,6 +61,7 @@ public class AtletaRepository : IAtletaRepository
                 professorId: model.ProfessorId,
                 observacoesClinicas: model.ObservacoesClinicas,
                 nivelEsportivo: model.NivelEsportivo,
+                email: model.Email,
                 id: model.Id))
             .ToList();
     }

@@ -7,6 +7,7 @@ Professor autenticado
 
 ## Entrada
 - Nome
+- Email (opcional)
 - ObservacoesClinicas (opcional)
 - NivelEsportivo (opcional)
 

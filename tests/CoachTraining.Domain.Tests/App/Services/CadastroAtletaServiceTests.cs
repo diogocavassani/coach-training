@@ -15,6 +15,12 @@ public class CadastroAtletaServiceTests
 
         public Atleta? ObterPorId(Guid atletaId, Guid professorId)
             => _atletas.TryGetValue(atletaId, out var atleta) && atleta.ProfessorId == professorId ? atleta : null;
+
+        public IReadOnlyList<Atleta> ListarPorProfessor(Guid professorId)
+            => _atletas.Values
+                .Where(atleta => atleta.ProfessorId == professorId)
+                .OrderBy(atleta => atleta.Nome)
+                .ToList();
     }
 
     [Fact]
@@ -46,5 +52,66 @@ public class CadastroAtletaServiceTests
         var entidade = service.ObterEntidadePorId(Guid.NewGuid(), Guid.NewGuid());
 
         Assert.Null(entidade);
+    }
+
+    [Fact]
+    public void ListarPorProfessor_DeveRetornarSomenteAtletasDoProfessorOrdenadosPorNome()
+    {
+        var service = new CadastroAtletaService(new AtletaRepositoryFake());
+        var professorA = Guid.NewGuid();
+        var professorB = Guid.NewGuid();
+
+        service.Cadastrar(new CriarAtletaDto { Nome = "Zoe" }, professorA);
+        service.Cadastrar(new CriarAtletaDto { Nome = "Ana" }, professorA);
+        service.Cadastrar(new CriarAtletaDto { Nome = "Bruno" }, professorB);
+
+        var atletasDoProfessorA = service.ListarPorProfessor(professorA);
+
+        Assert.Equal(2, atletasDoProfessorA.Count);
+        Assert.Collection(
+            atletasDoProfessorA,
+            atleta => Assert.Equal("Ana", atleta.Nome),
+            atleta => Assert.Equal("Zoe", atleta.Nome));
+        Assert.All(atletasDoProfessorA, atleta => Assert.Equal(professorA, atleta.ProfessorId));
+    }
+
+    [Fact]
+    public void ListarPorProfessor_ProfessorIdVazio_DeveRetornarListaVazia()
+    {
+        var service = new CadastroAtletaService(new AtletaRepositoryFake());
+
+        var atletas = service.ListarPorProfessor(Guid.Empty);
+
+        Assert.Empty(atletas);
+    }
+
+    [Fact]
+    public void Cadastrar_ComEmailValido_DevePersistirEmailNoAtleta()
+    {
+        var service = new CadastroAtletaService(new AtletaRepositoryFake());
+        var professorId = Guid.NewGuid();
+        var dto = new CriarAtletaDto
+        {
+            Nome = "Atleta Email",
+            Email = "atleta.email@teste.com"
+        };
+
+        var atleta = service.Cadastrar(dto, professorId);
+
+        Assert.Equal("atleta.email@teste.com", atleta.Email);
+    }
+
+    [Fact]
+    public void Cadastrar_ComEmailInvalido_DeveLancarArgumentException()
+    {
+        var service = new CadastroAtletaService(new AtletaRepositoryFake());
+        var professorId = Guid.NewGuid();
+        var dto = new CriarAtletaDto
+        {
+            Nome = "Atleta Email Invalido",
+            Email = "email-invalido"
+        };
+
+        Assert.Throws<ArgumentException>(() => service.Cadastrar(dto, professorId));
     }
 }

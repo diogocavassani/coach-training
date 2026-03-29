@@ -7,6 +7,8 @@ import { Student } from '../models/student.model';
 export interface CreateStudentRequest {
   nome: string;
   email?: string;
+  observacoesClinicas?: string;
+  nivelEsportivo?: string;
 }
 
 @Injectable({
@@ -18,10 +20,7 @@ export class StudentsApiService {
   constructor(private readonly httpClient: HttpClient) {}
 
   cadastrar(payload: CreateStudentRequest): Observable<Student> {
-    return this.httpClient.post<Student>(this.endpoint, {
-      nome: payload.nome,
-      observacoesClinicas: payload.email ?? null
-    });
+    return this.httpClient.post<Student>(this.endpoint, payload);
   }
 
   listar(): Observable<Student[]> {

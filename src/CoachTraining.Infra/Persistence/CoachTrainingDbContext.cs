@@ -34,6 +34,7 @@ public class CoachTrainingDbContext : DbContext
             builder.HasKey(x => x.Id);
             builder.Property(x => x.ProfessorId).IsRequired();
             builder.Property(x => x.Nome).HasMaxLength(200).IsRequired();
+            builder.Property(x => x.Email).HasMaxLength(320);
             builder.Property(x => x.ObservacoesClinicas).HasMaxLength(2000);
             builder.Property(x => x.NivelEsportivo).HasMaxLength(120);
             builder.HasIndex(x => x.ProfessorId);

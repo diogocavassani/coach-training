@@ -2,13 +2,11 @@ namespace CoachTraining.App.DTOs;
 
 /// <summary>
 /// DTO para resposta de cadastro ou consulta de atleta.
-/// Retorna dados da entidade de atleta criada ou consultada.
 /// </summary>
 public class AtletaDto
 {
     /// <summary>
-    /// Identificador ??nico do atleta (GUID).
-    /// Gerado automaticamente no cadastro.
+    /// Identificador unico do atleta.
     /// </summary>
     public Guid Id { get; set; }
 
@@ -23,17 +21,22 @@ public class AtletaDto
     public string Nome { get; set; } = string.Empty;
 
     /// <summary>
-    /// Observa??es cl??nicas do atleta.
+    /// Email do atleta.
+    /// </summary>
+    public string? Email { get; set; }
+
+    /// <summary>
+    /// Observacoes clinicas do atleta.
     /// </summary>
     public string? ObservacoesClinicas { get; set; }
 
     /// <summary>
-    /// N??vel/categoria esportiva do atleta.
+    /// Nivel/categoria esportiva do atleta.
     /// </summary>
     public string? NivelEsportivo { get; set; }
 
     /// <summary>
-    /// Data de cria??o do registro do atleta.
+    /// Data de criacao do registro do atleta.
     /// </summary>
     public DateTime DataCriacao { get; set; }
 }
