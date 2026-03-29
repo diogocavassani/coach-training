@@ -52,6 +52,8 @@ public class CoachTrainingDbContext : DbContext
             builder.Property(x => x.DuracaoMinutos).IsRequired();
             builder.Property(x => x.DistanciaKm).IsRequired();
             builder.Property(x => x.Rpe).IsRequired();
+            builder.HasIndex(x => x.AtletaId);
+            builder.HasIndex(x => x.Data);
             builder.HasIndex(x => new { x.AtletaId, x.Data });
             builder.HasOne(x => x.Atleta)
                 .WithMany(x => x.SessoesDeTreino)

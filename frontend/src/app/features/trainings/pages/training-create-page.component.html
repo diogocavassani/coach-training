@@ -1,0 +1,38 @@
+<section class="training-create-page">
+  <a routerLink="/dashboard" class="back-link">← Voltar</a>
+  <h1>Cadastrar treino</h1>
+
+  <form [formGroup]="form" (ngSubmit)="salvar()" class="training-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Atleta ID</mat-label>
+      <input matInput formControlName="atletaId" placeholder="UUID do atleta" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data</mat-label>
+      <input matInput type="date" formControlName="data" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo (enum)</mat-label>
+      <input matInput type="number" formControlName="tipo" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Duração (min)</mat-label>
+      <input matInput type="number" formControlName="duracaoMinutos" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Distância (km)</mat-label>
+      <input matInput type="number" formControlName="distanciaKm" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>RPE (1-10)</mat-label>
+      <input matInput type="number" formControlName="rpe" />
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="enviando">Salvar treino</button>
+  </form>
+</section>

@@ -1,13 +1,24 @@
 # Dominio - Treino
 
-## Contexto
-Conjunto de sessoes e prova-alvo usados para consolidar o dashboard do aluno/atleta.
+## Entidade principal
+`SessaoDeTreino`
 
-## Componentes
-- `SessaoDeTreino`
-- `ProvaAlvo`
-- `ObterDashboardAtletaService` (camada App)
+### Campos
+- `Id`
+- `AtletaId`
+- `Data`
+- `Tipo`
+- `DuracaoMinutos`
+- `DistanciaKm`
+- `Rpe` (`Value Object`)
 
-## Regras relevantes
-- Dashboard so e calculado para aluno pertencente ao professor autenticado.
-- Sessoes/prova sao carregadas com filtro de tenant.
+## Regras de validacao
+- `AtletaId` obrigatorio (`Guid` nao vazio).
+- `DuracaoMinutos` > 0.
+- `DistanciaKm` >= 0.
+- `Data` nao pode ser futura.
+- `RPE` entre 1 e 10.
+
+## Decisao tecnica
+- O `RPE` foi mantido como Value Object para consolidar linguagem ubiqua e evitar valores fora do intervalo aceito.
+- A carga e derivada por `DuracaoMinutos x RPE` e serve de base para metricas futuras (ex.: ACWR).

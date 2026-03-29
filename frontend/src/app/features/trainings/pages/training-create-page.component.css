@@ -1,0 +1,12 @@
+.training-create-page {
+  max-width: 720px;
+}
+
+.training-form {
+  display: grid;
+  gap: 12px;
+}
+
+.back-link {
+  text-decoration: none;
+}

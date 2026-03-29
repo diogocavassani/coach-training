@@ -14,7 +14,7 @@ public class CalculadoraDeCargaTests
     [Fact]
     public void CalcularCargaSessao_ReturnsExpected()
     {
-        var sessao = new SessaoDeTreino(DateOnly.FromDateTime(new DateTime(2025,12,01)), TipoDeTreino.Longo, 60, 12.0, new RPE(7));
+        var sessao = new SessaoDeTreino(Guid.NewGuid(), DateOnly.FromDateTime(new DateTime(2025,12,01)), TipoDeTreino.Longo, 60, 12.0, new RPE(7));
         var carga = CalculadoraDeCarga.CalcularCargaSessao(sessao);
         Assert.Equal(420, carga.Valor);
     }
@@ -24,9 +24,9 @@ public class CalculadoraDeCargaTests
     {
         var sessoes = new List<SessaoDeTreino>
         {
-            new SessaoDeTreino(DateOnly.FromDateTime(new DateTime(2025,11,24)), TipoDeTreino.Leve, 30, 5, new RPE(5)), // semana X
-            new SessaoDeTreino(DateOnly.FromDateTime(new DateTime(2025,11,25)), TipoDeTreino.Intervalado, 45, 8, new RPE(6)), // same week
-            new SessaoDeTreino(DateOnly.FromDateTime(new DateTime(2025,12,01)), TipoDeTreino.Longo, 60, 12, new RPE(7)) // next week
+            new SessaoDeTreino(Guid.NewGuid(), DateOnly.FromDateTime(new DateTime(2025,11,24)), TipoDeTreino.Leve, 30, 5, new RPE(5)), // semana X
+            new SessaoDeTreino(Guid.NewGuid(), DateOnly.FromDateTime(new DateTime(2025,11,25)), TipoDeTreino.Intervalado, 45, 8, new RPE(6)), // same week
+            new SessaoDeTreino(Guid.NewGuid(), DateOnly.FromDateTime(new DateTime(2025,12,01)), TipoDeTreino.Longo, 60, 12, new RPE(7)) // next week
         };
 
         var semanal = CalculadoraDeCarga.AgregarCargaSemanal(sessoes);
@@ -50,7 +50,7 @@ public class CalculadoraDeCargaTests
 
         void AddSessionFor(DateTime dt, int total)
         {
-            var sess = new SessaoDeTreino(DateOnly.FromDateTime(dt), TipoDeTreino.Longo, 1, 0.1, new RPE(Math.Max(1, Math.Min(10, total))));
+            var sess = new SessaoDeTreino(Guid.NewGuid(), DateOnly.FromDateTime(dt), TipoDeTreino.Longo, 1, 0.1, new RPE(Math.Max(1, Math.Min(10, total))));
             if (total <= 10)
             {
                 sessoes.Add(sess);
@@ -61,7 +61,7 @@ public class CalculadoraDeCargaTests
                 while (remaining > 0)
                 {
                     var r = Math.Min(10, remaining);
-                    sessoes.Add(new SessaoDeTreino(DateOnly.FromDateTime(dt), TipoDeTreino.Longo, 1, 0.1, new RPE(r)));
+                    sessoes.Add(new SessaoDeTreino(Guid.NewGuid(), DateOnly.FromDateTime(dt), TipoDeTreino.Longo, 1, 0.1, new RPE(r)));
                     remaining -= r;
                 }
             }
