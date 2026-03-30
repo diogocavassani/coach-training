@@ -156,9 +156,11 @@ docker compose logs -f api
 - APIs:
   - [Professor API](docs/apis/professor-api.md)
   - [Aluno API](docs/apis/aluno-api.md)
+  - [Dashboard API](docs/apis/dashboard-api.md)
 - Fluxos:
   - [Cadastro de Professor](docs/flows/cadastro-professor.md)
   - [Fluxo de Treino](docs/flows/fluxo-treino.md)
+  - [Fluxo de Dashboard do Aluno](docs/flows/fluxo-dashboard-aluno.md)
 - Modelo de dados:
   - [Entidades](docs/data-model/entidades.md)
   - [Diagramas](docs/data-model/diagramas.md)
@@ -220,6 +222,8 @@ Desenvolvido como projeto de estudo em arquitetura de software e ciência do esp
 - Landing publica com cadastro de professor (`/`)
 - Login com JWT (`/login`)
 - Dashboard base protegido por autenticacao (`/dashboard`)
+- Dashboard individual do aluno (`/dashboard/alunos/:id`) com metricas e graficos
+- Exportacao de dados do dashboard do aluno em Excel e PDF
 
 ### Execucao local do frontend
 

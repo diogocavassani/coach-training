@@ -31,6 +31,9 @@ No ambiente Docker (`docker compose`), o `nginx` do frontend faz proxy para o se
 - `/`: landing + cadastro de professor
 - `/login`: autenticacao de professor
 - `/dashboard`: area protegida com layout autenticado
+- `/dashboard/alunos`: listagem de alunos do professor
+- `/dashboard/alunos/:id`: dashboard individual do aluno (metricas, graficos e exportacao)
+- `/dashboard/treinos/novo`: cadastro de treino
 
 ## Scripts
 
