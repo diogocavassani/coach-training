@@ -16,9 +16,9 @@ public class GeradorDeInsightsTests
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var sessoes = new List<SessaoDeTreino>
         {
-            new SessaoDeTreino(hoje.AddDays(-3), TipoDeTreino.Intervalado, 120, 10.0, new RPE(9)),
-            new SessaoDeTreino(hoje.AddDays(-2), TipoDeTreino.Longo, 180, 20.0, new RPE(9)),
-            new SessaoDeTreino(hoje.AddDays(-1), TipoDeTreino.Intervalado, 120, 10.0, new RPE(9)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-3), TipoDeTreino.Intervalado, 120, 10.0, new RPE(9)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-2), TipoDeTreino.Longo, 180, 20.0, new RPE(9)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-1), TipoDeTreino.Intervalado, 120, 10.0, new RPE(9)),
         };
 
         var dashboard = _service.ObterDashboard(atleta, sessoes);
@@ -33,10 +33,10 @@ public class GeradorDeInsightsTests
         var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
         var sessoes = new List<SessaoDeTreino>
         {
-            new SessaoDeTreino(hoje.AddDays(-14), TipoDeTreino.Leve, 45, 5.0, new RPE(3)),
-            new SessaoDeTreino(hoje.AddDays(-13), TipoDeTreino.Leve, 45, 5.0, new RPE(3)),
-            new SessaoDeTreino(hoje.AddDays(-2), TipoDeTreino.Intervalado, 120, 10.0, new RPE(8)),
-            new SessaoDeTreino(hoje.AddDays(-1), TipoDeTreino.Longo, 180, 20.0, new RPE(8)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-14), TipoDeTreino.Leve, 45, 5.0, new RPE(3)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-13), TipoDeTreino.Leve, 45, 5.0, new RPE(3)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-2), TipoDeTreino.Intervalado, 120, 10.0, new RPE(8)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-1), TipoDeTreino.Longo, 180, 20.0, new RPE(8)),
         };
 
         var dashboard = _service.ObterDashboard(atleta, sessoes);
@@ -53,13 +53,13 @@ public class GeradorDeInsightsTests
 
         var sessoes = new List<SessaoDeTreino>
         {
-            new SessaoDeTreino(hoje.AddDays(-7), TipoDeTreino.Longo, 180, 20.0, new RPE(7)),
-            new SessaoDeTreino(hoje.AddDays(-6), TipoDeTreino.Ritmo, 90, 5.0, new RPE(6)),
-            new SessaoDeTreino(hoje.AddDays(-5), TipoDeTreino.Intervalado, 60, 5.0, new RPE(6)),
-            new SessaoDeTreino(hoje.AddDays(-4), TipoDeTreino.Leve, 45, 5.0, new RPE(4)),
-            new SessaoDeTreino(hoje.AddDays(-3), TipoDeTreino.Ritmo, 60, 5.0, new RPE(5)),
-            new SessaoDeTreino(hoje.AddDays(-2), TipoDeTreino.Leve, 45, 5.0, new RPE(4)),
-            new SessaoDeTreino(hoje.AddDays(-1), TipoDeTreino.Leve, 30, 3.0, new RPE(3)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-7), TipoDeTreino.Longo, 180, 20.0, new RPE(7)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-6), TipoDeTreino.Ritmo, 90, 5.0, new RPE(6)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-5), TipoDeTreino.Intervalado, 60, 5.0, new RPE(6)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-4), TipoDeTreino.Leve, 45, 5.0, new RPE(4)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-3), TipoDeTreino.Ritmo, 60, 5.0, new RPE(5)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-2), TipoDeTreino.Leve, 45, 5.0, new RPE(4)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-1), TipoDeTreino.Leve, 30, 3.0, new RPE(3)),
         };
 
         var dashboard = _service.ObterDashboard(atleta, sessoes, prova);

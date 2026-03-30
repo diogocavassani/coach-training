@@ -2,6 +2,7 @@ using CoachTraining.App.Abstractions.Persistence;
 using CoachTraining.Domain.Entities;
 using CoachTraining.Domain.Enums;
 using CoachTraining.Domain.ValueObjects;
+using CoachTraining.Infra.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoachTraining.Infra.Persistence.Repositories;
@@ -15,6 +16,23 @@ public class SessaoDeTreinoRepository : ISessaoDeTreinoRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
+    public void Adicionar(SessaoDeTreino sessao)
+    {
+        var model = new SessaoDeTreinoModel
+        {
+            Id = sessao.Id,
+            AtletaId = sessao.AtletaId,
+            Data = sessao.Data,
+            Tipo = (int)sessao.Tipo,
+            DuracaoMinutos = sessao.DuracaoMinutos,
+            DistanciaKm = sessao.DistanciaKm,
+            Rpe = sessao.Rpe.Valor
+        };
+
+        _context.SessoesDeTreino.Add(model);
+        _context.SaveChanges();
+    }
+
     public IReadOnlyCollection<SessaoDeTreino> ObterPorAtletaId(Guid atletaId, Guid professorId)
     {
         var query = from sessao in _context.SessoesDeTreino.AsNoTracking()
@@ -26,6 +44,7 @@ public class SessaoDeTreinoRepository : ISessaoDeTreinoRepository
             .OrderBy(s => s.Data)
             .AsEnumerable()
             .Select(s => new SessaoDeTreino(
+                atletaId: s.AtletaId,
                 data: s.Data,
                 tipo: ObterTipoDeTreinoValido(s.Tipo, s.Id),
                 duracaoMinutos: s.DuracaoMinutos,

@@ -7,6 +7,7 @@ import { ProfessorLandingPageComponent } from './features/professor/pages/profes
 import { AppShellComponent } from './core/layout/app-shell.component';
 import { StudentsListPageComponent } from './features/students/pages/students-list-page.component';
 import { StudentCreatePageComponent } from './features/students/pages/student-create-page.component';
+import { TrainingCreatePageComponent } from './features/trainings/pages/training-create-page.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,10 @@ export const routes: Routes = [
       {
         path: 'alunos/novo',
         component: StudentCreatePageComponent
+      },
+      {
+        path: 'treinos/novo',
+        component: TrainingCreatePageComponent
       }
     ]
   },

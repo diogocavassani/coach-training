@@ -140,6 +140,10 @@ namespace CoachTraining.Infra.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AtletaId");
+
+                    b.HasIndex("Data");
+
                     b.HasIndex("AtletaId", "Data");
 
                     b.ToTable("sessoes_treino", (string)null);

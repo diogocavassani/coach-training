@@ -34,7 +34,7 @@ public class DomainTests
     public void SessaoDeTreino_CalcularCarga_Works()
     {
         var rpe = new RPE(6);
-        var sessao = new SessaoDeTreino(DateOnly.FromDateTime(DateTime.UtcNow), TipoDeTreino.Longo, 90, 20.0, rpe);
+        var sessao = new SessaoDeTreino(Guid.NewGuid(), DateOnly.FromDateTime(DateTime.UtcNow), TipoDeTreino.Longo, 90, 20.0, rpe);
         var carga = sessao.CalcularCarga();
         Assert.Equal(540, carga.Valor);
     }

@@ -1,8 +1,9 @@
-# Fluxo - Treino
+# Fluxo - Professor -> Atleta -> Treino
 
 1. Professor autentica e recebe JWT com `professor_id`.
-2. Professor cadastra aluno (`POST /api/atleta`) com `nome`, `email`, `observacoesClinicas` e `nivelEsportivo`.
-3. API extrai `professor_id` e grava vinculo no atleta.
-4. Professor lista seus alunos (`GET /api/atleta`).
-5. Professor consulta dashboard (`GET /api/dashboard/atleta/{id}`).
-6. Repositorios filtram por `ProfessorId` e retornam apenas dados do tenant atual.
+2. Professor cadastra atleta (`POST /api/atleta`).
+3. Professor registra treino (`POST /treinos`) informando dados da sessao.
+4. API extrai `ProfessorId` do token (nunca do body).
+5. Caso de uso valida se o atleta pertence ao professor autenticado.
+6. Sessao e persistida em `sessoes_treino` com FK para atleta.
+7. Dashboard e demais calculos passam a considerar a nova sessao.
