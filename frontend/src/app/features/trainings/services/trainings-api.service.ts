@@ -8,7 +8,7 @@ import { CreateTrainingRequest, Training } from '../models/training.model';
   providedIn: 'root'
 })
 export class TrainingsApiService {
-  private readonly endpoint = '/treinos';
+  private readonly endpoint = '/api/treinos';
 
   constructor(private readonly httpClient: HttpClient) {}
 

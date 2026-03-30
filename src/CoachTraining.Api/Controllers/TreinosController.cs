@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CoachTraining.Api.Controllers;
 
 [ApiController]
-[Route("treinos")]
+[Route("api/[controller]")]
 [Produces("application/json")]
 [Authorize]
 public class TreinosController : ControllerBase
@@ -42,21 +42,21 @@ public class TreinosController : ControllerBase
             }
 
             var sessao = _service.Cadastrar(dto, professorId);
-            return Created($"/treinos/{sessao.Id}", sessao);
+            return Created($"/api/treinos/{sessao.Id}", sessao);
         }
         catch (UnauthorizedAccessException ex)
         {
             _logger.LogWarning(ex, "Tentativa de cadastro de treino sem ownership valido.");
             return Forbid();
         }
-        catch (ArgumentException ex)
-        {
-            _logger.LogWarning(ex, "Erro de validacao no cadastro de treino.");
-            return BadRequest(new { erro = ex.Message });
-        }
         catch (ArgumentOutOfRangeException ex)
         {
             _logger.LogWarning(ex, "Erro de validacao de faixa no cadastro de treino.");
+            return BadRequest(new { erro = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Erro de validacao no cadastro de treino.");
             return BadRequest(new { erro = ex.Message });
         }
     }
