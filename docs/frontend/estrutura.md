@@ -34,7 +34,7 @@ frontend/src/app
 - `core/layout`: shell autenticado com header, sidebar e area principal.
 - `features/auth`: tela de login e validacoes.
 - `features/professor`: landing publica e formulario de cadastro do professor.
-- `features/dashboard`: tela inicial autenticada com placeholder operacional.
+- `features/dashboard`: tela inicial autenticada e dashboard individual do aluno (metricas, graficos e exportacao).
 - `features/students`: cadastro e listagem de alunos do professor autenticado.
 - `services/api`: contratos e chamadas HTTP orientadas ao backend.
 - `services/auth`: sessao local (token/expiracao), login e logout.
@@ -46,3 +46,5 @@ frontend/src/app
 - `/dashboard`: area protegida com layout autenticado.
 - `/dashboard/alunos`: listagem de alunos do professor.
 - `/dashboard/alunos/novo`: cadastro de aluno.
+- `/dashboard/alunos/:id`: dashboard individual do aluno.
+- `/dashboard/treinos/novo`: cadastro de treino.

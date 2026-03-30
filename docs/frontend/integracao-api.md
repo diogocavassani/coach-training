@@ -89,6 +89,23 @@ Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas
 - Erros tratados:
   - `401`: token ausente/invalido
 
+### Dashboard do aluno
+
+- Metodo: `GET /api/dashboard/atleta/{id}`
+- Response esperado: `200 OK` com metricas consolidadas, insights, series (`serieCargaSemanal`, `seriePaceSemanal`) e `treinosJanela`.
+- Erros tratados:
+  - `401`: token ausente/invalido
+  - `404`: atleta nao encontrado para o professor autenticado
+
+### Treinos - Cadastro
+
+- Metodo: `POST /api/treinos`
+- Response esperado: `201 Created` com dados da sessao cadastrada.
+- Erros tratados:
+  - `400`: validacao de payload (dados obrigatorios/faixas)
+  - `401`: token ausente/invalido
+  - `403`: tentativa de cadastrar treino para atleta sem ownership
+
 ## Requests autenticadas
 
 Chamadas para recursos privados usam header:

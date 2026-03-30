@@ -1,7 +1,7 @@
 # API - Treinos
 
 ## Endpoint
-`POST /treinos`
+`POST /api/treinos`
 
 ## Autenticacao
 Endpoint protegido por JWT (`[Authorize]`).
