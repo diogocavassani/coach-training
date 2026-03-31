@@ -102,4 +102,46 @@ public class DashboardAtletaDto
     /// Mensagens human-readable que explicam o que foi detectado e acoes sugeridas.
     /// </summary>
     public IList<string> Insights { get; set; } = new List<string>();
+
+    /// <summary>
+    /// Serie semanal de carga de treino para os ultimos 12 ciclos semanais (segunda a domingo).
+    /// </summary>
+    public IList<SerieCargaSemanalDto> SerieCargaSemanal { get; set; } = new List<SerieCargaSemanalDto>();
+
+    /// <summary>
+    /// Serie semanal de pace medio (min/km) para os ultimos 12 ciclos semanais (segunda a domingo).
+    /// Pode conter valor nulo quando nao houver distancia registrada na semana.
+    /// </summary>
+    public IList<SeriePaceSemanalDto> SeriePaceSemanal { get; set; } = new List<SeriePaceSemanalDto>();
+
+    /// <summary>
+    /// Lista de treinos contidos na janela de 12 semanas usada no dashboard.
+    /// </summary>
+    public IList<TreinoJanelaDto> TreinosJanela { get; set; } = new List<TreinoJanelaDto>();
+}
+
+public class SerieCargaSemanalDto
+{
+    public DateOnly SemanaInicio { get; set; }
+    public DateOnly SemanaFim { get; set; }
+    public int Valor { get; set; }
+}
+
+public class SeriePaceSemanalDto
+{
+    public DateOnly SemanaInicio { get; set; }
+    public DateOnly SemanaFim { get; set; }
+    public double? ValorMinPorKm { get; set; }
+}
+
+public class TreinoJanelaDto
+{
+    public Guid Id { get; set; }
+    public DateOnly Data { get; set; }
+    public TipoDeTreino Tipo { get; set; }
+    public int DuracaoMinutos { get; set; }
+    public double DistanciaKm { get; set; }
+    public int Rpe { get; set; }
+    public int Carga { get; set; }
+    public double? PaceMinPorKm { get; set; }
 }

@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LoginPageComponent } from './features/auth/pages/login-page.component';
 import { DashboardPageComponent } from './features/dashboard/pages/dashboard-page.component';
+import { StudentDashboardPageComponent } from './features/dashboard/pages/student-dashboard-page.component';
 import { ProfessorLandingPageComponent } from './features/professor/pages/professor-landing-page.component';
 import { AppShellComponent } from './core/layout/app-shell.component';
 import { StudentsListPageComponent } from './features/students/pages/students-list-page.component';
@@ -34,6 +35,10 @@ export const routes: Routes = [
       {
         path: 'alunos/novo',
         component: StudentCreatePageComponent
+      },
+      {
+        path: 'alunos/:id',
+        component: StudentDashboardPageComponent
       },
       {
         path: 'treinos/novo',

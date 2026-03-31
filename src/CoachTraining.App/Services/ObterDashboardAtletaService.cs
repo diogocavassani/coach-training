@@ -12,6 +12,10 @@ namespace CoachTraining.App.Services;
 /// </summary>
 public class ObterDashboardAtletaService
 {
+    private const int NumeroSemanasJanelaDashboard = 12;
+
+    private readonly record struct IntervaloSemanal(DateOnly Inicio, DateOnly Fim);
+
     // Utiliza metodos estaticos dos Domain Services (CalculadoraDeCarga, AvaliadorDeRisco, ClassificadorDeFase)
     public ObterDashboardAtletaService() { }
 
@@ -32,11 +36,13 @@ public class ObterDashboardAtletaService
         var sessoesListEntrada = sessoes.ToList();
         ValidarIntegridadeDasSessoes(sessoesListEntrada);
         var sessoesList = FiltrarOrdenarSessoes(sessoesListEntrada, hoje);
+        var janelaSemanal = ObterJanelaSemanal(hoje, NumeroSemanasJanelaDashboard);
+        var sessoesJanela = ObterSessoesDaJanela(sessoesList, janelaSemanal);
 
         // Se nao houver sessoes validas, retornar dashboard vazio
         if (sessoesList.Count == 0)
         {
-            return CriarDashboardVazio(atleta, prova, hoje, agora);
+            return CriarDashboardVazio(atleta, prova, hoje, agora, janelaSemanal);
         }
 
         var cargas = sessoesList.Select(s => s.CalcularCarga()).ToList();
@@ -49,9 +55,10 @@ public class ObterDashboardAtletaService
         var (cargaAguda, cargaCronica) = CalcularCargaAgudaECronicaPorJanela(cargaDiaria, hoje);
 
         // Calculos de risco
-        var acwr = AvaliadorDeRisco.CalcularAcwr(cargaAguda, cargaCronica);
+        var acwrCalculado = AvaliadorDeRisco.CalcularAcwr(cargaAguda, cargaCronica);
         var deltaPercentual = AvaliadorDeRisco.CalcularDeltaPercentual(cargaSemanal, cargaSemanaAnterior);
-        var statusRisco = AvaliadorDeRisco.AvaliarRiscoCombinado(acwr, deltaPercentual);
+        var statusRisco = AvaliadorDeRisco.AvaliarRiscoCombinado(acwrCalculado, deltaPercentual);
+        var acwr = NormalizarNumeroParaJson(acwrCalculado);
 
         // Classificacao de fase
         var fase = ClassificadorDeFase.ClassificarFase(cargas, hoje, prova);
@@ -86,7 +93,10 @@ public class ObterDashboardAtletaService
             ReducaoVolumeTaper = reducaoTaper,
             DataUltimaAtualizacao = agora,
             ObservacoesClin = atleta.ObservacoesClinicas,
-            NivelAtleta = atleta.NivelEsportivo
+            NivelAtleta = atleta.NivelEsportivo,
+            SerieCargaSemanal = MontarSerieCargaSemanal(janelaSemanal, sessoesJanela),
+            SeriePaceSemanal = MontarSeriePaceSemanal(janelaSemanal, sessoesJanela),
+            TreinosJanela = MontarTreinosDaJanela(sessoesJanela)
         };
 
         return PreencherInsights(dto);
@@ -157,10 +167,130 @@ public class ObterDashboardAtletaService
         return (aguda, cronica);
     }
 
+    private static IReadOnlyList<IntervaloSemanal> ObterJanelaSemanal(DateOnly referencia, int quantidadeSemanas)
+    {
+        var inicioSemanaAtual = ObterInicioDaSemana(referencia);
+        var intervalos = new List<IntervaloSemanal>(quantidadeSemanas);
+
+        for (var i = quantidadeSemanas - 1; i >= 0; i--)
+        {
+            var inicio = inicioSemanaAtual.AddDays(-7 * i);
+            intervalos.Add(new IntervaloSemanal(inicio, inicio.AddDays(6)));
+        }
+
+        return intervalos;
+    }
+
+    private static DateOnly ObterInicioDaSemana(DateOnly data)
+    {
+        var deslocamento = ((int)data.DayOfWeek + 6) % 7; // Semana iniciando na segunda-feira.
+        return data.AddDays(-deslocamento);
+    }
+
+    private static IReadOnlyList<SessaoDeTreino> ObterSessoesDaJanela(
+        IReadOnlyList<SessaoDeTreino> sessoes,
+        IReadOnlyList<IntervaloSemanal> janelaSemanal)
+    {
+        if (janelaSemanal.Count == 0)
+        {
+            return [];
+        }
+
+        var inicioJanela = janelaSemanal[0].Inicio;
+        var fimJanela = janelaSemanal[^1].Fim;
+
+        return sessoes
+            .Where(s => s.Data >= inicioJanela && s.Data <= fimJanela)
+            .OrderBy(s => s.Data)
+            .ToList();
+    }
+
+    private static IList<SerieCargaSemanalDto> MontarSerieCargaSemanal(
+        IReadOnlyList<IntervaloSemanal> janelaSemanal,
+        IReadOnlyList<SessaoDeTreino> sessoesJanela)
+    {
+        var cargasPorDia = CalculadoraDeCarga.AgregarCargaDiaria(sessoesJanela);
+
+        return janelaSemanal
+            .Select(intervalo => new SerieCargaSemanalDto
+            {
+                SemanaInicio = intervalo.Inicio,
+                SemanaFim = intervalo.Fim,
+                Valor = cargasPorDia
+                    .Where(kvp => kvp.Key >= intervalo.Inicio && kvp.Key <= intervalo.Fim)
+                    .Sum(kvp => kvp.Value.Valor)
+            })
+            .ToList();
+    }
+
+    private static IList<SeriePaceSemanalDto> MontarSeriePaceSemanal(
+        IReadOnlyList<IntervaloSemanal> janelaSemanal,
+        IReadOnlyList<SessaoDeTreino> sessoesJanela)
+    {
+        return janelaSemanal
+            .Select(intervalo =>
+            {
+                var sessoesComDistancia = sessoesJanela
+                    .Where(s => s.Data >= intervalo.Inicio && s.Data <= intervalo.Fim && s.DistanciaKm > 0)
+                    .ToList();
+
+                double? pace = null;
+                if (sessoesComDistancia.Count > 0)
+                {
+                    var distanciaTotal = sessoesComDistancia.Sum(s => s.DistanciaKm);
+                    var duracaoTotal = sessoesComDistancia.Sum(s => s.DuracaoMinutos);
+                    if (distanciaTotal > 0)
+                    {
+                        pace = Math.Round(duracaoTotal / distanciaTotal, 2);
+                    }
+                }
+
+                return new SeriePaceSemanalDto
+                {
+                    SemanaInicio = intervalo.Inicio,
+                    SemanaFim = intervalo.Fim,
+                    ValorMinPorKm = pace
+                };
+            })
+            .ToList();
+    }
+
+    private static IList<TreinoJanelaDto> MontarTreinosDaJanela(IReadOnlyList<SessaoDeTreino> sessoesJanela)
+    {
+        return sessoesJanela
+            .OrderBy(s => s.Data)
+            .Select(sessao =>
+            {
+                double? pace = null;
+                if (sessao.DistanciaKm > 0)
+                {
+                    pace = Math.Round(sessao.DuracaoMinutos / sessao.DistanciaKm, 2);
+                }
+
+                return new TreinoJanelaDto
+                {
+                    Id = sessao.Id,
+                    Data = sessao.Data,
+                    Tipo = sessao.Tipo,
+                    DuracaoMinutos = sessao.DuracaoMinutos,
+                    DistanciaKm = sessao.DistanciaKm,
+                    Rpe = sessao.Rpe.Valor,
+                    Carga = sessao.CalcularCarga().Valor,
+                    PaceMinPorKm = pace
+                };
+            })
+            .ToList();
+    }
+
     /// <summary>
     /// Cria um dashboard vazio para atleta sem sessoes registradas.
     /// </summary>
-    private DashboardAtletaDto CriarDashboardVazio(Atleta atleta, ProvaAlvo? prova, DateOnly hoje, DateTime dataAtualizacao)
+    private DashboardAtletaDto CriarDashboardVazio(
+        Atleta atleta,
+        ProvaAlvo? prova,
+        DateOnly hoje,
+        DateTime dataAtualizacao,
+        IReadOnlyList<IntervaloSemanal> janelaSemanal)
     {
         var emTaper = prova != null && ClassificadorDeFase.IsInTaperWindow(hoje, prova.DataProva);
 
@@ -182,7 +312,10 @@ public class ObterDashboardAtletaService
             ReducaoVolumeTaper = null,
             DataUltimaAtualizacao = dataAtualizacao,
             ObservacoesClin = atleta.ObservacoesClinicas,
-            NivelAtleta = atleta.NivelEsportivo
+            NivelAtleta = atleta.NivelEsportivo,
+            SerieCargaSemanal = MontarSerieCargaSemanal(janelaSemanal, []),
+            SeriePaceSemanal = MontarSeriePaceSemanal(janelaSemanal, []),
+            TreinosJanela = []
         };
     }
 
@@ -190,5 +323,25 @@ public class ObterDashboardAtletaService
     {
         dto.Insights = GeradorDeInsights.GerarInsights(dto);
         return dto;
+    }
+
+    private static double NormalizarNumeroParaJson(double valor)
+    {
+        if (double.IsNaN(valor))
+        {
+            return 0;
+        }
+
+        if (double.IsPositiveInfinity(valor))
+        {
+            return 999.99;
+        }
+
+        if (double.IsNegativeInfinity(valor))
+        {
+            return -999.99;
+        }
+
+        return valor;
     }
 }

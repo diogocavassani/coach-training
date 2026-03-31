@@ -35,7 +35,7 @@
           <td>{{ aluno.nivelEsportivo || '-' }}</td>
           <td>{{ aluno.observacoesClinicas || '-' }}</td>
           <td>{{ formatarData(aluno.dataCriacao) }}</td>
-          <td><span class="muted">Ver dashboard (proxima sprint)</span></td>
+          <td><a mat-stroked-button [routerLink]="['/dashboard/alunos', aluno.id]">Ver dashboard</a></td>
         </tr>
       </tbody>
     </table>

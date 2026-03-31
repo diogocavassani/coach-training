@@ -1,6 +1,7 @@
 import { of, throwError } from 'rxjs';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { By } from '@angular/platform-browser';
 
 import { StudentsListPageComponent } from './students-list-page.component';
 import { StudentsApiService } from '../services/students-api.service';
@@ -57,5 +58,13 @@ describe('StudentsListPageComponent', () => {
     expect(component.formatarData()).toBe('-');
     expect(component.formatarData('valor-invalido')).toBe('-');
     expect(component.formatarData('2026-03-28T12:00:00Z')).toMatch(/^\d{2}\/\d{2}\/\d{4}$/);
+  });
+
+  it('exibe acao de ver dashboard para os alunos listados', () => {
+    fixture.detectChanges();
+
+    const botoesDashboard = fixture.debugElement.queryAll(By.css('a[mat-stroked-button]'));
+    expect(botoesDashboard.length).toBe(2);
+    expect(botoesDashboard[0].nativeElement.textContent).toContain('Ver dashboard');
   });
 });

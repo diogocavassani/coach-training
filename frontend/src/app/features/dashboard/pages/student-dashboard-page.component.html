@@ -1,0 +1,111 @@
+<section class="student-dashboard" aria-label="Dashboard do aluno">
+  <a routerLink="/dashboard/alunos" class="back-link">Voltar para alunos</a>
+
+  @if (carregando) {
+    <p class="helper">Carregando dashboard do aluno...</p>
+  }
+
+  @if (!carregando && mensagemErro) {
+    <div class="feedback error">{{ mensagemErro }}</div>
+  }
+
+  @if (!carregando && dashboard) {
+    <header class="header">
+      <div>
+        <p class="eyebrow">Dashboard do aluno</p>
+        <h1>{{ dashboard.nome }}</h1>
+        <p class="subtext">Ultima atualizacao: {{ dashboard.dataUltimaAtualizacao | date: 'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="exportarExcel()" [disabled]="!podeExportar">
+          Exportar Excel
+        </button>
+        <button mat-flat-button type="button" (click)="exportarPdf()" [disabled]="!podeExportar">Exportar PDF</button>
+      </div>
+    </header>
+
+    <div class="metrics-grid">
+      <article>
+        <span>Carga semanal</span>
+        <strong>{{ dashboard.cargaSemanal }}</strong>
+        <small>Delta: {{ dashboard.deltaPercentualSemanal | number: '1.0-1' }}%</small>
+      </article>
+      <article>
+        <span>Carga cronica</span>
+        <strong>{{ dashboard.cargaCronica }}</strong>
+        <small>Carga aguda: {{ dashboard.cargaAguda }}</small>
+      </article>
+      <article>
+        <span>ACWR</span>
+        <strong>{{ dashboard.acwr | number: '1.2-2' }}</strong>
+        <small [class]="statusRiscoClasse">Risco: {{ statusRiscoDescricao }}</small>
+      </article>
+      <article>
+        <span>Fase</span>
+        <strong>{{ faseDescricao }}</strong>
+        <small *ngIf="dashboard.proximaProva">Prova: {{ formatarData(dashboard.proximaProva) }}</small>
+        <small *ngIf="!dashboard.proximaProva">Sem prova alvo definida</small>
+      </article>
+    </div>
+
+    <div class="charts-grid">
+      <article class="chart-card">
+        <h2>Carga semanal (12 semanas)</h2>
+        <div class="chart-container">
+          <canvas #cargaChart aria-label="Grafico de carga semanal"></canvas>
+        </div>
+      </article>
+      <article class="chart-card">
+        <h2>Pace medio semanal (12 semanas)</h2>
+        <div class="chart-container">
+          <canvas #paceChart aria-label="Grafico de pace semanal"></canvas>
+        </div>
+      </article>
+    </div>
+
+    <section class="card">
+      <h2>Insights</h2>
+      <ul *ngIf="dashboard.insights.length > 0; else semInsights">
+        <li *ngFor="let insight of dashboard.insights">{{ insight }}</li>
+      </ul>
+      <ng-template #semInsights>
+        <p class="helper">Sem insights no periodo selecionado.</p>
+      </ng-template>
+    </section>
+
+    <section class="card">
+      <h2>Treinos da janela (12 semanas)</h2>
+
+      <div *ngIf="dashboard.treinosJanela.length === 0" class="feedback">
+        Nenhum treino encontrado nas ultimas 12 semanas para este aluno.
+      </div>
+
+      <div *ngIf="dashboard.treinosJanela.length > 0" class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Tipo</th>
+              <th>Duracao</th>
+              <th>Distancia</th>
+              <th>RPE</th>
+              <th>Carga</th>
+              <th>Pace</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let treino of dashboard.treinosJanela">
+              <td>{{ formatarData(treino.data) }}</td>
+              <td>{{ obterTipoTreinoDescricao(treino.tipo) }}</td>
+              <td>{{ treino.duracaoMinutos }} min</td>
+              <td>{{ treino.distanciaKm | number: '1.1-1' }} km</td>
+              <td>{{ treino.rpe }}</td>
+              <td>{{ treino.carga }}</td>
+              <td>{{ treino.paceMinPorKm != null ? (treino.paceMinPorKm | number: '1.2-2') : '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</section>
