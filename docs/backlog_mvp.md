@@ -121,22 +121,22 @@
 - [x] Validar manualmente a tela autenticada com dados reais.
 - [x] Rodar testes relevantes do frontend e backend envolvidos.
 
-### [ ] BL-06 - Completar os insights prometidos no escopo do MVP
+### [x] BL-06 - Completar os insights prometidos no escopo do MVP
 
 **Objetivo:** alinhar os insights implementados ao escopo documentado do produto.
 
 **Criterios de aceite**
 
-- [ ] Existe regra objetiva para monotonia de carga, caso ela permaneca no escopo.
-- [ ] Existe regra objetiva para divergencia entre carga e rendimento, ou o escopo e a documentacao sao ajustados para remover essa promessa.
-- [ ] Existe insight para aderencia ao planejamento depois da entrega do `BL-04`.
-- [ ] Os novos insights possuem testes automatizados.
-- [ ] A documentacao de regras de negocio e insights e atualizada.
+- [x] Existe regra objetiva para monotonia de carga, caso ela permaneca no escopo.
+- [x] Existe regra objetiva para divergencia entre carga e rendimento, ou o escopo e a documentacao sao ajustados para remover essa promessa.
+- [x] Existe insight para aderencia ao planejamento depois da entrega do `BL-04`.
+- [x] Os novos insights possuem testes automatizados.
+- [x] A documentacao de regras de negocio e insights e atualizada.
 
 **Validacao minima**
 
-- [ ] Rodar testes da camada de aplicacao e dominio relacionados.
-- [ ] Revisar exemplos de mensagens retornadas no dashboard.
+- [x] Rodar testes da camada de aplicacao e dominio relacionados.
+- [x] Revisar exemplos de mensagens retornadas no dashboard.
 
 ## P2 - Fechamento documental e operacional
 
@@ -165,7 +165,7 @@
 3. [x] BL-03 - Implementar planejamento base por atleta.
 4. [x] BL-04 - Exibir aderencia ao planejamento no dashboard.
 5. [x] BL-05 - Substituir o dashboard inicial do professor por dados reais.
-6. [ ] BL-06 - Completar os insights prometidos no escopo do MVP.
+6. [x] BL-06 - Completar os insights prometidos no escopo do MVP.
 7. [ ] BL-07 - Alinhar a documentacao ao estado real do sistema.
 
 ## Regra de manutencao

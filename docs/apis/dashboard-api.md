@@ -111,6 +111,8 @@ O `professor_id` e extraido do token autenticado para validar ownership do atlet
 - `treinosRealizadosNaSemana` usa a mesma janela movel de 7 dias adotada para `cargaSemanal`.
 - `aderenciaPlanejamentoPercentual` so e calculada quando o atleta possui `treinosPlanejadosPorSemana`.
 - O gerador de insights passa a sinalizar aderencia abaixo do esperado (`< 80%`) e execucao acima do planejado (`> 120%`).
+- Monotonia semanal usa a distribuicao de carga diaria da janela movel dos ultimos 7 dias e alerta a partir de `2.0`.
+- Divergencia entre carga e rendimento usa o `pace medio semanal` como proxy de desempenho quando existem ao menos 4 semanas com pace valido.
 - A serie semanal usa janela fixa de 12 semanas (segunda a domingo).
 - `seriePaceSemanal.valorMinPorKm` pode ser `null` quando nao houver distancia valida na semana.
 - `treinosJanela` contem os treinos da mesma janela de 12 semanas usada nos graficos.
