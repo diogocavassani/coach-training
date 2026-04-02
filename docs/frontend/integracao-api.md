@@ -122,6 +122,29 @@ Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas
   - `401`: token ausente/invalido
   - `403`: tentativa de editar prova de atleta sem ownership
 
+### Alunos - Planejamento base
+
+- Metodo: `GET /api/atleta/{id}/planejamento-base`
+- Response esperado: `200 OK` com `atletaId` e `treinosPlanejadosPorSemana`.
+- Erros tratados:
+  - `401`: token ausente/invalido
+  - `404`: atleta sem planejamento base cadastrado ou fora do ownership
+
+- Metodo: `PUT /api/atleta/{id}/planejamento-base`
+- Request:
+
+```json
+{
+  "treinosPlanejadosPorSemana": 5
+}
+```
+
+- Response esperado: `200 OK` com o planejamento persistido.
+- Erros tratados:
+  - `400`: validacao de payload
+  - `401`: token ausente/invalido
+  - `403`: tentativa de editar planejamento de atleta sem ownership
+
 ### Treinos - Cadastro
 
 - Metodo: `POST /api/treinos`

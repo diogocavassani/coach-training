@@ -98,4 +98,33 @@ describe('StudentsApiService', () => {
       objetivo: 'Maratona principal'
     });
   });
+
+  it('consulta planejamento base do atleta no endpoint esperado', () => {
+    service.obterPlanejamentoBase('atleta-123').subscribe();
+
+    const req = httpMock.expectOne('/api/Atleta/atleta-123/planejamento-base');
+    expect(req.request.method).toBe('GET');
+    req.flush({
+      atletaId: 'atleta-123',
+      treinosPlanejadosPorSemana: 5
+    });
+  });
+
+  it('salva planejamento base do atleta com PUT no endpoint esperado', () => {
+    service
+      .salvarPlanejamentoBase('atleta-123', {
+        treinosPlanejadosPorSemana: 6
+      })
+      .subscribe();
+
+    const req = httpMock.expectOne('/api/Atleta/atleta-123/planejamento-base');
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({
+      treinosPlanejadosPorSemana: 6
+    });
+    req.flush({
+      atletaId: 'atleta-123',
+      treinosPlanejadosPorSemana: 6
+    });
+  });
 });

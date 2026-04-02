@@ -60,7 +60,12 @@ describe('StudentDashboardPageComponent', () => {
   beforeEach(async () => {
     dashboardApiService = jasmine.createSpyObj<DashboardApiService>('DashboardApiService', ['obterPorAtletaId']);
     dashboardApiService.obterPorAtletaId.and.returnValue(of(mockDashboard));
-    studentsApiService = jasmine.createSpyObj<StudentsApiService>('StudentsApiService', ['obterProvaAlvo', 'salvarProvaAlvo']);
+    studentsApiService = jasmine.createSpyObj<StudentsApiService>('StudentsApiService', [
+      'obterProvaAlvo',
+      'salvarProvaAlvo',
+      'obterPlanejamentoBase',
+      'salvarPlanejamentoBase'
+    ]);
     studentsApiService.obterProvaAlvo.and.returnValue(
       of({
         id: 'prova-1',
@@ -68,6 +73,18 @@ describe('StudentDashboardPageComponent', () => {
         dataProva: '2026-05-01',
         distanciaKm: 21.1,
         objetivo: 'Completar forte'
+      })
+    );
+    studentsApiService.obterPlanejamentoBase.and.returnValue(
+      of({
+        atletaId: 'atleta-1',
+        treinosPlanejadosPorSemana: 5
+      })
+    );
+    studentsApiService.salvarPlanejamentoBase.and.returnValue(
+      of({
+        atletaId: 'atleta-1',
+        treinosPlanejadosPorSemana: 5
       })
     );
     studentsApiService.salvarProvaAlvo.and.returnValue(
@@ -108,11 +125,15 @@ describe('StudentDashboardPageComponent', () => {
   it('carrega dashboard pelo id da rota', () => {
     expect(dashboardApiService.obterPorAtletaId).toHaveBeenCalledWith('atleta-1');
     expect(studentsApiService.obterProvaAlvo).toHaveBeenCalledWith('atleta-1');
+    expect(studentsApiService.obterPlanejamentoBase).toHaveBeenCalledWith('atleta-1');
     expect(component.dashboard?.atletaId).toBe('atleta-1');
     expect(component.provaAlvoForm.getRawValue()).toEqual({
       dataProva: '2026-05-01',
       distanciaKm: 21.1,
       objetivo: 'Completar forte'
+    });
+    expect(component.planejamentoBaseForm.getRawValue()).toEqual({
+      treinosPlanejadosPorSemana: 5
     });
     expect(component.carregando).toBeFalse();
   });
@@ -148,6 +169,21 @@ describe('StudentDashboardPageComponent', () => {
     expect(component.mensagemErroProvaAlvo).toBe('');
   });
 
+  it('mantem formulario de planejamento vazio quando o atleta ainda nao possui base planejada', () => {
+    studentsApiService.obterPlanejamentoBase.and.returnValue(
+      throwError(() => new HttpErrorResponse({ status: 404, error: { erro: 'Nao encontrado' } }))
+    );
+
+    fixture = TestBed.createComponent(StudentDashboardPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.planejamentoBaseForm.getRawValue()).toEqual({
+      treinosPlanejadosPorSemana: null
+    });
+    expect(component.mensagemErroPlanejamentoBase).toBe('');
+  });
+
   it('salva prova-alvo e recarrega o dashboard', () => {
     dashboardApiService.obterPorAtletaId.calls.reset();
     component.provaAlvoForm.setValue({
@@ -165,6 +201,21 @@ describe('StudentDashboardPageComponent', () => {
     });
     expect(dashboardApiService.obterPorAtletaId).toHaveBeenCalledWith('atleta-1');
     expect(component.mensagemErroProvaAlvo).toBe('');
+  });
+
+  it('salva planejamento base e recarrega o dashboard', () => {
+    dashboardApiService.obterPorAtletaId.calls.reset();
+    component.planejamentoBaseForm.setValue({
+      treinosPlanejadosPorSemana: 6
+    });
+
+    component.salvarPlanejamentoBase();
+
+    expect(studentsApiService.salvarPlanejamentoBase).toHaveBeenCalledWith('atleta-1', {
+      treinosPlanejadosPorSemana: 6
+    });
+    expect(dashboardApiService.obterPorAtletaId).toHaveBeenCalledWith('atleta-1');
+    expect(component.mensagemErroPlanejamentoBase).toBe('');
   });
 
   it('exporta excel com os treinos carregados', () => {

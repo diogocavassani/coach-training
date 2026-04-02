@@ -15,15 +15,18 @@ public class AtletaController : ControllerBase
 {
     private readonly CadastroAtletaService _cadastroService;
     private readonly GerenciarProvaAlvoService _provaAlvoService;
+    private readonly GerenciarPlanejamentoBaseService _planejamentoBaseService;
     private readonly ILogger<AtletaController> _logger;
 
     public AtletaController(
         CadastroAtletaService cadastroService,
         GerenciarProvaAlvoService provaAlvoService,
+        GerenciarPlanejamentoBaseService planejamentoBaseService,
         ILogger<AtletaController> logger)
     {
         _cadastroService = cadastroService ?? throw new ArgumentNullException(nameof(cadastroService));
         _provaAlvoService = provaAlvoService ?? throw new ArgumentNullException(nameof(provaAlvoService));
+        _planejamentoBaseService = planejamentoBaseService ?? throw new ArgumentNullException(nameof(planejamentoBaseService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -166,6 +169,68 @@ public class AtletaController : ControllerBase
         catch (ArgumentException ex)
         {
             _logger.LogWarning(ex, "Erro de validacao ao salvar prova alvo do atleta {AtletaId}", id);
+            return BadRequest(new { erro = ex.Message });
+        }
+    }
+
+    [HttpGet("{id:guid}/planejamento-base")]
+    public IActionResult ObterPlanejamentoBase(Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return BadRequest(new { erro = "Id do atleta invalido" });
+        }
+
+        if (!User.TryGetProfessorId(out var professorId))
+        {
+            return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+        }
+
+        var planejamentoBase = _planejamentoBaseService.ObterPorAtletaId(id, professorId);
+        if (planejamentoBase == null)
+        {
+            return NotFound(new { erro = "Planejamento base nao encontrado para o atleta informado." });
+        }
+
+        return Ok(planejamentoBase);
+    }
+
+    [HttpPut("{id:guid}/planejamento-base")]
+    public IActionResult SalvarPlanejamentoBase(Guid id, [FromBody] SalvarPlanejamentoBaseDto dto)
+    {
+        try
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest(new { erro = "Id do atleta invalido" });
+            }
+
+            if (dto == null)
+            {
+                return BadRequest(new { erro = "Corpo da requisicao nao pode estar vazio" });
+            }
+
+            if (!User.TryGetProfessorId(out var professorId))
+            {
+                return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+            }
+
+            var planejamentoBase = _planejamentoBaseService.Salvar(id, dto, professorId);
+            return Ok(planejamentoBase);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogWarning(ex, "Professor sem ownership para salvar planejamento base do atleta {AtletaId}", id);
+            return Forbid();
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            _logger.LogWarning(ex, "Erro de faixa ao salvar planejamento base do atleta {AtletaId}", id);
+            return BadRequest(new { erro = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Erro de validacao ao salvar planejamento base do atleta {AtletaId}", id);
             return BadRequest(new { erro = ex.Message });
         }
     }

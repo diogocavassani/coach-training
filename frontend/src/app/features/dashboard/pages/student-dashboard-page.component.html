@@ -79,6 +79,31 @@
       </form>
     </section>
 
+    <section class="card" aria-label="Planejamento base do aluno">
+      <div class="card-header">
+        <div>
+          <h2>Planejamento base</h2>
+          <p class="helper">Informe quantos treinos por semana sao esperados para habilitar a leitura de aderencia.</p>
+        </div>
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="salvarPlanejamentoBase()"
+          [disabled]="salvandoPlanejamentoBase || carregandoPlanejamentoBase">
+          {{ salvandoPlanejamentoBase ? 'Salvando...' : 'Salvar planejamento' }}
+        </button>
+      </div>
+
+      <div *ngIf="mensagemErroPlanejamentoBase" class="feedback error">{{ mensagemErroPlanejamentoBase }}</div>
+
+      <form class="target-form planning-form" [formGroup]="planejamentoBaseForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Treinos planejados por semana</mat-label>
+          <input matInput type="number" min="1" max="14" step="1" formControlName="treinosPlanejadosPorSemana" />
+        </mat-form-field>
+      </form>
+    </section>
+
     <div class="charts-grid">
       <article class="chart-card">
         <h2>Carga semanal (12 semanas)</h2>

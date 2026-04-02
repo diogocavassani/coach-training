@@ -79,6 +79,7 @@ public class CadastroAtletaService
             Email = atleta.Email,
             ObservacoesClinicas = atleta.ObservacoesClinicas,
             NivelEsportivo = atleta.NivelEsportivo,
+            TreinosPlanejadosPorSemana = atleta.TreinosPlanejadosPorSemana,
             DataCriacao = DateTime.UtcNow
         };
     }

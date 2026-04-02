@@ -111,6 +111,10 @@
   margin-top: var(--space-4);
 }
 
+.planning-form {
+  grid-template-columns: minmax(0, 320px);
+}
+
 .target-form-wide {
   grid-column: span 1;
 }

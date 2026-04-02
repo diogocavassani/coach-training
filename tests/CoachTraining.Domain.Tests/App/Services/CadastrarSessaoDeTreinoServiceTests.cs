@@ -70,6 +70,10 @@ public class CadastrarSessaoDeTreinoServiceTests
         {
         }
 
+        public void AtualizarPlanejamentoBase(Guid atletaId, Guid professorId, int treinosPlanejadosPorSemana)
+        {
+        }
+
         public IReadOnlyList<Atleta> ListarPorProfessor(Guid professorId)
         {
             return _atleta.ProfessorId == professorId ? [_atleta] : [];

@@ -20,3 +20,12 @@ export interface SaveStudentTargetRequest {
   distanciaKm: number;
   objetivo?: string;
 }
+
+export interface StudentBasePlan {
+  atletaId: string;
+  treinosPlanejadosPorSemana: number;
+}
+
+export interface SaveStudentBasePlanRequest {
+  treinosPlanejadosPorSemana: number;
+}

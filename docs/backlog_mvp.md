@@ -67,23 +67,23 @@
 - [x] Rodar testes de backend relacionados.
 - [x] Validar o fluxo manual: cadastrar atleta, cadastrar prova-alvo e abrir o dashboard.
 
-### [ ] BL-03 - Implementar planejamento base por atleta
+### [x] BL-03 - Implementar planejamento base por atleta
 
 **Objetivo:** registrar o numero de treinos semanais planejados para cada atleta.
 
 **Criterios de aceite**
 
-- [ ] Existe modelo de dados para planejamento base por atleta.
-- [ ] Existe endpoint autenticado para criar ou atualizar o planejamento base.
-- [ ] Existe endpoint autenticado para consultar o planejamento do atleta quando necessario.
-- [ ] O frontend possui fluxo para definir e editar treinos planejados por semana.
-- [ ] Regras de validacao basicas estao definidas e testadas.
-- [ ] O dado fica pronto para ser consumido pelo dashboard e insights.
+- [x] Existe modelo de dados para planejamento base por atleta.
+- [x] Existe endpoint autenticado para criar ou atualizar o planejamento base.
+- [x] Existe endpoint autenticado para consultar o planejamento do atleta quando necessario.
+- [x] O frontend possui fluxo para definir e editar treinos planejados por semana.
+- [x] Regras de validacao basicas estao definidas e testadas.
+- [x] O dado fica pronto para ser consumido pelo dashboard e insights.
 
 **Validacao minima**
 
-- [ ] Rodar testes de backend relacionados.
-- [ ] Validar o fluxo manual no frontend.
+- [x] Rodar testes de backend relacionados.
+- [x] Validar o fluxo manual no frontend.
 
 ### [ ] BL-04 - Exibir aderencia ao planejamento no dashboard
 
@@ -162,7 +162,7 @@
 
 1. [x] BL-01 - Corrigir prontidao de entrega do frontend.
 2. [x] BL-02 - Implementar cadastro de prova-alvo por atleta.
-3. [ ] BL-03 - Implementar planejamento base por atleta.
+3. [x] BL-03 - Implementar planejamento base por atleta.
 4. [ ] BL-04 - Exibir aderencia ao planejamento no dashboard.
 5. [ ] BL-05 - Substituir o dashboard inicial do professor por dados reais.
 6. [ ] BL-06 - Completar os insights prometidos no escopo do MVP.

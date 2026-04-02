@@ -90,6 +90,33 @@ Todos os endpoints abaixo exigem `Authorization: Bearer <token>`.
 - `403 Forbidden`: tentativa de alterar prova-alvo de atleta sem ownership.
 - `401 Unauthorized`: sem token/token invalido.
 
+## GET /api/atleta/{id}/planejamento-base
+- `200 OK`: retorna o planejamento base atual do atleta.
+- `404 Not Found`: quando o atleta nao possui planejamento base cadastrado ou nao pertence ao professor autenticado.
+
+### Response 200 (exemplo)
+```json
+{
+  "atletaId": "6f4bb540-2d56-4ce7-a56d-8acaf556ab49",
+  "treinosPlanejadosPorSemana": 5
+}
+```
+
+## PUT /api/atleta/{id}/planejamento-base
+
+### Request
+```json
+{
+  "treinosPlanejadosPorSemana": 5
+}
+```
+
+### Responses
+- `200 OK`: cria ou atualiza o planejamento base do atleta.
+- `400 Bad Request`: payload invalido.
+- `403 Forbidden`: tentativa de alterar planejamento de atleta sem ownership.
+- `401 Unauthorized`: sem token/token invalido.
+
 ## GET /api/dashboard/atleta/{id}
 - `200 OK`: dashboard consolidado do aluno do professor autenticado.
 - `404 Not Found`: aluno nao pertence ao professor autenticado.

@@ -79,6 +79,10 @@ public class GerenciarProvaAlvoServiceTests
         {
         }
 
+        public void AtualizarPlanejamentoBase(Guid atletaId, Guid professorId, int treinosPlanejadosPorSemana)
+        {
+        }
+
         public Atleta? ObterPorId(Guid atletaId, Guid professorId)
         {
             return _atleta.Id == atletaId && _atleta.ProfessorId == professorId ? _atleta : null;
