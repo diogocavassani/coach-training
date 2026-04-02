@@ -112,17 +112,26 @@ Resposta esperada do endpoint principal:
 
 Para preparar a base usada em apresentações com dados pré-populados:
 
+**Opção 1: Via Docker (recomendado)**
+
+```bash
+cd infra
+docker compose --profile seed up --build demoseed
+```
+
+**Opção 2: Localmente (.NET SDK 10+)**
+
 ```bash
 dotnet run --project src/CoachTraining.DemoSeed -- --profile demo-v1 --reset-demo
 ```
 
-O comando recria apenas o dataset `demo.*` (professor e 6 atletas) e imprime as credenciais do professor demo e o resumo esperado de cada atleta.
+Ambos os comandos recriam apenas o dataset `demo.*` (professor e 6 atletas) e imprimem as credenciais do professor demo e o resumo esperado de cada atleta.
 
 **Professor Demo**: `demo.professor@coachtraining.local` / `Demo@123456`
 
 **Cenários inclusos**: Base estável, Construção saudável, Risco por carga abrupta, Taper bem executado, Aderência baixa e Divergência carga x rendimento.
 
-Para mais detalhes: [docs/demo/demo-v1.md](docs/demo/demo-v1.md)
+Para mais detalhes: [docs/demo/demo-v1.md](docs/demo/demo-v1.md) | [Docker setup](docs/demo/DOCKER_SEED.md)
 
 ## Testes
 
