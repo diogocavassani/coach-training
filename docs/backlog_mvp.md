@@ -1,6 +1,6 @@
 # Backlog do MVP - CoachTraining
 
-> Ultima atualizacao: 2026-04-01
+> Ultima atualizacao: 2026-04-02
 > Fonte de verdade do escopo: `docs/projeto_sistema_de_monitoramento_de_carga_e_preparacao_de_atletas.md`
 
 ## Como usar este arquivo
@@ -13,12 +13,12 @@
 
 ## Definicao de pronto do MVP
 
-- [ ] O professor consegue se cadastrar e autenticar.
-- [ ] O professor consegue cadastrar atleta, prova-alvo, planejamento base e sessoes de treino.
-- [ ] O dashboard individual do atleta mostra metricas, alertas e aderencia ao planejamento.
-- [ ] O frontend fecha build de producao sem erro.
-- [ ] O ambiente principal sobe via Docker Compose.
-- [ ] A documentacao principal reflete o comportamento real do sistema.
+- [x] O professor consegue se cadastrar e autenticar.
+- [x] O professor consegue cadastrar atleta, prova-alvo, planejamento base e sessoes de treino.
+- [x] O dashboard individual do atleta mostra metricas, alertas e aderencia ao planejamento.
+- [x] O frontend fecha build de producao sem erro.
+- [x] O ambiente principal sobe via Docker Compose.
+- [x] A documentacao principal reflete o comportamento real do sistema.
 
 ## Entregas ja concluidas fora deste backlog
 
@@ -140,23 +140,23 @@
 
 ## P2 - Fechamento documental e operacional
 
-### [ ] BL-07 - Alinhar a documentacao ao estado real do sistema
+### [x] BL-07 - Alinhar a documentacao ao estado real do sistema
 
 **Objetivo:** deixar README e docs coerentes com o que o projeto realmente entrega.
 
 **Criterios de aceite**
 
-- [ ] O `README.md` reflete o status atual do MVP.
-- [ ] A documentacao de setup e execucao nao aponta para fluxos quebrados ou desatualizados.
-- [ ] O endpoint de health-check documentado bate com a rota real.
-- [ ] As referencias antigas a persistencia pendente sao removidas ou corrigidas.
-- [ ] As novas funcionalidades de prova-alvo e planejamento entram na documentacao quando implementadas.
-- [ ] Este backlog continua sendo atualizado nas PRs que alterarem o estado do MVP.
+- [x] O `README.md` reflete o status atual do MVP.
+- [x] A documentacao de setup e execucao nao aponta para fluxos quebrados ou desatualizados.
+- [x] O endpoint de health-check documentado bate com a rota real.
+- [x] As referencias antigas a persistencia pendente sao removidas ou corrigidas.
+- [x] As novas funcionalidades de prova-alvo e planejamento entram na documentacao quando implementadas.
+- [x] Este backlog continua sendo atualizado nas PRs que alterarem o estado do MVP.
 
 **Validacao minima**
 
-- [ ] Revisao manual dos documentos alterados.
-- [ ] Conferencia de comandos e rotas descritos na documentacao.
+- [x] Revisao manual dos documentos alterados.
+- [x] Conferencia de comandos e rotas descritos na documentacao.
 
 ## Ordem sugerida de execucao
 
@@ -166,10 +166,10 @@
 4. [x] BL-04 - Exibir aderencia ao planejamento no dashboard.
 5. [x] BL-05 - Substituir o dashboard inicial do professor por dados reais.
 6. [x] BL-06 - Completar os insights prometidos no escopo do MVP.
-7. [ ] BL-07 - Alinhar a documentacao ao estado real do sistema.
+7. [x] BL-07 - Alinhar a documentacao ao estado real do sistema.
 
 ## Regra de manutencao
 
-- [ ] Ao concluir um item principal, marcar tambem os criterios de aceite e validacoes minimas correspondentes.
-- [ ] Manter este arquivo atualizado na mesma PR da entrega implementada.
+- [x] Ao concluir um item principal, marcar tambem os criterios de aceite e validacoes minimas correspondentes.
+- [x] Manter este arquivo atualizado na mesma PR da entrega implementada.
 - [ ] Se um item mudar de escopo, ajustar este backlog e a documentacao de produto no mesmo ciclo.

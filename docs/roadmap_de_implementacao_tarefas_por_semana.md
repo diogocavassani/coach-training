@@ -27,7 +27,7 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 - [x] Criar solução e projetos (`.Domain`, `CoachTraining.App` como Application, `.Infra`, `.API`)
 - [x] Configurar referências corretas entre camadas
 - [x] Configurar API base (`Program.cs`)
-- [x] Criar endpoint de health-check (`GET api/HealthCheck`)
+- [x] Criar endpoint de health-check (`GET api/healthcheck`)
 - [x] Configurar injeção de dependência básica
 - [x] Criar README inicial (visão do projeto)
 - [x] Documentar princípios arquiteturais (Clean / DDD) — `README.md`, `ARCHITECTURE.md`, `docs/ARQUITETURA.md`
@@ -108,13 +108,13 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ## 📅 Semana 6 — Read model e queries de dashboard
 **Objetivo:** Preparar dados consolidados para visualização.  
-**Status:** Parcialmente concluída — endpoint HTTP funcional para atletas cadastrados em memória; persistência completa ainda pendente.
+**Status:** Concluída — dashboard do atleta integrado à persistência real e evoluído com aderência ao planejamento.
 
 ### Tarefas
 - [x] Definir DTO do dashboard do atleta (`DashboardAtletaDto`)
 - [x] Consolidar métricas no Application Layer (`ObterDashboardAtletaService`)
 - [x] Criar query de dashboard por atleta (serviço de aplicação + testes `ObterDashboardAtletaServiceTests`)
-- [x] Implementar endpoint **funcional** `GET` de dashboard por atleta — integrado ao `ObterDashboardAtletaService` com recuperação de atleta via cadastro em memória
+- [x] Implementar endpoint **funcional** `GET` de dashboard por atleta — integrado ao `ObterDashboardAtletaService` com recuperação persistida do atleta
 - [ ] Validar performance e clareza dos dados (sem medição formal / carga real)
 
 **Entregável:** Endpoint de dashboard funcional.
@@ -185,14 +185,14 @@ O objetivo é fornecer um **panorama completo**, com início, meio e fim bem def
 
 ## ⚠️ Pendências consolidadas (além dos itens `[ ]` acima)
 
-1. **Persistência real:** substituir armazenamento em memória por implementação em `CoachTraining.Infra` (repositórios + banco).
-2. **Performance e qualidade de dados:** medir carga real, validar volumes maiores e evoluir observabilidade.
-3. **Extras do MVP (doc de projeto):** prova alvo por atleta, planejamento semanal e registro de sessões via API.
+1. **Performance e qualidade de dados:** medir carga real, validar volumes maiores e evoluir observabilidade.
+2. **Observabilidade operacional:** ampliar logs, health checks e métricas de suporte.
+3. **Evoluções pós-MVP:** integrações externas, relatórios e novos refinamentos de UX.
 
 ---
 
 ## ✅ Resumo Final
 
 - **Duração planejada:** 10 semanas · **Dedicação média:** 5 h/semana
-- **Progresso estimado:** Semanas 1–5, 7, 8 e 10 **concluídas**; Semana 6 **parcial** (sem persistência); Semana 9 **contínua** (refino e robustez).
+- **Progresso estimado:** Semanas 1–10 **concluídas no escopo do MVP**, com Semana 9 permanecendo aberta para novos refinamentos incrementais.
 - **Resultado alvo:** Sistema funcional de apoio à decisão para treinadores, baseado em ciência do esporte, com arquitetura limpa e regras bem documentadas.

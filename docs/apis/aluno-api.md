@@ -131,5 +131,6 @@ Todos os endpoints abaixo exigem `Authorization: Bearer <token>`.
 ```
 
 ## Health (anonimo)
+- `GET /api/healthcheck`
 - `GET /api/atleta/health`
 - `GET /api/dashboard/health`

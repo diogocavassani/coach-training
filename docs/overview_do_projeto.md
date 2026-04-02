@@ -1,45 +1,45 @@
-# Overview do Projeto — CoachTraining
+# Overview do Projeto - CoachTraining
 
 ## Proposta
 
-O **CoachTraining** e um sistema de apoio a decisao para treinadores de corrida, com foco em consolidar dados de treino e transformar indicadores tecnicos em informacao acionavel.
-
-O produto **nao prescreve treinos** e **nao substitui o treinador**. O objetivo e reduzir subjetividade no acompanhamento de carga e risco, apoiando decisao com base em ciencia do esporte.
+CoachTraining e um sistema de apoio a decisao para treinadores de corrida, com foco em transformar dados de treino em informacao acionavel. O produto centraliza carga, risco, fase do ciclo, taper e aderencia ao planejamento sem substituir a leitura tecnica do treinador.
 
 ## Problema que resolve
 
-Treinadores lidam com planilhas dispersas e sinais de risco pouco padronizados. Isso dificulta:
+Planilhas e acompanhamentos manuais tornam dificil:
 
-- perceber progressao abrupta de carga;
-- comparar semana atual vs semana anterior;
-- comunicar ao atleta o nivel de risco com clareza.
+- perceber aumentos abruptos de carga;
+- acompanhar multiplos atletas com criterio consistente;
+- identificar quem demanda atencao imediata;
+- cruzar planejamento, execucao e proximidade de prova.
 
-## Solucao implementada (MVP atual)
+## MVP atual
 
-- Cadastro basico de atleta via API;
-- Dashboard consolidado por atleta;
-- Calculo de carga por `session-RPE`;
-- Indicadores de carga aguda, carga cronica e ACWR;
-- Avaliacao de risco (Normal, Atencao, Risco);
-- Classificacao de fase do ciclo e verificacao de janela de taper;
-- Geracao de insights textuais orientados ao treinador.
+- Cadastro de professor e autenticacao JWT
+- Cadastro e listagem de atletas por professor
+- Cadastro e edicao de prova-alvo por atleta
+- Cadastro e edicao de planejamento base por atleta
+- Registro de sessoes de treino
+- Dashboard individual do atleta com metricas, insights, series e exportacao
+- Home autenticada do professor com resumo operacional real
+- Persistencia em PostgreSQL com EF Core e migrations
 
 ## Diferenciais tecnicos
 
-- Arquitetura limpa com separacao clara de responsabilidades;
-- Dominio modelado com DDD (Entities, Value Objects, Domain Services);
-- Regras de negocio cobertas por testes unitarios;
-- API com endpoints HTTP e validacoes basicas.
+- Clean Architecture com separacao clara entre API, aplicacao, dominio e infraestrutura
+- DDD para entidades, value objects e regras de negocio
+- Suite automatizada cobrindo dominio, aplicacao, API e frontend
+- Docker Compose para subir banco, API e frontend no fluxo principal
 
 ## Estado atual
 
-- Suíte de testes unitarios verde;
-- Endpoint de dashboard funcional para atletas cadastrados no ciclo de vida da aplicacao;
-- Persistencia em banco ainda pendente (proxima evolucao natural do MVP).
+- Persistencia real em funcionamento
+- Fluxos principais do MVP entregues ponta a ponta
+- Build de producao do frontend validado
+- Documentacao principal alinhada ao estado do codigo
 
 ## Proximos passos sugeridos
 
-1. Implementar persistencia (Infra + repositórios + EF Core);
-2. Expor cadastro e consulta de sessoes de treino via API;
-3. Adicionar prova alvo por atleta e planejamento semanal;
-4. Evoluir observabilidade (logs estruturados e metricas).
+1. Evoluir observabilidade com logs estruturados e metricas.
+2. Revisar performance de consultas conforme a base crescer.
+3. Planejar integracoes futuras com plataformas externas e wearables.
