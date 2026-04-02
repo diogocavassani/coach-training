@@ -59,4 +59,43 @@ describe('StudentsApiService', () => {
     expect(req.request.method).toBe('GET');
     req.flush([]);
   });
+
+  it('consulta prova-alvo do atleta no endpoint esperado', () => {
+    service.obterProvaAlvo('atleta-123').subscribe();
+
+    const req = httpMock.expectOne('/api/Atleta/atleta-123/prova-alvo');
+    expect(req.request.method).toBe('GET');
+    req.flush({
+      id: 'prova-1',
+      atletaId: 'atleta-123',
+      dataProva: '2026-05-01',
+      distanciaKm: 21.1,
+      objetivo: 'Completar forte'
+    });
+  });
+
+  it('salva prova-alvo do atleta com PUT no endpoint esperado', () => {
+    service
+      .salvarProvaAlvo('atleta-123', {
+        dataProva: '2026-05-01',
+        distanciaKm: 42.2,
+        objetivo: 'Maratona principal'
+      })
+      .subscribe();
+
+    const req = httpMock.expectOne('/api/Atleta/atleta-123/prova-alvo');
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({
+      dataProva: '2026-05-01',
+      distanciaKm: 42.2,
+      objetivo: 'Maratona principal'
+    });
+    req.flush({
+      id: 'prova-1',
+      atletaId: 'atleta-123',
+      dataProva: '2026-05-01',
+      distanciaKm: 42.2,
+      objetivo: 'Maratona principal'
+    });
+  });
 });

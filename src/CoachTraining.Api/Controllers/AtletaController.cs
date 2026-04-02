@@ -14,13 +14,16 @@ namespace CoachTraining.Api.Controllers;
 public class AtletaController : ControllerBase
 {
     private readonly CadastroAtletaService _cadastroService;
+    private readonly GerenciarProvaAlvoService _provaAlvoService;
     private readonly ILogger<AtletaController> _logger;
 
     public AtletaController(
         CadastroAtletaService cadastroService,
+        GerenciarProvaAlvoService provaAlvoService,
         ILogger<AtletaController> logger)
     {
         _cadastroService = cadastroService ?? throw new ArgumentNullException(nameof(cadastroService));
+        _provaAlvoService = provaAlvoService ?? throw new ArgumentNullException(nameof(provaAlvoService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -103,6 +106,68 @@ public class AtletaController : ControllerBase
         }
 
         return Ok(atleta);
+    }
+
+    [HttpGet("{id:guid}/prova-alvo")]
+    public IActionResult ObterProvaAlvo(Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return BadRequest(new { erro = "Id do atleta invalido" });
+        }
+
+        if (!User.TryGetProfessorId(out var professorId))
+        {
+            return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+        }
+
+        var provaAlvo = _provaAlvoService.ObterPorAtletaId(id, professorId);
+        if (provaAlvo == null)
+        {
+            return NotFound(new { erro = "Prova alvo nao encontrada para o atleta informado." });
+        }
+
+        return Ok(provaAlvo);
+    }
+
+    [HttpPut("{id:guid}/prova-alvo")]
+    public IActionResult SalvarProvaAlvo(Guid id, [FromBody] SalvarProvaAlvoDto dto)
+    {
+        try
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest(new { erro = "Id do atleta invalido" });
+            }
+
+            if (dto == null)
+            {
+                return BadRequest(new { erro = "Corpo da requisicao nao pode estar vazio" });
+            }
+
+            if (!User.TryGetProfessorId(out var professorId))
+            {
+                return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+            }
+
+            var provaAlvo = _provaAlvoService.Salvar(id, dto, professorId);
+            return Ok(provaAlvo);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogWarning(ex, "Professor sem ownership para salvar prova alvo do atleta {AtletaId}", id);
+            return Forbid();
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            _logger.LogWarning(ex, "Erro de faixa ao salvar prova alvo do atleta {AtletaId}", id);
+            return BadRequest(new { erro = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Erro de validacao ao salvar prova alvo do atleta {AtletaId}", id);
+            return BadRequest(new { erro = ex.Message });
+        }
     }
 
     [HttpGet("health")]

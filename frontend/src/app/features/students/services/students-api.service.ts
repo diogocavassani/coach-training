@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Student } from '../models/student.model';
+import { SaveStudentTargetRequest, Student, StudentTarget } from '../models/student.model';
 
 export interface CreateStudentRequest {
   nome: string;
@@ -25,5 +25,13 @@ export class StudentsApiService {
 
   listar(): Observable<Student[]> {
     return this.httpClient.get<Student[]>(this.endpoint);
+  }
+
+  obterProvaAlvo(atletaId: string): Observable<StudentTarget> {
+    return this.httpClient.get<StudentTarget>(`${this.endpoint}/${atletaId}/prova-alvo`);
+  }
+
+  salvarProvaAlvo(atletaId: string, payload: SaveStudentTargetRequest): Observable<StudentTarget> {
+    return this.httpClient.put<StudentTarget>(`${this.endpoint}/${atletaId}/prova-alvo`, payload);
   }
 }

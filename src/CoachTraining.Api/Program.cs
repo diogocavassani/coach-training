@@ -66,6 +66,7 @@ builder.Services.AddScoped<CadastroProfessorService>();
 builder.Services.AddScoped<LoginProfessorService>();
 builder.Services.AddScoped<ObterDashboardAtletaService>();
 builder.Services.AddScoped<CadastrarSessaoDeTreinoService>();
+builder.Services.AddScoped<GerenciarProvaAlvoService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();

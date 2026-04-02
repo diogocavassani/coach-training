@@ -97,6 +97,31 @@ Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas
   - `401`: token ausente/invalido
   - `404`: atleta nao encontrado para o professor autenticado
 
+### Alunos - Prova alvo
+
+- Metodo: `GET /api/atleta/{id}/prova-alvo`
+- Response esperado: `200 OK` com `id`, `atletaId`, `dataProva`, `distanciaKm` e `objetivo`.
+- Erros tratados:
+  - `401`: token ausente/invalido
+  - `404`: atleta sem prova alvo cadastrada ou fora do ownership
+
+- Metodo: `PUT /api/atleta/{id}/prova-alvo`
+- Request:
+
+```json
+{
+  "dataProva": "2026-05-24",
+  "distanciaKm": 21.1,
+  "objetivo": "Completar forte"
+}
+```
+
+- Response esperado: `200 OK` com a prova alvo persistida.
+- Erros tratados:
+  - `400`: validacao de payload
+  - `401`: token ausente/invalido
+  - `403`: tentativa de editar prova de atleta sem ownership
+
 ### Treinos - Cadastro
 
 - Metodo: `POST /api/treinos`

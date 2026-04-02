@@ -58,6 +58,38 @@ Todos os endpoints abaixo exigem `Authorization: Bearer <token>`.
 - `200 OK`: quando aluno pertence ao professor autenticado.
 - `404 Not Found`: quando nao existe ou pertence a outro professor.
 
+## GET /api/atleta/{id}/prova-alvo
+- `200 OK`: retorna a prova-alvo atual do atleta.
+- `404 Not Found`: quando o atleta nao possui prova-alvo cadastrada ou nao pertence ao professor autenticado.
+
+### Response 200 (exemplo)
+```json
+{
+  "id": "5db28c72-d984-47fd-b4d5-c18f4fa1f4f9",
+  "atletaId": "6f4bb540-2d56-4ce7-a56d-8acaf556ab49",
+  "dataProva": "2026-05-24",
+  "distanciaKm": 21.1,
+  "objetivo": "Completar forte"
+}
+```
+
+## PUT /api/atleta/{id}/prova-alvo
+
+### Request
+```json
+{
+  "dataProva": "2026-05-24",
+  "distanciaKm": 21.1,
+  "objetivo": "Completar forte"
+}
+```
+
+### Responses
+- `200 OK`: cria ou atualiza a prova-alvo do atleta.
+- `400 Bad Request`: payload invalido.
+- `403 Forbidden`: tentativa de alterar prova-alvo de atleta sem ownership.
+- `401 Unauthorized`: sem token/token invalido.
+
 ## GET /api/dashboard/atleta/{id}
 - `200 OK`: dashboard consolidado do aluno do professor autenticado.
 - `404 Not Found`: aluno nao pertence ao professor autenticado.

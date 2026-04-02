@@ -53,6 +53,13 @@
   padding: var(--space-6);
 }
 
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
 .metrics-grid article span {
   color: var(--color-text-muted);
   text-transform: uppercase;
@@ -95,6 +102,17 @@
 .chart-card h2,
 .card h2 {
   font-size: var(--font-size-heading-m);
+}
+
+.target-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.target-form-wide {
+  grid-column: span 1;
 }
 
 .chart-container {
@@ -160,6 +178,10 @@ thead th {
   .charts-grid {
     grid-template-columns: 1fr;
   }
+
+  .target-form {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 760px) {
@@ -178,5 +200,13 @@ thead th {
 
   .actions button {
     flex: 1;
+  }
+
+  .card-header {
+    flex-direction: column;
+  }
+
+  .target-form {
+    grid-template-columns: 1fr;
   }
 }

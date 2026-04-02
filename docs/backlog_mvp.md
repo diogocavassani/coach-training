@@ -49,23 +49,23 @@
 - [x] Rodar `npm run build`.
 - [x] Rodar `docker compose up --build` a partir de `infra/`.
 
-### [ ] BL-02 - Implementar cadastro de prova-alvo por atleta
+### [x] BL-02 - Implementar cadastro de prova-alvo por atleta
 
 **Objetivo:** permitir que o professor cadastre e atualize a prova-alvo usada pelo dashboard.
 
 **Criterios de aceite**
 
-- [ ] Existe endpoint autenticado para criar ou atualizar prova-alvo por atleta.
-- [ ] Existe consulta autenticada para recuperar a prova-alvo do atleta quando necessario.
-- [ ] A persistencia de prova-alvo esta integrada ao modelo atual.
-- [ ] O frontend possui formulario ou fluxo claro para cadastrar e editar prova-alvo.
-- [ ] O dashboard individual passa a refletir a prova cadastrada sem dependencias manuais.
-- [ ] Existem testes cobrindo fluxo feliz e validacoes principais.
+- [x] Existe endpoint autenticado para criar ou atualizar prova-alvo por atleta.
+- [x] Existe consulta autenticada para recuperar a prova-alvo do atleta quando necessario.
+- [x] A persistencia de prova-alvo esta integrada ao modelo atual.
+- [x] O frontend possui formulario ou fluxo claro para cadastrar e editar prova-alvo.
+- [x] O dashboard individual passa a refletir a prova cadastrada sem dependencias manuais.
+- [x] Existem testes cobrindo fluxo feliz e validacoes principais.
 
 **Validacao minima**
 
-- [ ] Rodar testes de backend relacionados.
-- [ ] Validar o fluxo manual: cadastrar atleta, cadastrar prova-alvo e abrir o dashboard.
+- [x] Rodar testes de backend relacionados.
+- [x] Validar o fluxo manual: cadastrar atleta, cadastrar prova-alvo e abrir o dashboard.
 
 ### [ ] BL-03 - Implementar planejamento base por atleta
 
@@ -161,7 +161,7 @@
 ## Ordem sugerida de execucao
 
 1. [x] BL-01 - Corrigir prontidao de entrega do frontend.
-2. [ ] BL-02 - Implementar cadastro de prova-alvo por atleta.
+2. [x] BL-02 - Implementar cadastro de prova-alvo por atleta.
 3. [ ] BL-03 - Implementar planejamento base por atleta.
 4. [ ] BL-04 - Exibir aderencia ao planejamento no dashboard.
 5. [ ] BL-05 - Substituir o dashboard inicial do professor por dados reais.
