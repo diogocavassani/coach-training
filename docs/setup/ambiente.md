@@ -63,3 +63,19 @@ dotnet ef migrations list --project src/CoachTraining.Infra --startup-project sr
 cd frontend && npm test -- --watch=false --browsers=ChromeHeadless
 cd frontend && npm run build
 ```
+
+## Dataset demo
+
+Com o PostgreSQL local ou Docker em execução:
+
+```bash
+dotnet run --project src/CoachTraining.DemoSeed -- --profile demo-v1 --reset-demo
+```
+
+O seed foi feito para apresentação e feedback com treinadores. Por padrão, remove apenas dados `demo.*` das execuções anteriores.
+
+Credenciais do professor demo:
+- Email: `demo.professor@coachtraining.local`
+- Senha: `Demo@123456`
+
+Para mais informações sobre os cenários inclusos e fluxo de uso, veja [docs/demo/demo-v1.md](../demo/demo-v1.md).

@@ -108,6 +108,22 @@ Resposta esperada do endpoint principal:
 }
 ```
 
+## Dataset de Demonstração
+
+Para preparar a base usada em apresentações com dados pré-populados:
+
+```bash
+dotnet run --project src/CoachTraining.DemoSeed -- --profile demo-v1 --reset-demo
+```
+
+O comando recria apenas o dataset `demo.*` (professor e 6 atletas) e imprime as credenciais do professor demo e o resumo esperado de cada atleta.
+
+**Professor Demo**: `demo.professor@coachtraining.local` / `Demo@123456`
+
+**Cenários inclusos**: Base estável, Construção saudável, Risco por carga abrupta, Taper bem executado, Aderência baixa e Divergência carga x rendimento.
+
+Para mais detalhes: [docs/demo/demo-v1.md](docs/demo/demo-v1.md)
+
 ## Testes
 
 Backend:
