@@ -121,6 +121,15 @@ Todos os endpoints abaixo exigem `Authorization: Bearer <token>`.
 - `200 OK`: dashboard consolidado do aluno do professor autenticado.
 - `404 Not Found`: aluno nao pertence ao professor autenticado.
 
+### Response 200 (campos novos do planejamento)
+```json
+{
+  "treinosPlanejadosPorSemana": 4,
+  "treinosRealizadosNaSemana": 3,
+  "aderenciaPlanejamentoPercentual": 75.0
+}
+```
+
 ## Health (anonimo)
 - `GET /api/atleta/health`
 - `GET /api/dashboard/health`

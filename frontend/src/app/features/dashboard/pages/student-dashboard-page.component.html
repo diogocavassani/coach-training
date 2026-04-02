@@ -48,6 +48,41 @@
       </article>
     </div>
 
+    <section class="card adherence-card" aria-label="Aderencia ao planejamento">
+      <div class="card-header">
+        <div>
+          <h2>Aderencia ao planejamento</h2>
+          <p class="helper">
+            Compare o planejado com o realizado na janela semanal usada para calcular a carga atual.
+          </p>
+        </div>
+      </div>
+
+      @if (dashboard.treinosPlanejadosPorSemana != null && dashboard.aderenciaPlanejamentoPercentual != null) {
+        <div class="adherence-grid">
+          <article>
+            <span>Aderencia</span>
+            <strong>{{ dashboard.aderenciaPlanejamentoPercentual | number: '1.0-1' }}%</strong>
+            <small>{{ resumoAderenciaPlanejamento }}</small>
+          </article>
+          <article>
+            <span>Planejado</span>
+            <strong>{{ dashboard.treinosPlanejadosPorSemana }}</strong>
+            <small>Treinos previstos na semana</small>
+          </article>
+          <article>
+            <span>Realizado</span>
+            <strong>{{ dashboard.treinosRealizadosNaSemana }}</strong>
+            <small>Treinos registrados na semana</small>
+          </article>
+        </div>
+      } @else {
+        <div class="feedback">
+          Defina o planejamento base do atleta para liberar a leitura de aderencia no dashboard.
+        </div>
+      }
+    </section>
+
     <section class="card" aria-label="Prova alvo do aluno">
       <div class="card-header">
         <div>

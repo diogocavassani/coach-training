@@ -22,6 +22,9 @@ O `professor_id` e extraido do token autenticado para validar ownership do atlet
   "cargaCronica": 1085,
   "acwr": 1.09,
   "deltaPercentualSemanal": 15.7,
+  "treinosPlanejadosPorSemana": 4,
+  "treinosRealizadosNaSemana": 3,
+  "aderenciaPlanejamentoPercentual": 75.0,
   "faseAtual": 1,
   "statusRisco": 0,
   "emJanelaDeTaper": false,
@@ -64,6 +67,9 @@ O `professor_id` e extraido do token autenticado para validar ownership do atlet
 
 ## Regras de negocio
 - O professor autenticado so pode consultar dashboard de atleta vinculado ao proprio `professor_id`.
+- `treinosRealizadosNaSemana` usa a mesma janela movel de 7 dias adotada para `cargaSemanal`.
+- `aderenciaPlanejamentoPercentual` so e calculada quando o atleta possui `treinosPlanejadosPorSemana`.
+- O gerador de insights passa a sinalizar aderencia abaixo do esperado (`< 80%`) e execucao acima do planejado (`> 120%`).
 - A serie semanal usa janela fixa de 12 semanas (segunda a domingo).
 - `seriePaceSemanal.valorMinPorKm` pode ser `null` quando nao houver distancia valida na semana.
 - `treinosJanela` contem os treinos da mesma janela de 12 semanas usada nos graficos.

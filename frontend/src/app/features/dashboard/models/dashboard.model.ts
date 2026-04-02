@@ -31,6 +31,9 @@ export interface DashboardAtleta {
   cargaCronica: number;
   acwr: number;
   deltaPercentualSemanal: number;
+  treinosPlanejadosPorSemana: number | null;
+  treinosRealizadosNaSemana: number;
+  aderenciaPlanejamentoPercentual: number | null;
   faseAtual: number;
   statusRisco: number;
   emJanelaDeTaper: boolean;

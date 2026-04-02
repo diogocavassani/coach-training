@@ -42,7 +42,27 @@ public static class GeradorDeInsights
             insights.Add((4, "Semana anterior sem carga registrada; comparar progressao com cautela."));
         }
 
-        // 3. Taper
+        // 3. Aderencia ao planejamento
+        if (dto.TreinosPlanejadosPorSemana.HasValue && dto.AderenciaPlanejamentoPercentual.HasValue)
+        {
+            var treinosPlanejados = dto.TreinosPlanejadosPorSemana.Value;
+            var aderencia = dto.AderenciaPlanejamentoPercentual.Value;
+
+            if (aderencia < 80)
+            {
+                insights.Add((
+                    2,
+                    $"Aderencia ao planejamento abaixo do esperado ({dto.TreinosRealizadosNaSemana}/{treinosPlanejados} treinos, {FormatPercent(aderencia)}). Revisar barreiras de execucao."));
+            }
+            else if (aderencia > 120)
+            {
+                insights.Add((
+                    3,
+                    $"Volume realizado acima do planejamento ({dto.TreinosRealizadosNaSemana}/{treinosPlanejados} treinos, {FormatPercent(aderencia)}). Confirmar se o plano semanal precisa de ajuste."));
+            }
+        }
+
+        // 4. Taper
         if (dto.EmJanelaDeTaper)
         {
             if (dto.ReducaoVolumeTaper.HasValue)
@@ -62,13 +82,13 @@ public static class GeradorDeInsights
             }
         }
 
-        // 4. Observacoes clinicas
+        // 5. Observacoes clinicas
         if (!string.IsNullOrWhiteSpace(dto.ObservacoesClin))
         {
             insights.Add((1, $"Observacoes clinicas: {dto.ObservacoesClin}. Ajustar plano conforme restricoes."));
         }
 
-        // 5. Informacao geral
+        // 6. Informacao geral
         if (insights.Count == 0)
             insights.Add((5, "Nenhum alerta critico detectado. Treinamento dentro de parametros esperados."));
 

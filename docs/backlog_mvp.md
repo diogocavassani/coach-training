@@ -85,22 +85,22 @@
 - [x] Rodar testes de backend relacionados.
 - [x] Validar o fluxo manual no frontend.
 
-### [ ] BL-04 - Exibir aderencia ao planejamento no dashboard
+### [x] BL-04 - Exibir aderencia ao planejamento no dashboard
 
 **Objetivo:** fechar o ciclo entre planejamento base e execucao real dos treinos.
 
 **Criterios de aceite**
 
-- [ ] O dashboard expone planejado vs realizado de forma objetiva.
-- [ ] O dashboard calcula um indicador de aderencia para o periodo analisado.
-- [ ] Existe insight textual quando a aderencia estiver fora do esperado.
-- [ ] O frontend mostra o indicador de aderencia em local claro no dashboard do atleta.
-- [ ] Existem testes cobrindo o calculo e a exibicao do novo indicador.
+- [x] O dashboard expone planejado vs realizado de forma objetiva.
+- [x] O dashboard calcula um indicador de aderencia para o periodo analisado.
+- [x] Existe insight textual quando a aderencia estiver fora do esperado.
+- [x] O frontend mostra o indicador de aderencia em local claro no dashboard do atleta.
+- [x] Existem testes cobrindo o calculo e a exibicao do novo indicador.
 
 **Validacao minima**
 
-- [ ] Rodar testes de backend e frontend relacionados.
-- [ ] Validar manualmente cenarios com aderencia alta e baixa.
+- [x] Rodar testes de backend e frontend relacionados.
+- [x] Validar manualmente cenarios com aderencia alta e baixa.
 
 ## P1 - Fechamento da experiencia do produto
 
@@ -163,7 +163,7 @@
 1. [x] BL-01 - Corrigir prontidao de entrega do frontend.
 2. [x] BL-02 - Implementar cadastro de prova-alvo por atleta.
 3. [x] BL-03 - Implementar planejamento base por atleta.
-4. [ ] BL-04 - Exibir aderencia ao planejamento no dashboard.
+4. [x] BL-04 - Exibir aderencia ao planejamento no dashboard.
 5. [ ] BL-05 - Substituir o dashboard inicial do professor por dados reais.
 6. [ ] BL-06 - Completar os insights prometidos no escopo do MVP.
 7. [ ] BL-07 - Alinhar a documentacao ao estado real do sistema.

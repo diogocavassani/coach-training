@@ -66,4 +66,18 @@ public class GeradorDeInsightsTests
 
         Assert.Contains(dashboard.Insights, s => s.Contains("Taper") || s.Contains("Polimento") || s.Contains("redução"));
     }
+    [Fact]
+    public void Insights_AdicionaAlertaQuandoAderenciaAoPlanejamentoEstaBaixa()
+    {
+        var dashboard = new CoachTraining.App.DTOs.DashboardAtletaDto
+        {
+            TreinosPlanejadosPorSemana = 5,
+            TreinosRealizadosNaSemana = 2,
+            AderenciaPlanejamentoPercentual = 40
+        };
+
+        var insights = GeradorDeInsights.GerarInsights(dashboard);
+
+        Assert.Contains(insights, insight => insight.Contains("planejamento", StringComparison.OrdinalIgnoreCase));
+    }
 }

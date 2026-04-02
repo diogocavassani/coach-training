@@ -184,6 +184,7 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
         var professor = await CadastrarProfessorAsync(client, $"professor.dashboard.{Guid.NewGuid():N}@teste.com");
         var token = await LoginAsync(client, professor.Email, "123456");
         var atleta = await CadastrarAtletaAsync(client, token, "Atleta Dashboard", email: "atleta.dashboard@teste.com");
+        await SalvarPlanejamentoBaseAsync(client, token, atleta.Id, 4);
 
         await CadastrarTreinoAsync(
             client,
@@ -215,6 +216,9 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
         var dashboard = await response.Content.ReadFromJsonAsync<DashboardAtletaDto>();
         Assert.NotNull(dashboard);
         Assert.Equal(atleta.Id, dashboard!.AtletaId);
+        Assert.Equal(4, dashboard.TreinosPlanejadosPorSemana);
+        Assert.Equal(1, dashboard.TreinosRealizadosNaSemana);
+        Assert.Equal(25.0, dashboard.AderenciaPlanejamentoPercentual);
         Assert.Equal(12, dashboard.SerieCargaSemanal.Count);
         Assert.Equal(12, dashboard.SeriePaceSemanal.Count);
         Assert.True(dashboard.TreinosJanela.Count >= 2);
@@ -299,6 +303,25 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
                 DuracaoMinutos = duracaoMinutos,
                 DistanciaKm = distanciaKm,
                 Rpe = rpe
+            })
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+    }
+
+    private static async Task SalvarPlanejamentoBaseAsync(
+        HttpClient client,
+        string token,
+        Guid atletaId,
+        int treinosPlanejadosPorSemana)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/api/atleta/{atletaId}/planejamento-base")
+        {
+            Content = JsonContent.Create(new SalvarPlanejamentoBaseDto
+            {
+                TreinosPlanejadosPorSemana = treinosPlanejadosPorSemana
             })
         };
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);

@@ -34,6 +34,9 @@ describe('StudentDashboardPageComponent', () => {
     dataUltimaAtualizacao: '2026-03-30T10:00:00Z',
     observacoesClin: null,
     nivelAtleta: 'Intermediario',
+    treinosPlanejadosPorSemana: 5,
+    treinosRealizadosNaSemana: 3,
+    aderenciaPlanejamentoPercentual: 60,
     insights: ['Carga sob controle.'],
     serieCargaSemanal: [
       { semanaInicio: '2026-03-16', semanaFim: '2026-03-22', valor: 980 },
@@ -136,6 +139,12 @@ describe('StudentDashboardPageComponent', () => {
       treinosPlanejadosPorSemana: 5
     });
     expect(component.carregando).toBeFalse();
+  });
+
+  it('resume aderencia ao planejamento quando houver base configurada', () => {
+    expect(component.resumoAderenciaPlanejamento).toBe('3 de 5 treinos na semana');
+    expect(fixture.nativeElement.textContent).toContain('Aderencia ao planejamento');
+    expect(fixture.nativeElement.textContent).toContain('3 de 5 treinos na semana');
   });
 
   it('exibe erro quando API falha', async () => {

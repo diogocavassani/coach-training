@@ -151,6 +151,14 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
     return !!this.dashboard && this.dashboard.treinosJanela.length > 0;
   }
 
+  get resumoAderenciaPlanejamento(): string {
+    if (!this.dashboard || this.dashboard.treinosPlanejadosPorSemana == null) {
+      return 'Planejamento base ainda nao definido.';
+    }
+
+    return `${this.dashboard.treinosRealizadosNaSemana} de ${this.dashboard.treinosPlanejadosPorSemana} treinos na semana`;
+  }
+
   salvarProvaAlvo(): void {
     if (!this.atletaId) {
       return;
@@ -273,6 +281,14 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
       y += 16;
       doc.text(`ACWR: ${this.dashboard.acwr.toFixed(2)}`, margemEsquerda, y);
       y += 16;
+      if (this.dashboard.aderenciaPlanejamentoPercentual != null && this.dashboard.treinosPlanejadosPorSemana != null) {
+        doc.text(
+          `Aderencia ao planejamento: ${this.dashboard.aderenciaPlanejamentoPercentual.toFixed(1)}% (${this.resumoAderenciaPlanejamento})`,
+          margemEsquerda,
+          y
+        );
+        y += 16;
+      }
       doc.text(`Fase: ${this.faseDescricao} | Risco: ${this.statusRiscoDescricao}`, margemEsquerda, y);
       y += 24;
 

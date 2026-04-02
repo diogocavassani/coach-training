@@ -92,7 +92,7 @@ Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas
 ### Dashboard do aluno
 
 - Metodo: `GET /api/dashboard/atleta/{id}`
-- Response esperado: `200 OK` com metricas consolidadas, insights, series (`serieCargaSemanal`, `seriePaceSemanal`) e `treinosJanela`.
+- Response esperado: `200 OK` com metricas consolidadas, insights, series (`serieCargaSemanal`, `seriePaceSemanal`), `treinosJanela` e os campos de aderencia (`treinosPlanejadosPorSemana`, `treinosRealizadosNaSemana`, `aderenciaPlanejamentoPercentual`).
 - Erros tratados:
   - `401`: token ausente/invalido
   - `404`: atleta nao encontrado para o professor autenticado

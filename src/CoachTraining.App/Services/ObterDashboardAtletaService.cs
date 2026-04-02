@@ -47,12 +47,17 @@ public class ObterDashboardAtletaService
 
         var cargas = sessoesList.Select(s => s.CalcularCarga()).ToList();
         var cargaDiaria = CalculadoraDeCarga.AgregarCargaDiaria(sessoesList);
+        var inicioJanelaSemanalAtual = hoje.AddDays(-6);
 
         // Calculos de carga
         var cargaUltimaSessao = cargas[^1].Valor;
-        var cargaSemanal = ObterCargaNoPeriodo(cargaDiaria, hoje.AddDays(-6), hoje);
+        var cargaSemanal = ObterCargaNoPeriodo(cargaDiaria, inicioJanelaSemanalAtual, hoje);
         var cargaSemanaAnterior = ObterCargaNoPeriodo(cargaDiaria, hoje.AddDays(-13), hoje.AddDays(-7));
         var (cargaAguda, cargaCronica) = CalcularCargaAgudaECronicaPorJanela(cargaDiaria, hoje);
+        var treinosRealizadosNaSemana = ObterQuantidadeSessoesNoPeriodo(sessoesList, inicioJanelaSemanalAtual, hoje);
+        var aderenciaPlanejamento = CalcularAderenciaPlanejamento(
+            atleta.TreinosPlanejadosPorSemana,
+            treinosRealizadosNaSemana);
 
         // Calculos de risco
         var acwrCalculado = AvaliadorDeRisco.CalcularAcwr(cargaAguda, cargaCronica);
@@ -86,6 +91,9 @@ public class ObterDashboardAtletaService
             CargaCronica = cargaCronica.Valor,
             ACWR = acwr,
             DeltaPercentualSemanal = deltaPercentual,
+            TreinosPlanejadosPorSemana = atleta.TreinosPlanejadosPorSemana,
+            TreinosRealizadosNaSemana = treinosRealizadosNaSemana,
+            AderenciaPlanejamentoPercentual = aderenciaPlanejamento,
             FaseAtual = fase,
             StatusRisco = statusRisco,
             EmJanelaDeTaper = emTaper,
@@ -141,6 +149,27 @@ public class ObterDashboardAtletaService
             .Sum(kvp => kvp.Value.Valor);
 
         return new CargaTreino(total);
+    }
+
+    private static int ObterQuantidadeSessoesNoPeriodo(
+        IEnumerable<SessaoDeTreino> sessoes,
+        DateOnly inicio,
+        DateOnly fim)
+    {
+        return sessoes.Count(sessao => sessao.Data >= inicio && sessao.Data <= fim);
+    }
+
+    private static double? CalcularAderenciaPlanejamento(int? treinosPlanejadosPorSemana, int treinosRealizadosNaSemana)
+    {
+        if (!treinosPlanejadosPorSemana.HasValue || treinosPlanejadosPorSemana.Value <= 0)
+        {
+            return null;
+        }
+
+        return Math.Round(
+            (double)treinosRealizadosNaSemana / treinosPlanejadosPorSemana.Value * 100,
+            1,
+            MidpointRounding.AwayFromZero);
     }
 
     /// <summary>
@@ -305,6 +334,9 @@ public class ObterDashboardAtletaService
             CargaCronica = 0,
             ACWR = 0.0,
             DeltaPercentualSemanal = 0.0,
+            TreinosPlanejadosPorSemana = atleta.TreinosPlanejadosPorSemana,
+            TreinosRealizadosNaSemana = 0,
+            AderenciaPlanejamentoPercentual = CalcularAderenciaPlanejamento(atleta.TreinosPlanejadosPorSemana, 0),
             FaseAtual = FaseDoCiclo.Base,
             StatusRisco = StatusDeRisco.Normal,
             EmJanelaDeTaper = emTaper,
