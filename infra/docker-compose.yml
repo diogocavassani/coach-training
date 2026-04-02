@@ -53,5 +53,18 @@ services:
     ports:
       - "${FRONTEND_HTTP_PORT:-4200}:80"
 
+  demoseed:
+    build:
+      context: ..
+      dockerfile: src/CoachTraining.DemoSeed/Dockerfile
+    profiles: ["seed"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__DefaultConnection: >-
+        Host=db;Port=5432;Database=${POSTGRES_DB:-coachtraining};Username=${POSTGRES_USER:-coach};Password=${POSTGRES_PASSWORD:-coach}
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   postgres_data:

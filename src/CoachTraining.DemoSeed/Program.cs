@@ -16,9 +16,23 @@ if (options.HelpRequested)
 }
 
 // Construir configuração explicitamente
-var projectDir = Path.Combine(Directory.GetCurrentDirectory(), "src", "CoachTraining.DemoSeed");
+// Tentar encontrar appsettings.json em diferentes localizações
+var possiblePaths = new[]
+{
+    Path.Combine(Directory.GetCurrentDirectory(), "src", "CoachTraining.DemoSeed"), // Local em dev
+    Directory.GetCurrentDirectory(), // Em Docker ou quando rodando de outro lugar
+    "/app" // Em Docker runtime
+};
+
+var configBasePath = possiblePaths.FirstOrDefault(p => 
+    Directory.Exists(p) && (
+        File.Exists(Path.Combine(p, "appsettings.json")) || 
+        File.Exists(Path.Combine(p, "appsettings.Development.json"))
+    )
+) ?? Directory.GetCurrentDirectory();
+
 var configBuilder = new ConfigurationBuilder()
-    .SetBasePath(projectDir)
+    .SetBasePath(configBasePath)
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
