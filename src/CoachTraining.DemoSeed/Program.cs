@@ -15,17 +15,25 @@ if (options.HelpRequested)
     return;
 }
 
-var builder = Host.CreateApplicationBuilder(args);
+// Construir configuração explicitamente
+var projectDir = Path.Combine(Directory.GetCurrentDirectory(), "src", "CoachTraining.DemoSeed");
+var configBuilder = new ConfigurationBuilder()
+    .SetBasePath(projectDir)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
-// Verificar connection string antes de construir o host
-var tempConfig = builder.Configuration;
-var connectionString = tempConfig["ConnectionStrings:DefaultConnection"] ?? tempConfig["connectionStrings:defaultConnection"];
+var config = configBuilder.Build();
+var connectionString = config["ConnectionStrings:DefaultConnection"];
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
     Console.WriteLine("Erro: ConnectionStrings:DefaultConnection não configurada em appsettings.json ou variáveis de ambiente.");
     Environment.Exit(1);
 }
+
+var builder = Host.CreateApplicationBuilder(args);
+builder.Configuration.AddConfiguration(config);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<CadastroProfessorService>();
