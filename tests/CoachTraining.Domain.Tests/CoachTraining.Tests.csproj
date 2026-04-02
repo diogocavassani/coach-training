@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\src\CoachTraining.App\CoachTraining.App.csproj" />
     <ProjectReference Include="..\..\src\CoachTraining.Api\CoachTraining.Api.csproj" />
     <ProjectReference Include="..\..\src\CoachTraining.Infra\CoachTraining.Infra.csproj" />
+    <ProjectReference Include="..\..\src\CoachTraining.DemoSeed\CoachTraining.DemoSeed.csproj" />
   </ItemGroup>
 
 </Project>
