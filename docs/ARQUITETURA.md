@@ -254,7 +254,7 @@ public async Task AtletaService_DeveRetornarAtletaComCargas()
 public async Task HealthCheck_DeveRetornar200()
 {
     var client = _factory.CreateClient();
-    var response = await client.GetAsync("/health-check");
+    var response = await client.GetAsync("/api/healthcheck");
     
     Assert.Equal(StatusCodes.Status200OK, (int)response.StatusCode);
 }

@@ -1,5 +1,46 @@
 # API - Dashboard do Aluno
 
+## Resumo do professor
+`GET /api/dashboard/professor/resumo`
+
+### Response (200)
+```json
+{
+  "totalAtletas": 12,
+  "atletasEmAtencao": 3,
+  "atletasEmRisco": 1,
+  "atletasEmTaper": 2,
+  "treinosRegistradosNaSemana": 19,
+  "atletasComPlanejamentoConfigurado": 8,
+  "dataUltimaAtualizacao": "2026-04-02T02:10:00Z",
+  "atletasPrioritarios": [
+    {
+      "atletaId": "4df75e0e-3df5-4ef6-8cb7-8f7b5f8d87af",
+      "nome": "Atleta Exemplo",
+      "statusRisco": 2,
+      "emJanelaDeTaper": false,
+      "proximaProva": null,
+      "cargaSemanal": 1180,
+      "aderenciaPlanejamentoPercentual": 50.0
+    }
+  ],
+  "treinosRecentes": [
+    {
+      "atletaId": "4df75e0e-3df5-4ef6-8cb7-8f7b5f8d87af",
+      "nomeAtleta": "Atleta Exemplo",
+      "data": "2026-04-01",
+      "tipo": 2,
+      "carga": 810
+    }
+  ]
+}
+```
+
+### Regras
+- Resume apenas dados do `professor_id` autenticado.
+- `atletasPrioritarios` combina risco, taper e aderencia fora do esperado.
+- `treinosRecentes` retorna os treinos mais recentes do workspace para apoiar a navegacao inicial.
+
 ## Endpoint
 `GET /api/dashboard/atleta/{id}`
 
@@ -22,6 +63,9 @@ O `professor_id` e extraido do token autenticado para validar ownership do atlet
   "cargaCronica": 1085,
   "acwr": 1.09,
   "deltaPercentualSemanal": 15.7,
+  "treinosPlanejadosPorSemana": 4,
+  "treinosRealizadosNaSemana": 3,
+  "aderenciaPlanejamentoPercentual": 75.0,
   "faseAtual": 1,
   "statusRisco": 0,
   "emJanelaDeTaper": false,
@@ -64,6 +108,11 @@ O `professor_id` e extraido do token autenticado para validar ownership do atlet
 
 ## Regras de negocio
 - O professor autenticado so pode consultar dashboard de atleta vinculado ao proprio `professor_id`.
+- `treinosRealizadosNaSemana` usa a mesma janela movel de 7 dias adotada para `cargaSemanal`.
+- `aderenciaPlanejamentoPercentual` so e calculada quando o atleta possui `treinosPlanejadosPorSemana`.
+- O gerador de insights passa a sinalizar aderencia abaixo do esperado (`< 80%`) e execucao acima do planejado (`> 120%`).
+- Monotonia semanal usa a distribuicao de carga diaria da janela movel dos ultimos 7 dias e alerta a partir de `2.0`.
+- Divergencia entre carga e rendimento usa o `pace medio semanal` como proxy de desempenho quando existem ao menos 4 semanas com pace valido.
 - A serie semanal usa janela fixa de 12 semanas (segunda a domingo).
 - `seriePaceSemanal.valorMinPorKm` pode ser `null` quando nao houver distancia valida na semana.
 - `treinosJanela` contem os treinos da mesma janela de 12 semanas usada nos graficos.

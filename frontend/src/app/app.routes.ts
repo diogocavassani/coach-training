@@ -1,48 +1,57 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
-import { LoginPageComponent } from './features/auth/pages/login-page.component';
-import { DashboardPageComponent } from './features/dashboard/pages/dashboard-page.component';
-import { StudentDashboardPageComponent } from './features/dashboard/pages/student-dashboard-page.component';
-import { ProfessorLandingPageComponent } from './features/professor/pages/professor-landing-page.component';
-import { AppShellComponent } from './core/layout/app-shell.component';
-import { StudentsListPageComponent } from './features/students/pages/students-list-page.component';
-import { StudentCreatePageComponent } from './features/students/pages/student-create-page.component';
-import { TrainingCreatePageComponent } from './features/trainings/pages/training-create-page.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: ProfessorLandingPageComponent
+    loadComponent: () =>
+      import('./features/professor/pages/professor-landing-page.component').then(
+        (module) => module.ProfessorLandingPageComponent
+      )
   },
   {
     path: 'login',
-    component: LoginPageComponent
+    loadComponent: () =>
+      import('./features/auth/pages/login-page.component').then((module) => module.LoginPageComponent)
   },
   {
     path: 'dashboard',
-    component: AppShellComponent,
+    loadComponent: () => import('./core/layout/app-shell.component').then((module) => module.AppShellComponent),
     canActivate: [authGuard],
     children: [
       {
         path: '',
-        component: DashboardPageComponent
+        loadComponent: () =>
+          import('./features/dashboard/pages/dashboard-page.component').then((module) => module.DashboardPageComponent)
       },
       {
         path: 'alunos',
-        component: StudentsListPageComponent
+        loadComponent: () =>
+          import('./features/students/pages/students-list-page.component').then(
+            (module) => module.StudentsListPageComponent
+          )
       },
       {
         path: 'alunos/novo',
-        component: StudentCreatePageComponent
+        loadComponent: () =>
+          import('./features/students/pages/student-create-page.component').then(
+            (module) => module.StudentCreatePageComponent
+          )
       },
       {
         path: 'alunos/:id',
-        component: StudentDashboardPageComponent
+        loadComponent: () =>
+          import('./features/dashboard/pages/student-dashboard-page.component').then(
+            (module) => module.StudentDashboardPageComponent
+          )
       },
       {
         path: 'treinos/novo',
-        component: TrainingCreatePageComponent
+        loadComponent: () =>
+          import('./features/trainings/pages/training-create-page.component').then(
+            (module) => module.TrainingCreatePageComponent
+          )
       }
     ]
   },

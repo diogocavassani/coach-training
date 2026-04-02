@@ -1,5 +1,6 @@
 using CoachTraining.App.Abstractions.Persistence;
 using CoachTraining.Domain.Entities;
+using CoachTraining.Infra.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoachTraining.Infra.Persistence.Repositories;
@@ -32,5 +33,27 @@ public class ProvaAlvoRepository : IProvaAlvoRepository
             distanciaKm: model.DistanciaKm,
             objetivo: model.Objetivo,
             id: model.Id);
+    }
+
+    public void Salvar(Guid atletaId, ProvaAlvo provaAlvo)
+    {
+        var model = _context.ProvasAlvo.FirstOrDefault(x => x.AtletaId == atletaId);
+
+        if (model == null)
+        {
+            model = new ProvaAlvoModel
+            {
+                Id = provaAlvo.Id,
+                AtletaId = atletaId
+            };
+
+            _context.ProvasAlvo.Add(model);
+        }
+
+        model.DataProva = provaAlvo.DataProva;
+        model.DistanciaKm = provaAlvo.DistanciaKm;
+        model.Objetivo = provaAlvo.Objetivo;
+
+        _context.SaveChanges();
     }
 }

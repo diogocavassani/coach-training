@@ -37,6 +37,7 @@ public class CoachTrainingDbContext : DbContext
             builder.Property(x => x.Email).HasMaxLength(320);
             builder.Property(x => x.ObservacoesClinicas).HasMaxLength(2000);
             builder.Property(x => x.NivelEsportivo).HasMaxLength(120);
+            builder.Property(x => x.TreinosPlanejadosPorSemana);
             builder.HasIndex(x => x.ProfessorId);
             builder.HasOne(x => x.Professor)
                 .WithMany(x => x.Atletas)

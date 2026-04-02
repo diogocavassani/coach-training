@@ -13,6 +13,16 @@ public class CadastroAtletaServiceTests
 
         public void Adicionar(Atleta atleta) => _atletas[atleta.Id] = atleta;
 
+        public void AtualizarPlanejamentoBase(Guid atletaId, Guid professorId, int treinosPlanejadosPorSemana)
+        {
+            if (!_atletas.TryGetValue(atletaId, out var atleta) || atleta.ProfessorId != professorId)
+            {
+                throw new InvalidOperationException("Atleta nao encontrado.");
+            }
+
+            atleta.DefinirTreinosPlanejadosPorSemana(treinosPlanejadosPorSemana);
+        }
+
         public Atleta? ObterPorId(Guid atletaId, Guid professorId)
             => _atletas.TryGetValue(atletaId, out var atleta) && atleta.ProfessorId == professorId ? atleta : null;
 

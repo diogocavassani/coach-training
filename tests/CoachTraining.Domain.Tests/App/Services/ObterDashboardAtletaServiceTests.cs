@@ -282,6 +282,25 @@ public class ObterDashboardAtletaServiceTests
     }
 
     [Fact]
+    public void ObterDashboard_ComPlanejamentoBase_DeveCalcularAderenciaSemanal()
+    {
+        var atleta = new Atleta("Atleta Planejamento", Guid.NewGuid(), treinosPlanejadosPorSemana: 5);
+        var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
+        var sessoes = new List<SessaoDeTreino>
+        {
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-3), TipoDeTreino.Ritmo, 45, 7.0, new RPE(6)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-2), TipoDeTreino.Leve, 40, 6.0, new RPE(4)),
+            new SessaoDeTreino(Guid.NewGuid(), hoje.AddDays(-1), TipoDeTreino.Intervalado, 50, 8.0, new RPE(7))
+        };
+
+        var dashboard = _service.ObterDashboard(atleta, sessoes);
+
+        Assert.Equal(5, dashboard.TreinosPlanejadosPorSemana);
+        Assert.Equal(3, dashboard.TreinosRealizadosNaSemana);
+        Assert.Equal(60, dashboard.AderenciaPlanejamentoPercentual);
+    }
+
+    [Fact]
     public void ObterDashboard_LancaArgumentNullException_SeAtletaNull()
     {
         var sessoes = new List<SessaoDeTreino>();

@@ -163,6 +163,12 @@ Se o sistema identificar ausência ou excesso de redução, gera alerta.
 - Divergência entre carga e rendimento
 - Aderência ao planejamento (treinos planejados vs realizados)
 
+### 7.1 Definições objetivas usadas no MVP
+
+- **Monotonia elevada**: calculada na janela móvel dos últimos 7 dias, usando a relação entre média e desvio-padrão da carga diária, incluindo dias sem treino. Valores `>= 2,0` geram alerta.
+- **Rendimento**: no MVP, o sistema usa **pace médio semanal** como proxy de rendimento quando há distância válida registrada.
+- **Divergência carga x rendimento**: gerada quando a carga média das 2 semanas mais recentes sobe mais de `10%` em relação às 2 semanas anteriores e, ao mesmo tempo, o pace médio piora mais de `3%`.
+
 Os insights são apresentados **para o professor**, com linguagem técnica e contextualizada.
 
 ---

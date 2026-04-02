@@ -56,6 +56,21 @@ public class DashboardAtletaDto
     public double DeltaPercentualSemanal { get; set; }
 
     /// <summary>
+    /// Quantidade de treinos planejados por semana para o atleta.
+    /// </summary>
+    public int? TreinosPlanejadosPorSemana { get; set; }
+
+    /// <summary>
+    /// Quantidade de sessoes registradas na janela semanal analisada.
+    /// </summary>
+    public int TreinosRealizadosNaSemana { get; set; }
+
+    /// <summary>
+    /// Percentual de aderencia entre treinos planejados e realizados.
+    /// </summary>
+    public double? AderenciaPlanejamentoPercentual { get; set; }
+
+    /// <summary>
     /// Fase atual do ciclo de treinamento.
     /// </summary>
     public FaseDoCiclo FaseAtual { get; set; }

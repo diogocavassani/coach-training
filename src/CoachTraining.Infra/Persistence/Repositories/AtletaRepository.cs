@@ -23,10 +23,23 @@ public class AtletaRepository : IAtletaRepository
             Nome = atleta.Nome,
             Email = atleta.Email,
             ObservacoesClinicas = atleta.ObservacoesClinicas,
-            NivelEsportivo = atleta.NivelEsportivo
+            NivelEsportivo = atleta.NivelEsportivo,
+            TreinosPlanejadosPorSemana = atleta.TreinosPlanejadosPorSemana
         };
 
         _context.Atletas.Add(model);
+        _context.SaveChanges();
+    }
+
+    public void AtualizarPlanejamentoBase(Guid atletaId, Guid professorId, int treinosPlanejadosPorSemana)
+    {
+        var model = _context.Atletas.FirstOrDefault(a => a.Id == atletaId && a.ProfessorId == professorId);
+        if (model == null)
+        {
+            throw new InvalidOperationException("Atleta nao encontrado para atualizacao do planejamento.");
+        }
+
+        model.TreinosPlanejadosPorSemana = treinosPlanejadosPorSemana;
         _context.SaveChanges();
     }
 
@@ -47,6 +60,7 @@ public class AtletaRepository : IAtletaRepository
             observacoesClinicas: model.ObservacoesClinicas,
             nivelEsportivo: model.NivelEsportivo,
             email: model.Email,
+            treinosPlanejadosPorSemana: model.TreinosPlanejadosPorSemana,
             id: model.Id);
     }
 
@@ -62,6 +76,7 @@ public class AtletaRepository : IAtletaRepository
                 observacoesClinicas: model.ObservacoesClinicas,
                 nivelEsportivo: model.NivelEsportivo,
                 email: model.Email,
+                treinosPlanejadosPorSemana: model.TreinosPlanejadosPorSemana,
                 id: model.Id))
             .ToList();
     }

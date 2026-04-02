@@ -1,30 +1,122 @@
-﻿<section class="dashboard" aria-label="Tela inicial do professor">
-  <header>
-    <p class="eyebrow">Painel inicial</p>
-    <h1>Resumo operacional dos atletas</h1>
-    <p>Placeholder da sprint: estrutura pronta para receber indicadores e consultas nas proximas entregas.</p>
+<section class="dashboard" aria-label="Tela inicial do professor">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Painel inicial</p>
+      <h1>Resumo operacional dos atletas</h1>
+      <p>
+        Acompanhe quem pede atencao agora, veja os treinos mais recentes e avance rapido para as acoes principais do dia.
+      </p>
+    </div>
+
+    <div class="actions">
+      <a mat-flat-button routerLink="/dashboard/alunos/novo">Cadastrar aluno</a>
+      <a mat-stroked-button routerLink="/dashboard/treinos/novo">Registrar treino</a>
+      <a mat-stroked-button routerLink="/dashboard/alunos">Ver alunos</a>
+    </div>
   </header>
 
-  <div class="kpi-grid">
-    <article>
-      <span>Atletas ativos</span>
-      <strong>24</strong>
-      <small class="positive">+12% esta semana</small>
-    </article>
-    <article>
-      <span>Treinos pendentes</span>
-      <strong>7</strong>
-      <small class="positive">Meta de acompanhamento em dia</small>
-    </article>
-    <article>
-      <span>Evolucao semanal</span>
-      <strong>86%</strong>
-      <small class="positive">+4 pts versus semana anterior</small>
-    </article>
-    <article>
-      <span>Taxa de conclusao</span>
-      <strong>91%</strong>
-      <small class="positive">Ritmo de performance estavel</small>
-    </article>
-  </div>
+  @if (carregando) {
+    <p class="helper">Carregando resumo operacional...</p>
+  }
+
+  @if (!carregando && mensagemErro) {
+    <div class="feedback error">{{ mensagemErro }}</div>
+  }
+
+  @if (!carregando && resumo) {
+    @if (resumo.totalAtletas === 0) {
+      <section class="empty-state">
+        <h2>Seu painel ainda esta vazio</h2>
+        <p>Cadastre o primeiro atleta para liberar indicadores, treinos recentes e acompanhamento por dashboard.</p>
+        <div class="actions">
+          <a mat-flat-button routerLink="/dashboard/alunos/novo">Cadastrar primeiro aluno</a>
+          <a mat-stroked-button routerLink="/dashboard/treinos/novo">Ir para treinos</a>
+        </div>
+      </section>
+    } @else {
+      <div class="kpi-grid">
+        <article>
+          <span>Atletas ativos</span>
+          <strong>{{ resumo.totalAtletas }}</strong>
+          <small>{{ resumo.atletasComPlanejamentoConfigurado }} com planejamento base configurado</small>
+        </article>
+        <article>
+          <span>Atencao ou risco</span>
+          <strong>{{ resumo.atletasEmAtencao }}</strong>
+          <small class="warning">{{ resumo.atletasEmRisco }} em risco alto neste momento</small>
+        </article>
+        <article>
+          <span>Treinos na semana</span>
+          <strong>{{ resumo.treinosRegistradosNaSemana }}</strong>
+          <small>Janela movel dos ultimos 7 dias</small>
+        </article>
+        <article>
+          <span>Em taper</span>
+          <strong>{{ resumo.atletasEmTaper }}</strong>
+          <small>Atletas com prova alvo na janela de polimento</small>
+        </article>
+      </div>
+
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Atletas prioritarios</h2>
+              <p class="helper">Lista ordenada por risco, taper e aderencia ao planejamento.</p>
+            </div>
+            <a mat-stroked-button routerLink="/dashboard/alunos">Abrir alunos</a>
+          </div>
+
+          @if (resumo.atletasPrioritarios.length === 0) {
+            <div class="feedback">Nenhum atleta pedindo acao imediata neste momento.</div>
+          } @else {
+            <ul class="priority-list">
+              <li *ngFor="let atleta of resumo.atletasPrioritarios">
+                <div>
+                  <div class="priority-head">
+                    <strong>{{ atleta.nome }}</strong>
+                    <span class="status-chip" [class]="classeStatusRisco(atleta.statusRisco)">
+                      {{ descricaoStatusRisco(atleta.statusRisco) }}
+                    </span>
+                  </div>
+                  <p>{{ resumoAderencia(atleta) }}</p>
+                  <small *ngIf="atleta.emJanelaDeTaper && atleta.proximaProva">
+                    Em taper para {{ formatarData(atleta.proximaProva) }}
+                  </small>
+                  <small *ngIf="!atleta.emJanelaDeTaper">Carga semanal: {{ atleta.cargaSemanal }}</small>
+                </div>
+                <a mat-stroked-button [routerLink]="['/dashboard/alunos', atleta.atletaId]">Abrir dashboard</a>
+              </li>
+            </ul>
+          }
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Treinos recentes</h2>
+              <p class="helper">Ultimos treinos registrados no workspace do professor.</p>
+            </div>
+            <a mat-stroked-button routerLink="/dashboard/treinos/novo">Novo treino</a>
+          </div>
+
+          @if (resumo.treinosRecentes.length === 0) {
+            <div class="feedback">Nenhum treino registrado ainda.</div>
+          } @else {
+            <ul class="recent-list">
+              <li *ngFor="let treino of resumo.treinosRecentes">
+                <div>
+                  <strong>{{ treino.nomeAtleta }}</strong>
+                  <p>{{ descricaoTreinoRecente(treino) }}</p>
+                </div>
+                <small>{{ formatarData(treino.data) }}</small>
+              </li>
+            </ul>
+          }
+        </section>
+      </div>
+
+      <p class="helper">Ultima atualizacao: {{ resumo.dataUltimaAtualizacao | date: 'dd/MM/yyyy HH:mm' }}</p>
+    }
+  }
 </section>

@@ -5,4 +5,5 @@ namespace CoachTraining.App.Abstractions.Persistence;
 public interface IProvaAlvoRepository
 {
     ProvaAlvo? ObterPorAtletaId(Guid atletaId, Guid professorId);
+    void Salvar(Guid atletaId, ProvaAlvo provaAlvo);
 }

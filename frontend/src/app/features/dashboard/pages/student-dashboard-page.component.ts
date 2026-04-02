@@ -1,7 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -11,11 +14,20 @@ import * as XLSX from 'xlsx';
 
 import { DashboardAtleta, DashboardTreinoJanela } from '../models/dashboard.model';
 import { DashboardApiService } from '../services/dashboard-api.service';
+import { StudentsApiService } from '../../students/services/students-api.service';
 
 @Component({
   selector: 'app-student-dashboard-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatSnackBarModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule
+  ],
   templateUrl: './student-dashboard-page.component.html',
   styleUrl: './student-dashboard-page.component.css'
 })
@@ -26,26 +38,51 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
   dashboard: DashboardAtleta | null = null;
   carregando = true;
   mensagemErro = '';
+  mensagemErroProvaAlvo = '';
+  carregandoProvaAlvo = true;
+  salvandoProvaAlvo = false;
+  mensagemErroPlanejamentoBase = '';
+  carregandoPlanejamentoBase = true;
+  salvandoPlanejamentoBase = false;
+
+  readonly provaAlvoForm;
+  readonly planejamentoBaseForm;
 
   private chartCarga?: Chart;
   private chartPace?: Chart;
   private viewInicializada = false;
+  private atletaId: string | null = null;
 
   constructor(
+    private readonly formBuilder: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly dashboardApiService: DashboardApiService,
+    private readonly studentsApiService: StudentsApiService,
     private readonly snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.provaAlvoForm = this.formBuilder.group({
+      dataProva: ['', [Validators.required]],
+      distanciaKm: [null as number | null, [Validators.required, Validators.min(0.1)]],
+      objetivo: ['']
+    });
+    this.planejamentoBaseForm = this.formBuilder.group({
+      treinosPlanejadosPorSemana: [null as number | null, [Validators.required, Validators.min(1), Validators.max(14)]]
+    });
+  }
 
   ngOnInit(): void {
-    const atletaId = this.route.snapshot.paramMap.get('id');
-    if (!atletaId) {
+    this.atletaId = this.route.snapshot.paramMap.get('id');
+    if (!this.atletaId) {
       this.carregando = false;
+      this.carregandoProvaAlvo = false;
+      this.carregandoPlanejamentoBase = false;
       this.mensagemErro = 'Nao foi possivel identificar o aluno para exibir o dashboard.';
       return;
     }
 
-    this.carregarDashboard(atletaId);
+    this.carregarDashboard(this.atletaId);
+    this.carregarProvaAlvo(this.atletaId);
+    this.carregarPlanejamentoBase(this.atletaId);
   }
 
   ngAfterViewInit(): void {
@@ -114,6 +151,84 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
     return !!this.dashboard && this.dashboard.treinosJanela.length > 0;
   }
 
+  get resumoAderenciaPlanejamento(): string {
+    if (!this.dashboard || this.dashboard.treinosPlanejadosPorSemana == null) {
+      return 'Planejamento base ainda nao definido.';
+    }
+
+    return `${this.dashboard.treinosRealizadosNaSemana} de ${this.dashboard.treinosPlanejadosPorSemana} treinos na semana`;
+  }
+
+  salvarProvaAlvo(): void {
+    if (!this.atletaId) {
+      return;
+    }
+
+    if (this.provaAlvoForm.invalid) {
+      this.provaAlvoForm.markAllAsTouched();
+      return;
+    }
+
+    const valor = this.provaAlvoForm.getRawValue();
+    this.salvandoProvaAlvo = true;
+    this.mensagemErroProvaAlvo = '';
+
+    this.studentsApiService
+      .salvarProvaAlvo(this.atletaId, {
+        dataProva: valor.dataProva ?? '',
+        distanciaKm: Number(valor.distanciaKm),
+        objetivo: valor.objetivo?.trim() || undefined
+      })
+      .pipe(finalize(() => (this.salvandoProvaAlvo = false)))
+      .subscribe({
+        next: (provaAlvo) => {
+          this.provaAlvoForm.patchValue({
+            dataProva: provaAlvo.dataProva,
+            distanciaKm: provaAlvo.distanciaKm,
+            objetivo: provaAlvo.objetivo ?? ''
+          });
+          this.snackBar.open('Prova alvo salva com sucesso.', 'Fechar', { duration: 3000 });
+          this.carregarDashboard(this.atletaId!);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.mensagemErroProvaAlvo = error.error?.erro ?? 'Nao foi possivel salvar a prova alvo.';
+        }
+      });
+  }
+
+  salvarPlanejamentoBase(): void {
+    if (!this.atletaId) {
+      return;
+    }
+
+    if (this.planejamentoBaseForm.invalid) {
+      this.planejamentoBaseForm.markAllAsTouched();
+      return;
+    }
+
+    const valor = this.planejamentoBaseForm.getRawValue();
+    this.salvandoPlanejamentoBase = true;
+    this.mensagemErroPlanejamentoBase = '';
+
+    this.studentsApiService
+      .salvarPlanejamentoBase(this.atletaId, {
+        treinosPlanejadosPorSemana: Number(valor.treinosPlanejadosPorSemana)
+      })
+      .pipe(finalize(() => (this.salvandoPlanejamentoBase = false)))
+      .subscribe({
+        next: (planejamentoBase) => {
+          this.planejamentoBaseForm.patchValue({
+            treinosPlanejadosPorSemana: planejamentoBase.treinosPlanejadosPorSemana
+          });
+          this.snackBar.open('Planejamento base salvo com sucesso.', 'Fechar', { duration: 3000 });
+          this.carregarDashboard(this.atletaId!);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.mensagemErroPlanejamentoBase = error.error?.erro ?? 'Nao foi possivel salvar o planejamento base.';
+        }
+      });
+  }
+
   exportarExcel(): void {
     if (!this.dashboard) {
       return;
@@ -166,6 +281,14 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
       y += 16;
       doc.text(`ACWR: ${this.dashboard.acwr.toFixed(2)}`, margemEsquerda, y);
       y += 16;
+      if (this.dashboard.aderenciaPlanejamentoPercentual != null && this.dashboard.treinosPlanejadosPorSemana != null) {
+        doc.text(
+          `Aderencia ao planejamento: ${this.dashboard.aderenciaPlanejamentoPercentual.toFixed(1)}% (${this.resumoAderenciaPlanejamento})`,
+          margemEsquerda,
+          y
+        );
+        y += 16;
+      }
       doc.text(`Fase: ${this.faseDescricao} | Risco: ${this.statusRiscoDescricao}`, margemEsquerda, y);
       y += 24;
 
@@ -270,6 +393,62 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
         error: (error: HttpErrorResponse) => {
           this.dashboard = null;
           this.mensagemErro = error.error?.erro ?? 'Nao foi possivel carregar o dashboard do aluno.';
+        }
+      });
+  }
+
+  private carregarProvaAlvo(atletaId: string): void {
+    this.carregandoProvaAlvo = true;
+    this.mensagemErroProvaAlvo = '';
+
+    this.studentsApiService
+      .obterProvaAlvo(atletaId)
+      .pipe(finalize(() => (this.carregandoProvaAlvo = false)))
+      .subscribe({
+        next: (provaAlvo) => {
+          this.provaAlvoForm.patchValue({
+            dataProva: provaAlvo.dataProva,
+            distanciaKm: provaAlvo.distanciaKm,
+            objetivo: provaAlvo.objetivo ?? ''
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            this.provaAlvoForm.reset({
+              dataProva: '',
+              distanciaKm: null,
+              objetivo: ''
+            });
+            return;
+          }
+
+          this.mensagemErroProvaAlvo = error.error?.erro ?? 'Nao foi possivel carregar a prova alvo.';
+        }
+      });
+  }
+
+  private carregarPlanejamentoBase(atletaId: string): void {
+    this.carregandoPlanejamentoBase = true;
+    this.mensagemErroPlanejamentoBase = '';
+
+    this.studentsApiService
+      .obterPlanejamentoBase(atletaId)
+      .pipe(finalize(() => (this.carregandoPlanejamentoBase = false)))
+      .subscribe({
+        next: (planejamentoBase) => {
+          this.planejamentoBaseForm.patchValue({
+            treinosPlanejadosPorSemana: planejamentoBase.treinosPlanejadosPorSemana
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            this.planejamentoBaseForm.reset({
+              treinosPlanejadosPorSemana: null
+            });
+            return;
+          }
+
+          this.mensagemErroPlanejamentoBase = error.error?.erro ?? 'Nao foi possivel carregar o planejamento base.';
         }
       });
   }

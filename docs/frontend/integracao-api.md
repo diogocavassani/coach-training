@@ -92,10 +92,66 @@ Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas
 ### Dashboard do aluno
 
 - Metodo: `GET /api/dashboard/atleta/{id}`
-- Response esperado: `200 OK` com metricas consolidadas, insights, series (`serieCargaSemanal`, `seriePaceSemanal`) e `treinosJanela`.
+- Response esperado: `200 OK` com metricas consolidadas, insights, series (`serieCargaSemanal`, `seriePaceSemanal`), `treinosJanela` e os campos de aderencia (`treinosPlanejadosPorSemana`, `treinosRealizadosNaSemana`, `aderenciaPlanejamentoPercentual`).
 - Erros tratados:
   - `401`: token ausente/invalido
   - `404`: atleta nao encontrado para o professor autenticado
+
+### Dashboard inicial do professor
+
+- Metodo: `GET /api/dashboard/professor/resumo`
+- Response esperado: `200 OK` com KPIs reais da home autenticada (`totalAtletas`, `atletasEmAtencao`, `atletasEmTaper`, `treinosRegistradosNaSemana`) e listas de apoio (`atletasPrioritarios`, `treinosRecentes`).
+- Erros tratados:
+  - `401`: token ausente/invalido
+  - `500`: falha inesperada no processamento do resumo
+
+### Alunos - Prova alvo
+
+- Metodo: `GET /api/atleta/{id}/prova-alvo`
+- Response esperado: `200 OK` com `id`, `atletaId`, `dataProva`, `distanciaKm` e `objetivo`.
+- Erros tratados:
+  - `401`: token ausente/invalido
+  - `404`: atleta sem prova alvo cadastrada ou fora do ownership
+
+- Metodo: `PUT /api/atleta/{id}/prova-alvo`
+- Request:
+
+```json
+{
+  "dataProva": "2026-05-24",
+  "distanciaKm": 21.1,
+  "objetivo": "Completar forte"
+}
+```
+
+- Response esperado: `200 OK` com a prova alvo persistida.
+- Erros tratados:
+  - `400`: validacao de payload
+  - `401`: token ausente/invalido
+  - `403`: tentativa de editar prova de atleta sem ownership
+
+### Alunos - Planejamento base
+
+- Metodo: `GET /api/atleta/{id}/planejamento-base`
+- Response esperado: `200 OK` com `atletaId` e `treinosPlanejadosPorSemana`.
+- Erros tratados:
+  - `401`: token ausente/invalido
+  - `404`: atleta sem planejamento base cadastrado ou fora do ownership
+
+- Metodo: `PUT /api/atleta/{id}/planejamento-base`
+- Request:
+
+```json
+{
+  "treinosPlanejadosPorSemana": 5
+}
+```
+
+- Response esperado: `200 OK` com o planejamento persistido.
+- Erros tratados:
+  - `400`: validacao de payload
+  - `401`: token ausente/invalido
+  - `403`: tentativa de editar planejamento de atleta sem ownership
 
 ### Treinos - Cadastro
 

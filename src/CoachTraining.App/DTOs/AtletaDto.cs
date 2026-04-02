@@ -36,6 +36,11 @@ public class AtletaDto
     public string? NivelEsportivo { get; set; }
 
     /// <summary>
+    /// Quantidade de treinos planejados por semana para o atleta.
+    /// </summary>
+    public int? TreinosPlanejadosPorSemana { get; set; }
+
+    /// <summary>
     /// Data de criacao do registro do atleta.
     /// </summary>
     public DateTime DataCriacao { get; set; }

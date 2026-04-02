@@ -14,6 +14,7 @@ namespace CoachTraining.Api.Controllers;
 public class DashboardController : ControllerBase
 {
     private readonly ObterDashboardAtletaService _dashboardService;
+    private readonly ObterResumoDashboardProfessorService _dashboardProfessorService;
     private readonly IAtletaRepository _atletaRepository;
     private readonly ISessaoDeTreinoRepository _sessaoDeTreinoRepository;
     private readonly IProvaAlvoRepository _provaAlvoRepository;
@@ -24,13 +25,35 @@ public class DashboardController : ControllerBase
         ISessaoDeTreinoRepository sessaoDeTreinoRepository,
         IProvaAlvoRepository provaAlvoRepository,
         ObterDashboardAtletaService dashboardService,
+        ObterResumoDashboardProfessorService dashboardProfessorService,
         ILogger<DashboardController> logger)
     {
         _atletaRepository = atletaRepository ?? throw new ArgumentNullException(nameof(atletaRepository));
         _sessaoDeTreinoRepository = sessaoDeTreinoRepository ?? throw new ArgumentNullException(nameof(sessaoDeTreinoRepository));
         _provaAlvoRepository = provaAlvoRepository ?? throw new ArgumentNullException(nameof(provaAlvoRepository));
         _dashboardService = dashboardService ?? throw new ArgumentNullException(nameof(dashboardService));
+        _dashboardProfessorService = dashboardProfessorService ?? throw new ArgumentNullException(nameof(dashboardProfessorService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    [HttpGet("professor/resumo")]
+    public IActionResult ObterResumoProfessor()
+    {
+        try
+        {
+            if (!User.TryGetProfessorId(out var professorId))
+            {
+                return Unauthorized(new { erro = "Token invalido: professor_id ausente." });
+            }
+
+            var resumo = _dashboardProfessorService.ObterResumo(professorId);
+            return Ok(resumo);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao obter resumo do dashboard para o professor autenticado.");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { erro = "Erro ao processar requisicao." });
+        }
     }
 
     [HttpGet("atleta/{id:guid}")]

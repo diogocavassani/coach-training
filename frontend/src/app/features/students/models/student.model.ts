@@ -6,3 +6,26 @@ export interface Student {
   nivelEsportivo?: string;
   dataCriacao?: string;
 }
+
+export interface StudentTarget {
+  id: string;
+  atletaId: string;
+  dataProva: string;
+  distanciaKm: number;
+  objetivo?: string;
+}
+
+export interface SaveStudentTargetRequest {
+  dataProva: string;
+  distanciaKm: number;
+  objetivo?: string;
+}
+
+export interface StudentBasePlan {
+  atletaId: string;
+  treinosPlanejadosPorSemana: number;
+}
+
+export interface SaveStudentBasePlanRequest {
+  treinosPlanejadosPorSemana: number;
+}

@@ -17,6 +17,65 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
     }
 
     [Fact]
+    public async Task DashboardProfessorResumo_DeveRetornarIndicadoresReais_DoProfessorAutenticado()
+    {
+        using var client = _factory.CreateClient();
+        var professor = await CadastrarProfessorAsync(client, $"professor.home.{Guid.NewGuid():N}@teste.com");
+        var token = await LoginAsync(client, professor.Email, "123456");
+        var atletaRisco = await CadastrarAtletaAsync(client, token, "Atleta Risco Home");
+        var atletaTaper = await CadastrarAtletaAsync(client, token, "Atleta Taper Home");
+
+        await SalvarPlanejamentoBaseAsync(client, token, atletaRisco.Id, 4);
+        await SalvarPlanejamentoBaseAsync(client, token, atletaTaper.Id, 5);
+        await SalvarProvaAlvoAsync(client, token, atletaTaper.Id, DateOnly.FromDateTime(DateTime.UtcNow).AddDays(10), 21.1, "Meia");
+
+        await CadastrarTreinoAsync(
+            client,
+            token,
+            atletaRisco.Id,
+            DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-2),
+            TipoDeTreino.Intervalado,
+            90,
+            10.0,
+            9);
+
+        await CadastrarTreinoAsync(
+            client,
+            token,
+            atletaRisco.Id,
+            DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
+            TipoDeTreino.Longo,
+            120,
+            16.0,
+            8);
+
+        await CadastrarTreinoAsync(
+            client,
+            token,
+            atletaTaper.Id,
+            DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
+            TipoDeTreino.Leve,
+            40,
+            6.0,
+            4);
+
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/dashboard/professor/resumo");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var resumo = await response.Content.ReadFromJsonAsync<DashboardProfessorResumoDto>();
+        Assert.NotNull(resumo);
+        Assert.Equal(2, resumo!.TotalAtletas);
+        Assert.Equal(1, resumo.AtletasEmTaper);
+        Assert.Equal(3, resumo.TreinosRegistradosNaSemana);
+        Assert.Contains(resumo.AtletasPrioritarios, atleta => atleta.Nome == "Atleta Taper Home");
+        Assert.Contains(resumo.TreinosRecentes, treino => treino.NomeAtleta == "Atleta Risco Home");
+    }
+
+    [Fact]
     public async Task CadastroProfessor_DeveRetornarCreated_EEmailDuplicadoDeveRetornarConflict()
     {
         using var client = _factory.CreateClient();
@@ -184,6 +243,7 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
         var professor = await CadastrarProfessorAsync(client, $"professor.dashboard.{Guid.NewGuid():N}@teste.com");
         var token = await LoginAsync(client, professor.Email, "123456");
         var atleta = await CadastrarAtletaAsync(client, token, "Atleta Dashboard", email: "atleta.dashboard@teste.com");
+        await SalvarPlanejamentoBaseAsync(client, token, atleta.Id, 4);
 
         await CadastrarTreinoAsync(
             client,
@@ -215,6 +275,9 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
         var dashboard = await response.Content.ReadFromJsonAsync<DashboardAtletaDto>();
         Assert.NotNull(dashboard);
         Assert.Equal(atleta.Id, dashboard!.AtletaId);
+        Assert.Equal(4, dashboard.TreinosPlanejadosPorSemana);
+        Assert.Equal(1, dashboard.TreinosRealizadosNaSemana);
+        Assert.Equal(25.0, dashboard.AderenciaPlanejamentoPercentual);
         Assert.Equal(12, dashboard.SerieCargaSemanal.Count);
         Assert.Equal(12, dashboard.SeriePaceSemanal.Count);
         Assert.True(dashboard.TreinosJanela.Count >= 2);
@@ -299,6 +362,48 @@ public class ProfessorAuthIntegrationTests : IClassFixture<ApiWebApplicationFact
                 DuracaoMinutos = duracaoMinutos,
                 DistanciaKm = distanciaKm,
                 Rpe = rpe
+            })
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+    }
+
+    private static async Task SalvarPlanejamentoBaseAsync(
+        HttpClient client,
+        string token,
+        Guid atletaId,
+        int treinosPlanejadosPorSemana)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/api/atleta/{atletaId}/planejamento-base")
+        {
+            Content = JsonContent.Create(new SalvarPlanejamentoBaseDto
+            {
+                TreinosPlanejadosPorSemana = treinosPlanejadosPorSemana
+            })
+        };
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+    }
+
+    private static async Task SalvarProvaAlvoAsync(
+        HttpClient client,
+        string token,
+        Guid atletaId,
+        DateOnly dataProva,
+        double distanciaKm,
+        string objetivo)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/api/atleta/{atletaId}/prova-alvo")
+        {
+            Content = JsonContent.Create(new SalvarProvaAlvoDto
+            {
+                DataProva = dataProva,
+                DistanciaKm = distanciaKm,
+                Objetivo = objetivo
             })
         };
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);

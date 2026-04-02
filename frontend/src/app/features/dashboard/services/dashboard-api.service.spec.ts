@@ -28,4 +28,12 @@ describe('DashboardApiService', () => {
     expect(req.request.method).toBe('GET');
     req.flush({});
   });
+
+  it('busca resumo do dashboard do professor no endpoint esperado', () => {
+    service.obterResumoProfessor().subscribe();
+
+    const req = httpMock.expectOne('/api/dashboard/professor/resumo');
+    expect(req.request.method).toBe('GET');
+    req.flush({});
+  });
 });

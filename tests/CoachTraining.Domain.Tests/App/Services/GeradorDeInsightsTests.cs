@@ -66,4 +66,67 @@ public class GeradorDeInsightsTests
 
         Assert.Contains(dashboard.Insights, s => s.Contains("Taper") || s.Contains("Polimento") || s.Contains("redução"));
     }
+    [Fact]
+    public void Insights_AdicionaAlertaQuandoAderenciaAoPlanejamentoEstaBaixa()
+    {
+        var dashboard = new CoachTraining.App.DTOs.DashboardAtletaDto
+        {
+            TreinosPlanejadosPorSemana = 5,
+            TreinosRealizadosNaSemana = 2,
+            AderenciaPlanejamentoPercentual = 40
+        };
+
+        var insights = GeradorDeInsights.GerarInsights(dashboard);
+
+        Assert.Contains(insights, insight => insight.Contains("planejamento", StringComparison.OrdinalIgnoreCase));
+    }
+    [Fact]
+    public void Insights_AdicionaAlertaQuandoMonotoniaSemanalEstaElevada()
+    {
+        var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
+        var dashboard = new CoachTraining.App.DTOs.DashboardAtletaDto
+        {
+            DataUltimaAtualizacao = DateTime.UtcNow,
+            TreinosJanela =
+            [
+                new() { Data = hoje.AddDays(-6), Carga = 100 },
+                new() { Data = hoje.AddDays(-5), Carga = 100 },
+                new() { Data = hoje.AddDays(-4), Carga = 100 },
+                new() { Data = hoje.AddDays(-3), Carga = 100 },
+                new() { Data = hoje.AddDays(-2), Carga = 100 },
+                new() { Data = hoje.AddDays(-1), Carga = 100 }
+            ]
+        };
+
+        var insights = GeradorDeInsights.GerarInsights(dashboard);
+
+        Assert.Contains(insights, insight => insight.Contains("Monotonia", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void Insights_AdicionaAlertaQuandoCargaSobeEMelhoraDeRendimentoNaoAcompanha()
+    {
+        var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
+        var dashboard = new CoachTraining.App.DTOs.DashboardAtletaDto
+        {
+            SerieCargaSemanal =
+            [
+                new() { SemanaInicio = hoje.AddDays(-28), SemanaFim = hoje.AddDays(-22), Valor = 800 },
+                new() { SemanaInicio = hoje.AddDays(-21), SemanaFim = hoje.AddDays(-15), Valor = 820 },
+                new() { SemanaInicio = hoje.AddDays(-14), SemanaFim = hoje.AddDays(-8), Valor = 1040 },
+                new() { SemanaInicio = hoje.AddDays(-7), SemanaFim = hoje.AddDays(-1), Valor = 1080 }
+            ],
+            SeriePaceSemanal =
+            [
+                new() { SemanaInicio = hoje.AddDays(-28), SemanaFim = hoje.AddDays(-22), ValorMinPorKm = 5.0 },
+                new() { SemanaInicio = hoje.AddDays(-21), SemanaFim = hoje.AddDays(-15), ValorMinPorKm = 4.95 },
+                new() { SemanaInicio = hoje.AddDays(-14), SemanaFim = hoje.AddDays(-8), ValorMinPorKm = 5.25 },
+                new() { SemanaInicio = hoje.AddDays(-7), SemanaFim = hoje.AddDays(-1), ValorMinPorKm = 5.35 }
+            ]
+        };
+
+        var insights = GeradorDeInsights.GerarInsights(dashboard);
+
+        Assert.Contains(insights, insight => insight.Contains("rendimento", StringComparison.OrdinalIgnoreCase));
+    }
 }

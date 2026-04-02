@@ -42,7 +42,46 @@ public static class GeradorDeInsights
             insights.Add((4, "Semana anterior sem carga registrada; comparar progressao com cautela."));
         }
 
-        // 3. Taper
+        // 3. Monotonia de carga
+        var monotoniaSemanal = CalcularMonotoniaSemanal(dto);
+        if (monotoniaSemanal is >= 2.0)
+        {
+            insights.Add((
+                2,
+                $"Monotonia elevada da carga na semana ({FormatNumber(monotoniaSemanal.Value)}). Distribuicao concentrada, revisar variacao de estimulo e recuperacao."));
+        }
+
+        // 4. Divergencia entre carga e rendimento
+        if (TryCalcularDivergenciaCargaERendimento(dto, out var deltaCargaPercentual, out var deltaPacePercentual)
+            && deltaCargaPercentual > 10
+            && deltaPacePercentual > 3)
+        {
+            insights.Add((
+                2,
+                $"Divergencia carga x rendimento: carga recente subiu {FormatPercent(deltaCargaPercentual)}, mas o pace medio piorou {FormatPercent(deltaPacePercentual)}. Investigar fadiga e ajustar recuperacao."));
+        }
+
+        // 5. Aderencia ao planejamento
+        if (dto.TreinosPlanejadosPorSemana.HasValue && dto.AderenciaPlanejamentoPercentual.HasValue)
+        {
+            var treinosPlanejados = dto.TreinosPlanejadosPorSemana.Value;
+            var aderencia = dto.AderenciaPlanejamentoPercentual.Value;
+
+            if (aderencia < 80)
+            {
+                insights.Add((
+                    2,
+                    $"Aderencia ao planejamento abaixo do esperado ({dto.TreinosRealizadosNaSemana}/{treinosPlanejados} treinos, {FormatPercent(aderencia)}). Revisar barreiras de execucao."));
+            }
+            else if (aderencia > 120)
+            {
+                insights.Add((
+                    3,
+                    $"Volume realizado acima do planejamento ({dto.TreinosRealizadosNaSemana}/{treinosPlanejados} treinos, {FormatPercent(aderencia)}). Confirmar se o plano semanal precisa de ajuste."));
+            }
+        }
+
+        // 6. Taper
         if (dto.EmJanelaDeTaper)
         {
             if (dto.ReducaoVolumeTaper.HasValue)
@@ -62,13 +101,13 @@ public static class GeradorDeInsights
             }
         }
 
-        // 4. Observacoes clinicas
+        // 7. Observacoes clinicas
         if (!string.IsNullOrWhiteSpace(dto.ObservacoesClin))
         {
             insights.Add((1, $"Observacoes clinicas: {dto.ObservacoesClin}. Ajustar plano conforme restricoes."));
         }
 
-        // 5. Informacao geral
+        // 8. Informacao geral
         if (insights.Count == 0)
             insights.Add((5, "Nenhum alerta critico detectado. Treinamento dentro de parametros esperados."));
 
@@ -84,4 +123,85 @@ public static class GeradorDeInsights
 
     private static string FormatPercent(double value)
         => value.ToString("0.#", CultureInfo.InvariantCulture) + "%";
+
+    private static double? CalcularMonotoniaSemanal(DashboardAtletaDto dto)
+    {
+        if (dto.TreinosJanela.Count == 0)
+        {
+            return null;
+        }
+
+        var referencia = DateOnly.FromDateTime(dto.DataUltimaAtualizacao == default ? DateTime.UtcNow : dto.DataUltimaAtualizacao);
+        var inicio = referencia.AddDays(-6);
+        var cargaPorDia = Enumerable.Range(0, 7)
+            .Select(deslocamento => inicio.AddDays(deslocamento))
+            .ToDictionary(data => data, _ => 0d);
+
+        foreach (var treino in dto.TreinosJanela.Where(treino => treino.Data >= inicio && treino.Data <= referencia))
+        {
+            cargaPorDia[treino.Data] += treino.Carga;
+        }
+
+        var cargas = cargaPorDia.Values.ToList();
+        var media = cargas.Average();
+        if (media == 0)
+        {
+            return null;
+        }
+
+        var variancia = cargas.Average(carga => Math.Pow(carga - media, 2));
+        var desvioPadrao = Math.Sqrt(variancia);
+        if (desvioPadrao == 0)
+        {
+            return 999;
+        }
+
+        return Math.Round(media / desvioPadrao, 2);
+    }
+
+    private static bool TryCalcularDivergenciaCargaERendimento(
+        DashboardAtletaDto dto,
+        out double deltaCargaPercentual,
+        out double deltaPacePercentual)
+    {
+        deltaCargaPercentual = 0;
+        deltaPacePercentual = 0;
+
+        var semanasComPace = dto.SerieCargaSemanal
+            .Join(
+                dto.SeriePaceSemanal.Where(serie => serie.ValorMinPorKm.HasValue),
+                carga => carga.SemanaInicio,
+                pace => pace.SemanaInicio,
+                (carga, pace) => new
+                {
+                    carga.SemanaInicio,
+                    Carga = carga.Valor,
+                    Pace = pace.ValorMinPorKm!.Value
+                })
+            .OrderBy(semana => semana.SemanaInicio)
+            .ToList();
+
+        if (semanasComPace.Count < 4)
+        {
+            return false;
+        }
+
+        var baseComparacao = semanasComPace.TakeLast(4).ToList();
+        var semanasBase = baseComparacao.Take(2).ToList();
+        var semanasRecentes = baseComparacao.Skip(2).ToList();
+
+        var cargaBase = semanasBase.Average(semana => semana.Carga);
+        var cargaRecente = semanasRecentes.Average(semana => semana.Carga);
+        var paceBase = semanasBase.Average(semana => semana.Pace);
+        var paceRecente = semanasRecentes.Average(semana => semana.Pace);
+
+        if (cargaBase <= 0 || paceBase <= 0)
+        {
+            return false;
+        }
+
+        deltaCargaPercentual = Math.Round((cargaRecente - cargaBase) / cargaBase * 100, 1, MidpointRounding.AwayFromZero);
+        deltaPacePercentual = Math.Round((paceRecente - paceBase) / paceBase * 100, 1, MidpointRounding.AwayFromZero);
+        return true;
+    }
 }
