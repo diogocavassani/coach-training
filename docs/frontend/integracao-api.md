@@ -97,6 +97,14 @@ Quando executado via `docker compose`, o frontend e servido por Nginx e as rotas
   - `401`: token ausente/invalido
   - `404`: atleta nao encontrado para o professor autenticado
 
+### Dashboard inicial do professor
+
+- Metodo: `GET /api/dashboard/professor/resumo`
+- Response esperado: `200 OK` com KPIs reais da home autenticada (`totalAtletas`, `atletasEmAtencao`, `atletasEmTaper`, `treinosRegistradosNaSemana`) e listas de apoio (`atletasPrioritarios`, `treinosRecentes`).
+- Erros tratados:
+  - `401`: token ausente/invalido
+  - `500`: falha inesperada no processamento do resumo
+
 ### Alunos - Prova alvo
 
 - Metodo: `GET /api/atleta/{id}/prova-alvo`

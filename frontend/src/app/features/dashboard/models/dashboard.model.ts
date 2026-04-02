@@ -47,3 +47,33 @@ export interface DashboardAtleta {
   seriePaceSemanal: DashboardSeriePaceSemanal[];
   treinosJanela: DashboardTreinoJanela[];
 }
+
+export interface DashboardProfessorAtletaPrioritario {
+  atletaId: string;
+  nome: string;
+  statusRisco: number;
+  emJanelaDeTaper: boolean;
+  proximaProva: string | null;
+  cargaSemanal: number;
+  aderenciaPlanejamentoPercentual: number | null;
+}
+
+export interface DashboardProfessorTreinoRecente {
+  atletaId: string;
+  nomeAtleta: string;
+  data: string;
+  tipo: number;
+  carga: number;
+}
+
+export interface DashboardProfessorResumo {
+  totalAtletas: number;
+  atletasEmAtencao: number;
+  atletasEmRisco: number;
+  atletasEmTaper: number;
+  treinosRegistradosNaSemana: number;
+  atletasComPlanejamentoConfigurado: number;
+  dataUltimaAtualizacao: string;
+  atletasPrioritarios: DashboardProfessorAtletaPrioritario[];
+  treinosRecentes: DashboardProfessorTreinoRecente[];
+}

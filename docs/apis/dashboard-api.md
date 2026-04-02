@@ -1,5 +1,46 @@
 # API - Dashboard do Aluno
 
+## Resumo do professor
+`GET /api/dashboard/professor/resumo`
+
+### Response (200)
+```json
+{
+  "totalAtletas": 12,
+  "atletasEmAtencao": 3,
+  "atletasEmRisco": 1,
+  "atletasEmTaper": 2,
+  "treinosRegistradosNaSemana": 19,
+  "atletasComPlanejamentoConfigurado": 8,
+  "dataUltimaAtualizacao": "2026-04-02T02:10:00Z",
+  "atletasPrioritarios": [
+    {
+      "atletaId": "4df75e0e-3df5-4ef6-8cb7-8f7b5f8d87af",
+      "nome": "Atleta Exemplo",
+      "statusRisco": 2,
+      "emJanelaDeTaper": false,
+      "proximaProva": null,
+      "cargaSemanal": 1180,
+      "aderenciaPlanejamentoPercentual": 50.0
+    }
+  ],
+  "treinosRecentes": [
+    {
+      "atletaId": "4df75e0e-3df5-4ef6-8cb7-8f7b5f8d87af",
+      "nomeAtleta": "Atleta Exemplo",
+      "data": "2026-04-01",
+      "tipo": 2,
+      "carga": 810
+    }
+  ]
+}
+```
+
+### Regras
+- Resume apenas dados do `professor_id` autenticado.
+- `atletasPrioritarios` combina risco, taper e aderencia fora do esperado.
+- `treinosRecentes` retorna os treinos mais recentes do workspace para apoiar a navegacao inicial.
+
 ## Endpoint
 `GET /api/dashboard/atleta/{id}`
 

@@ -104,22 +104,22 @@
 
 ## P1 - Fechamento da experiencia do produto
 
-### [ ] BL-05 - Substituir o dashboard inicial do professor por dados reais
+### [x] BL-05 - Substituir o dashboard inicial do professor por dados reais
 
 **Objetivo:** remover a tela placeholder da area autenticada e entregar um resumo operacional verdadeiro.
 
 **Criterios de aceite**
 
-- [ ] A tela `/dashboard` deixa de usar KPIs fixos.
-- [ ] A tela mostra indicadores reais do workspace do professor.
-- [ ] O conjunto inicial de indicadores e simples, util e coerente com o MVP.
-- [ ] Se for necessario um novo endpoint ou query, ele fica coberto por testes.
-- [ ] O fluxo de navegacao a partir da home autenticada ajuda o professor a chegar rapidamente nas acoes principais.
+- [x] A tela `/dashboard` deixa de usar KPIs fixos.
+- [x] A tela mostra indicadores reais do workspace do professor.
+- [x] O conjunto inicial de indicadores e simples, util e coerente com o MVP.
+- [x] Se for necessario um novo endpoint ou query, ele fica coberto por testes.
+- [x] O fluxo de navegacao a partir da home autenticada ajuda o professor a chegar rapidamente nas acoes principais.
 
 **Validacao minima**
 
-- [ ] Validar manualmente a tela autenticada com dados reais.
-- [ ] Rodar testes relevantes do frontend e backend envolvidos.
+- [x] Validar manualmente a tela autenticada com dados reais.
+- [x] Rodar testes relevantes do frontend e backend envolvidos.
 
 ### [ ] BL-06 - Completar os insights prometidos no escopo do MVP
 
@@ -164,7 +164,7 @@
 2. [x] BL-02 - Implementar cadastro de prova-alvo por atleta.
 3. [x] BL-03 - Implementar planejamento base por atleta.
 4. [x] BL-04 - Exibir aderencia ao planejamento no dashboard.
-5. [ ] BL-05 - Substituir o dashboard inicial do professor por dados reais.
+5. [x] BL-05 - Substituir o dashboard inicial do professor por dados reais.
 6. [ ] BL-06 - Completar os insights prometidos no escopo do MVP.
 7. [ ] BL-07 - Alinhar a documentacao ao estado real do sistema.
 
