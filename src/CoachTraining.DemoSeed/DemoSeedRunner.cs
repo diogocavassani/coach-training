@@ -13,19 +13,22 @@ public sealed class DemoSeedRunner
     private readonly CadastroAtletaService _cadastroAtletaService;
     private readonly CadastrarSessaoDeTreinoService _cadastrarSessaoDeTreinoService;
     private readonly GerenciarProvaAlvoService _gerenciarProvaAlvoService;
+    private readonly GerenciarPlanejamentoBaseService _gerenciarPlanejamentoBaseService;
 
     public DemoSeedRunner(
         CoachTrainingDbContext dbContext,
         CadastroProfessorService cadastroProfessorService,
         CadastroAtletaService cadastroAtletaService,
         CadastrarSessaoDeTreinoService cadastrarSessaoDeTreinoService,
-        GerenciarProvaAlvoService gerenciarProvaAlvoService)
+        GerenciarProvaAlvoService gerenciarProvaAlvoService,
+        GerenciarPlanejamentoBaseService gerenciarPlanejamentoBaseService)
     {
         _dbContext = dbContext;
         _cadastroProfessorService = cadastroProfessorService;
         _cadastroAtletaService = cadastroAtletaService;
         _cadastrarSessaoDeTreinoService = cadastrarSessaoDeTreinoService;
         _gerenciarProvaAlvoService = gerenciarProvaAlvoService;
+        _gerenciarPlanejamentoBaseService = gerenciarPlanejamentoBaseService;
     }
 
     public async Task<DemoSeedReport> RunAsync(
@@ -96,6 +99,15 @@ public sealed class DemoSeedRunner
                 NivelEsportivo = scenario.NivelEsportivo,
                 ObservacoesClinicas = scenario.ObservacoesClinicas
             }, professorDto.Id);
+
+            _gerenciarPlanejamentoBaseService.Salvar(
+                atletaDto.Id,
+                new SalvarPlanejamentoBaseDto
+                {
+                    TreinosPlanejadosPorSemana = scenario.TreinosPlanejadosPorSemana
+                },
+                professorDto.Id
+            );
 
             // Registrar sessões
             foreach (var sessao in scenario.Sessoes)

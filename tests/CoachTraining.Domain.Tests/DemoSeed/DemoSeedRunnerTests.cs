@@ -85,6 +85,7 @@ public class DemoSeedRunnerTests
         services.AddScoped<CadastroAtletaService>();
         services.AddScoped<CadastrarSessaoDeTreinoService>();
         services.AddScoped<GerenciarProvaAlvoService>();
+        services.AddScoped<GerenciarPlanejamentoBaseService>();
         services.AddScoped<DemoSeedRunner>();
 
         return services.BuildServiceProvider();

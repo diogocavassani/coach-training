@@ -54,6 +54,7 @@ builder.Services.AddScoped<CadastroProfessorService>();
 builder.Services.AddScoped<CadastroAtletaService>();
 builder.Services.AddScoped<CadastrarSessaoDeTreinoService>();
 builder.Services.AddScoped<GerenciarProvaAlvoService>();
+builder.Services.AddScoped<GerenciarPlanejamentoBaseService>();
 builder.Services.AddScoped<DemoSeedRunner>();
 
 using var host = builder.Build();
