@@ -77,6 +77,15 @@ describe('ProfessorLandingPageComponent', () => {
     expect(signup?.querySelector('form')).withContext('signup form').not.toBeNull();
   });
 
+  it('reserva espaco de scroll para os links internos sob o header fixo', () => {
+    const page = fixture.nativeElement as HTMLElement;
+    const signals = page.querySelector<HTMLElement>('#sinais') as HTMLElement;
+    const signup = page.querySelector<HTMLElement>('#cadastro') as HTMLElement;
+
+    expect(getComputedStyle(signals).scrollMarginTop).not.toBe('0px');
+    expect(getComputedStyle(signup).scrollMarginTop).not.toBe('0px');
+  });
+
   it('inicia com formulario invalido', () => {
     expect(component.cadastroForm.valid).toBeFalse();
   });
