@@ -1,86 +1,197 @@
-﻿<div class="landing-page">
+<div class="landing-page">
   <header class="topbar">
-    <p class="brand">CoachTraining</p>
-    <a mat-stroked-button routerLink="/login">Entrar</a>
+    <div class="topbar-inner">
+      <a class="brand" routerLink="/">
+        <span class="brand-mark">CoachTraining</span>
+        <span class="brand-context">Executive Signal</span>
+      </a>
+
+      <div class="topbar-actions">
+        <a mat-button href="#sinais">Sinais</a>
+        <a mat-button routerLink="/login">Entrar</a>
+      </div>
+    </div>
   </header>
 
   <section class="hero" aria-label="Apresentacao da plataforma">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <p class="eyebrow">Area do Professor</p>
-      <h1>Controle o ciclo de alta performance dos seus atletas em um unico painel.</h1>
-      <p class="subtitle">
-        Cadastre-se, acompanhe indicadores e mantenha foco nas decisoes que realmente mudam o resultado da prova.
-      </p>
-      <div class="hero-actions">
-        <a mat-flat-button href="#cadastro">Comecar cadastro</a>
-        <a mat-button routerLink="/login">Ja tenho conta</a>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="section-label">Workspace premium para treinadores</p>
+        <h1>Controle o ciclo do atleta com leitura precisa e decisoes mais confiantes.</h1>
+        <p class="hero-summary">
+          Do risco acumulado ao taper, da aderencia ao historico de treino, o CoachTraining transforma sinais
+          dispersos em contexto acionavel para o treinador decidir sem ruido.
+        </p>
+
+        <div class="hero-actions">
+          <a mat-flat-button href="#cadastro">Criar conta de professor</a>
+          <a mat-button routerLink="/login">Entrar no workspace</a>
+        </div>
+
+        <p class="hero-footnote">Leitura premium para carga, prontidao e prioridade em uma mesma sequencia de trabalho.</p>
       </div>
+
+      <aside class="hero-proof page-surface" aria-label="Prova de produto no hero">
+        <p class="proof-label">Product proof</p>
+        <h2>Painel orientado por decisao, nao por excesso de dado.</h2>
+
+        <div class="proof-stack">
+          <article>
+            <span>Risco operacional</span>
+            <strong>3 atletas pedem ajuste de carga hoje</strong>
+            <p>Alertas combinam historico recente, aderencia e tendencia de esforco.</p>
+          </article>
+
+          <article>
+            <span>Janela de taper</span>
+            <strong>2 ciclos entram na fase de refinamento</strong>
+            <p>O treinador enxerga o momento de reduzir volume sem perder controle da preparacao.</p>
+          </article>
+
+          <article>
+            <span>Historico consolidado</span>
+            <strong>Leitura unica do ultimo bloco de treino</strong>
+            <p>Comparacao entre carga planejada, executada e consistencia do atleta.</p>
+          </article>
+        </div>
+      </aside>
     </div>
   </section>
 
-  <section class="benefits" aria-label="Beneficios principais">
-    <article>
-      <h2>Visao consolidada</h2>
-      <p>Centralize carga de treino e leitura de progresso em um fluxo simples.</p>
-    </article>
-    <article>
-      <h2>Ritmo de decisao</h2>
-      <p>Reduza ruido operacional com um workspace feito para o dia a dia do treinador.</p>
-    </article>
-    <article>
-      <h2>Escala com metodo</h2>
-      <p>Mantenha consistencia de acompanhamento mesmo com varios atletas ativos.</p>
-    </article>
-  </section>
-
-  <section id="cadastro" class="signup-intro" aria-label="Inicio do cadastro">
-    <h2>Crie sua conta de professor</h2>
-    <p>Preencha os dados abaixo para habilitar seu acesso.</p>
-
-    <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="signup-form" novalidate>
-      <mat-form-field appearance="outline">
-        <mat-label>Nome</mat-label>
-        <input matInput formControlName="nome" autocomplete="name" />
-        @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('required')) {
-          <mat-error>Nome e obrigatorio.</mat-error>
-        }
-        @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('minlength')) {
-          <mat-error>Nome deve ter ao menos 3 caracteres.</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" autocomplete="email" />
-        @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('required')) {
-          <mat-error>Email e obrigatorio.</mat-error>
-        }
-        @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('email')) {
-          <mat-error>Informe um email valido.</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Senha</mat-label>
-        <input matInput type="password" formControlName="senha" autocomplete="new-password" />
-        @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('required')) {
-          <mat-error>Senha e obrigatoria.</mat-error>
-        }
-        @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('minlength')) {
-          <mat-error>Senha deve ter no minimo 6 caracteres.</mat-error>
-        }
-      </mat-form-field>
-
-      <div class="signup-actions">
-        <button mat-flat-button type="submit" [disabled]="carregandoCadastro">
-          {{ carregandoCadastro ? 'Enviando...' : 'Cadastrar professor' }}
-        </button>
+  <main class="landing-content">
+    <section id="sinais" class="content-section signals" aria-labelledby="signals-title">
+      <div class="section-header">
+        <p class="section-label">Leitura de prioridade</p>
+        <h2 id="signals-title">Sinais que importam</h2>
+        <p>
+          Cada camada da interface destaca o que muda a proxima decisao do treinador, sem transformar o workspace
+          em uma colecao de graficos sem contexto.
+        </p>
       </div>
 
-      @if (mensagemErro) {
-        <p class="signup-error">{{ mensagemErro }}</p>
-      }
-    </form>
-  </section>
+      <div class="signals-list page-surface">
+        <article class="signal-item">
+          <span class="signal-index">01</span>
+          <div>
+            <h3>Risco antes da quebra</h3>
+            <p>Identifique queda de aderencia, aumento de carga e sinais de fadiga antes de perder a sessao inteira.</p>
+          </div>
+        </article>
+
+        <article class="signal-item">
+          <span class="signal-index">02</span>
+          <div>
+            <h3>Taper com contexto real</h3>
+            <p>Leia o momento ideal de reduzir volume com apoio do historico e da resposta recente do atleta.</p>
+          </div>
+        </article>
+
+        <article class="signal-item">
+          <span class="signal-index">03</span>
+          <div>
+            <h3>Historico que explica a decisao</h3>
+            <p>Compare blocos, recupere referencias e sustente conversas tecnicas com um fio de leitura continuo.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section flow" aria-labelledby="flow-title">
+      <div class="section-header">
+        <p class="section-label">Operacao do treinador</p>
+        <h2 id="flow-title">Fluxo do treinador</h2>
+        <p>Uma sequencia editorial para ler o momento, decidir rapido e registrar o proximo ajuste sem mudar de contexto.</p>
+      </div>
+
+      <div class="flow-layout">
+        <div class="flow-steps">
+          <article class="flow-step">
+            <span>1</span>
+            <div>
+              <h3>Ler o bloco atual</h3>
+              <p>Comece pela sintese do ciclo e descubra quem precisa de atencao agora.</p>
+            </div>
+          </article>
+
+          <article class="flow-step">
+            <span>2</span>
+            <div>
+              <h3>Validar risco e aderencia</h3>
+              <p>Abra o detalhe certo para confirmar se a carga segue coerente com a resposta do atleta.</p>
+            </div>
+          </article>
+
+          <article class="flow-step">
+            <span>3</span>
+            <div>
+              <h3>Ajustar com seguranca</h3>
+              <p>Registre a decisao com base em historico, taper e consistencia recente sem perder a linha de raciocinio.</p>
+            </div>
+          </article>
+        </div>
+
+        <aside class="flow-note page-surface">
+          <p class="note-label">Por que funciona</p>
+          <p>
+            O workspace combina contexto de performance e prioridade operacional em uma leitura curta, feita para o
+            ritmo real de um treinador acompanhando varios atletas ao mesmo tempo.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="cadastro" class="content-section signup" aria-label="Inicio do cadastro">
+      <div class="signup-copy">
+        <p class="section-label">Criar conta de professor</p>
+        <h2>Entre no Executive Signal e estruture sua leitura de performance desde o primeiro atleta.</h2>
+        <p>Preencha os dados abaixo para habilitar seu acesso e iniciar o workspace com uma base premium de decisao.</p>
+      </div>
+
+      <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="signup-form page-surface" novalidate>
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" autocomplete="name" />
+          @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('required')) {
+            <mat-error>Nome e obrigatorio.</mat-error>
+          }
+          @if (cadastroForm.controls.nome.touched && cadastroForm.controls.nome.hasError('minlength')) {
+            <mat-error>Nome deve ter ao menos 3 caracteres.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" autocomplete="email" />
+          @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('required')) {
+            <mat-error>Email e obrigatorio.</mat-error>
+          }
+          @if (cadastroForm.controls.email.touched && cadastroForm.controls.email.hasError('email')) {
+            <mat-error>Informe um email valido.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input matInput type="password" formControlName="senha" autocomplete="new-password" />
+          @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('required')) {
+            <mat-error>Senha e obrigatoria.</mat-error>
+          }
+          @if (cadastroForm.controls.senha.touched && cadastroForm.controls.senha.hasError('minlength')) {
+            <mat-error>Senha deve ter no minimo 6 caracteres.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="signup-actions">
+          <button mat-flat-button type="submit" [disabled]="carregandoCadastro">
+            {{ carregandoCadastro ? 'Enviando...' : 'Cadastrar professor' }}
+          </button>
+          <a mat-button routerLink="/login">Ja tenho conta</a>
+        </div>
+
+        @if (mensagemErro) {
+          <p class="signup-error">{{ mensagemErro }}</p>
+        }
+      </form>
+    </section>
+  </main>
 </div>

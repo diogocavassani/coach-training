@@ -44,6 +44,15 @@ describe('ProfessorLandingPageComponent', () => {
     fixture.detectChanges();
   });
 
+  it('renderiza a arquitetura de informacao Executive Signal', () => {
+    const textContent = fixture.nativeElement.textContent as string;
+
+    expect(textContent).toContain('Workspace premium para treinadores');
+    expect(textContent).toContain('Sinais que importam');
+    expect(textContent).toContain('Fluxo do treinador');
+    expect(textContent).toContain('Criar conta de professor');
+  });
+
   it('inicia com formulario invalido', () => {
     expect(component.cadastroForm.valid).toBeFalse();
   });
