@@ -47,23 +47,32 @@ describe('ProfessorLandingPageComponent', () => {
   it('renderiza a arquitetura de informacao Executive Signal com as secoes esperadas', () => {
     const page = fixture.nativeElement as HTMLElement;
     const hero = page.querySelector<HTMLElement>('section.hero');
-    const signals = page.querySelector<HTMLElement>('section#sinais');
-    const trainerFlow = page.querySelector<HTMLElement>('section#fluxo');
-    const signup = page.querySelector<HTMLElement>('section#cadastro');
+    const landingContent = page.querySelector<HTMLElement>('main.landing-content');
+    const topLevelSections = Array.from(landingContent?.querySelectorAll(':scope > section') ?? []);
+    const [signals, trainerFlow, signup] = topLevelSections as HTMLElement[];
+    const heroSection = hero as HTMLElement;
+    const landingMain = landingContent as HTMLElement;
 
     expect(hero).withContext('hero section').not.toBeNull();
+    expect(landingContent).withContext('landing content main').not.toBeNull();
+    expect(heroSection.compareDocumentPosition(landingMain) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
     expect(hero?.querySelector('.section-label')?.textContent).toContain('Workspace premium para treinadores');
     expect(hero?.querySelector('h1')?.textContent).toContain(
       'Controle o ciclo do atleta com leitura precisa e decisoes mais confiantes.'
     );
 
+    expect(topLevelSections.map((section) => section.id)).toEqual(['sinais', 'fluxo', 'cadastro']);
+
     expect(signals).withContext('signals section').not.toBeNull();
+    expect(signals.id).toBe('sinais');
     expect(signals?.querySelector('h2')?.textContent).toContain('Sinais que importam');
 
     expect(trainerFlow).withContext('trainer flow section').not.toBeNull();
+    expect(trainerFlow.id).toBe('fluxo');
     expect(trainerFlow?.querySelector('h2')?.textContent).toContain('Fluxo do treinador');
 
     expect(signup).withContext('signup section').not.toBeNull();
+    expect(signup.id).toBe('cadastro');
     expect(signup?.querySelector('.section-label')?.textContent).toContain('Criar conta de professor');
     expect(signup?.querySelector('form')).withContext('signup form').not.toBeNull();
   });
