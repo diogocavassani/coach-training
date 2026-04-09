@@ -96,6 +96,7 @@
 
 .content-section {
   padding-top: clamp(3.5rem, 6vw, 5rem);
+  scroll-margin-top: 6.5rem;
 }
 
 .section-header {
