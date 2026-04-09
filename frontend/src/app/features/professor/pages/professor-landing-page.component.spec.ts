@@ -44,13 +44,28 @@ describe('ProfessorLandingPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('renderiza a arquitetura de informacao Executive Signal', () => {
-    const textContent = fixture.nativeElement.textContent as string;
+  it('renderiza a arquitetura de informacao Executive Signal com as secoes esperadas', () => {
+    const page = fixture.nativeElement as HTMLElement;
+    const hero = page.querySelector<HTMLElement>('section.hero');
+    const signals = page.querySelector<HTMLElement>('section#sinais');
+    const trainerFlow = page.querySelector<HTMLElement>('section#fluxo');
+    const signup = page.querySelector<HTMLElement>('section#cadastro');
 
-    expect(textContent).toContain('Workspace premium para treinadores');
-    expect(textContent).toContain('Sinais que importam');
-    expect(textContent).toContain('Fluxo do treinador');
-    expect(textContent).toContain('Criar conta de professor');
+    expect(hero).withContext('hero section').not.toBeNull();
+    expect(hero?.querySelector('.section-label')?.textContent).toContain('Workspace premium para treinadores');
+    expect(hero?.querySelector('h1')?.textContent).toContain(
+      'Controle o ciclo do atleta com leitura precisa e decisoes mais confiantes.'
+    );
+
+    expect(signals).withContext('signals section').not.toBeNull();
+    expect(signals?.querySelector('h2')?.textContent).toContain('Sinais que importam');
+
+    expect(trainerFlow).withContext('trainer flow section').not.toBeNull();
+    expect(trainerFlow?.querySelector('h2')?.textContent).toContain('Fluxo do treinador');
+
+    expect(signup).withContext('signup section').not.toBeNull();
+    expect(signup?.querySelector('.section-label')?.textContent).toContain('Criar conta de professor');
+    expect(signup?.querySelector('form')).withContext('signup form').not.toBeNull();
   });
 
   it('inicia com formulario invalido', () => {
