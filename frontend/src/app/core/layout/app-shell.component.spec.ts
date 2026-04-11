@@ -43,4 +43,11 @@ describe('AppShellComponent', () => {
     expect(text).toContain('Leituras');
     expect(text).toContain('Novo treino');
   });
+
+  it('mantem o shell generico sem reutilizar o titulo da home do dashboard', () => {
+    const headerTitle = fixture.nativeElement.querySelector('.header-copy h1') as HTMLHeadingElement | null;
+
+    expect(headerTitle?.textContent?.trim()).toBe('Workspace do professor');
+    expect(fixture.nativeElement.textContent).not.toContain('Leituras do workspace');
+  });
 });
