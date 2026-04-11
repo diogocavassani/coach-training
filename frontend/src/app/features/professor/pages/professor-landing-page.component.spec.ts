@@ -81,9 +81,11 @@ describe('ProfessorLandingPageComponent', () => {
     const page = fixture.nativeElement as HTMLElement;
     const signals = page.querySelector<HTMLElement>('#sinais') as HTMLElement;
     const signup = page.querySelector<HTMLElement>('#cadastro') as HTMLElement;
+    const signalsScrollMarginTop = Number.parseFloat(getComputedStyle(signals).scrollMarginTop);
+    const signupScrollMarginTop = Number.parseFloat(getComputedStyle(signup).scrollMarginTop);
 
-    expect(getComputedStyle(signals).scrollMarginTop).not.toBe('0px');
-    expect(getComputedStyle(signup).scrollMarginTop).not.toBe('0px');
+    expect(signalsScrollMarginTop).withContext('#sinais scroll margin').toBeGreaterThanOrEqual(136);
+    expect(signupScrollMarginTop).withContext('#cadastro scroll margin').toBeGreaterThanOrEqual(136);
   });
 
   it('inicia com formulario invalido', () => {

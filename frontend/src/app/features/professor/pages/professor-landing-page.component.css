@@ -96,7 +96,7 @@
 
 .content-section {
   padding-top: clamp(3.5rem, 6vw, 5rem);
-  scroll-margin-top: 6.5rem;
+  scroll-margin-top: 8.5rem;
 }
 
 .section-header {
@@ -209,6 +209,10 @@
 
   .hero-grid {
     padding-bottom: 3rem;
+  }
+
+  .content-section {
+    scroll-margin-top: 9.5rem;
   }
 
   .signal-item,
