@@ -42,10 +42,27 @@ describe('LoginPageComponent', () => {
   });
 
   it('renderiza a nova hierarquia editorial de autenticacao', () => {
-    const pageText = fixture.nativeElement.textContent;
+    const host: HTMLElement = fixture.nativeElement;
+    const shell = host.querySelector<HTMLElement>('.login-shell.page-surface');
+    const intro = host.querySelector<HTMLElement>('.login-intro');
+    const form = host.querySelector<HTMLElement>('form.login-form');
+    const introLabel = intro?.querySelector<HTMLElement>('.section-label');
+    const introTitle = intro?.querySelector<HTMLHeadingElement>('h1');
+    const introDescription = intro?.querySelector<HTMLElement>('.login-description');
+    const registerCta = intro?.querySelector<HTMLAnchorElement>('a.register-link');
+    const formHeading = form?.querySelector<HTMLHeadingElement>('.form-header h2');
 
-    expect(pageText).toContain('Acesse o workspace do treinador');
-    expect(pageText).toContain('Leituras de risco, taper e aderencia em um unico lugar');
-    expect(pageText).toContain('Ainda nao tem conta? Criar acesso');
+    expect(shell).not.toBeNull();
+    expect(intro).not.toBeNull();
+    expect(form).not.toBeNull();
+    expect(shell?.contains(intro as Node)).toBeTrue();
+    expect(shell?.contains(form as Node)).toBeTrue();
+    expect(intro?.contains(form as Node)).toBeFalse();
+
+    expect(introLabel?.textContent?.trim()).toBe('CoachTraining');
+    expect(introTitle?.textContent?.trim()).toBe('Acesse o workspace do treinador.');
+    expect(introDescription?.textContent).toContain('Leituras de risco, taper e aderencia em um unico lugar');
+    expect(registerCta?.textContent?.trim()).toBe('Ainda nao tem conta? Criar acesso');
+    expect(formHeading?.textContent?.trim()).toBe('Entrar no workspace');
   });
 });

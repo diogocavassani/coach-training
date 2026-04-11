@@ -411,14 +411,14 @@ app-professor-landing-page .signup-error {
   font-weight: var(--font-weight-semibold);
 }
 
-app-professor-landing-page .mat-mdc-unelevated-button.mat-mdc-button-base {
+:is(app-professor-landing-page, app-login-page) .mat-mdc-unelevated-button.mat-mdc-button-base {
   --mdc-filled-button-container-color: var(--es-color-primary-500);
   --mdc-filled-button-label-text-color: #f8fbfb;
   border-radius: 14px;
   box-shadow: 0 14px 28px rgb(18 50 71 / 16%);
 }
 
-app-professor-landing-page .mat-mdc-unelevated-button.mat-mdc-button-base:hover {
+:is(app-professor-landing-page, app-login-page) .mat-mdc-unelevated-button.mat-mdc-button-base:hover {
   --mdc-filled-button-container-color: var(--es-color-primary-600);
 }
 
@@ -426,7 +426,7 @@ app-professor-landing-page .mat-mdc-button.mat-mdc-button-base {
   color: var(--es-color-primary-600);
 }
 
-app-professor-landing-page .mat-mdc-form-field {
+:is(app-professor-landing-page, app-login-page) .mat-mdc-form-field {
   --mdc-outlined-text-field-container-color: var(--es-color-surface-strong);
   --mdc-outlined-text-field-outline-color: var(--es-color-border-strong);
   --mdc-outlined-text-field-hover-outline-color: var(--es-color-primary-400);
@@ -443,10 +443,10 @@ app-professor-landing-page .mat-mdc-form-field {
   --mat-sys-on-surface-variant: var(--es-color-text-muted);
 }
 
-app-professor-landing-page .mat-mdc-input-element::placeholder {
+:is(app-professor-landing-page, app-login-page) .mat-mdc-input-element::placeholder {
   color: var(--es-color-text-soft);
 }
 
-app-professor-landing-page .mat-mdc-form-field-error {
+:is(app-professor-landing-page, app-login-page) .mat-mdc-form-field-error {
   color: #cf6666;
 }

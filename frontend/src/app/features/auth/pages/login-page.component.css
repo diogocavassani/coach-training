@@ -42,8 +42,7 @@
   padding: clamp(0.25rem, 1vw, 0.75rem);
 }
 
-.login-page h1,
-.form-label {
+.login-page :is(h1, .form-heading) {
   font-family: var(--es-font-family-display);
   letter-spacing: -0.03em;
 }
@@ -106,7 +105,8 @@
   margin-bottom: var(--space-2);
 }
 
-.form-label {
+.form-heading {
+  margin: 0;
   font-size: clamp(1.5rem, 2.8vw, 2rem);
   line-height: 1.05;
   color: var(--es-color-text);
@@ -120,42 +120,6 @@
   margin-top: var(--space-2);
   color: var(--es-color-error);
   font-weight: var(--font-weight-semibold);
-}
-
-.login-page .mat-mdc-unelevated-button.mat-mdc-button-base {
-  --mdc-filled-button-container-color: var(--es-color-primary-500);
-  --mdc-filled-button-label-text-color: #f8fbfb;
-  border-radius: 14px;
-  box-shadow: 0 14px 28px rgb(18 50 71 / 16%);
-}
-
-.login-page .mat-mdc-unelevated-button.mat-mdc-button-base:hover {
-  --mdc-filled-button-container-color: var(--es-color-primary-600);
-}
-
-.login-page .mat-mdc-form-field {
-  --mdc-outlined-text-field-container-color: var(--es-color-surface-strong);
-  --mdc-outlined-text-field-outline-color: var(--es-color-border-strong);
-  --mdc-outlined-text-field-hover-outline-color: var(--es-color-primary-400);
-  --mdc-outlined-text-field-focus-outline-color: var(--es-color-primary-500);
-  --mdc-outlined-text-field-input-text-color: var(--es-color-text);
-  --mdc-outlined-text-field-label-text-color: var(--es-color-text-muted);
-  --mdc-outlined-text-field-focus-label-text-color: var(--es-color-primary-500);
-  --mdc-outlined-text-field-caret-color: var(--es-color-primary-500);
-  --mdc-outlined-text-field-error-outline-color: var(--es-color-error);
-  --mdc-outlined-text-field-error-hover-outline-color: #cf6666;
-  --mdc-outlined-text-field-error-focus-outline-color: var(--es-color-error);
-  --mdc-outlined-text-field-error-focus-label-text-color: #cf6666;
-  --mdc-outlined-text-field-error-label-text-color: #cf6666;
-  --mat-sys-on-surface-variant: var(--es-color-text-muted);
-}
-
-.login-page .mat-mdc-input-element::placeholder {
-  color: var(--es-color-text-soft);
-}
-
-.login-page .mat-mdc-form-field-error {
-  color: #cf6666;
 }
 
 @keyframes login-enter {
