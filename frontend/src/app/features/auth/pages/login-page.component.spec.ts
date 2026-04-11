@@ -40,4 +40,12 @@ describe('LoginPageComponent', () => {
     expect(component.loginForm.controls.email.hasError('email')).toBeTrue();
     expect(component.loginForm.controls.senha.hasError('minlength')).toBeTrue();
   });
+
+  it('renderiza a nova hierarquia editorial de autenticacao', () => {
+    const pageText = fixture.nativeElement.textContent;
+
+    expect(pageText).toContain('Acesse o workspace do treinador');
+    expect(pageText).toContain('Leituras de risco, taper e aderencia em um unico lugar');
+    expect(pageText).toContain('Ainda nao tem conta? Criar acesso');
+  });
 });

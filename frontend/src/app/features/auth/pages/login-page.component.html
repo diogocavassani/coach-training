@@ -1,10 +1,21 @@
-﻿<section class="login-page" aria-label="Acesso de professor">
-  <div class="login-content">
-    <p class="eyebrow">CoachTraining</p>
-    <h1>Entre para continuar o monitoramento dos seus atletas.</h1>
-    <p class="description">Use o email cadastrado e sua senha para acessar a area protegida.</p>
+<section class="login-page" aria-label="Acesso de professor">
+  <div class="login-shell page-surface">
+    <div class="login-intro">
+      <p class="section-label">CoachTraining</p>
+      <h1>Acesse o workspace do treinador.</h1>
+      <p class="login-description">
+        Leituras de risco, taper e aderencia em um unico lugar para acompanhar carga, prontidao e contexto de decisao.
+      </p>
+
+      <a class="register-link" routerLink="/">Ainda nao tem conta? Criar acesso</a>
+    </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+      <div class="form-header">
+        <p class="form-label">Entrar no workspace</p>
+        <p class="form-caption">Use o email cadastrado e sua senha para continuar.</p>
+      </div>
+
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input matInput type="email" formControlName="email" autocomplete="email" />
@@ -35,7 +46,5 @@
         <p class="error-feedback">{{ mensagemErro }}</p>
       }
     </form>
-
-    <a class="register-link" routerLink="/">Ainda nao tem conta? Cadastre-se.</a>
   </div>
 </section>
