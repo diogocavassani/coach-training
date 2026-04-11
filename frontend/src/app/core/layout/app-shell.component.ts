@@ -13,6 +13,12 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class AppShellComponent {
   sidebarAberta = false;
+  readonly navItems = [
+    { label: 'Leituras', routerLink: '/dashboard', exact: true },
+    { label: 'Alunos', routerLink: '/dashboard/alunos', exact: true },
+    { label: 'Novo aluno', routerLink: '/dashboard/alunos/novo', exact: true },
+    { label: 'Novo treino', routerLink: '/dashboard/treinos/novo', exact: true }
+  ] as const;
 
   constructor(
     private readonly authService: AuthService,

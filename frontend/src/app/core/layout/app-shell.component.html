@@ -1,25 +1,52 @@
-﻿<div class="shell-layout">
-  <header class="shell-header">
-    <button class="menu-button" type="button" (click)="toggleSidebar()" aria-label="Abrir menu">
-      ☰
-    </button>
-    <div class="header-brand">
-      <p class="brand">CoachTraining</p>
-      <p class="context">Workspace do Professor</p>
-    </div>
-    <button mat-stroked-button type="button" (click)="logout()">Sair</button>
-  </header>
+<div class="shell-layout">
+  <button
+    class="shell-backdrop"
+    type="button"
+    [class.visible]="sidebarAberta"
+    (click)="fecharSidebar()"
+    aria-label="Fechar menu"
+  ></button>
 
-  <div class="shell-body">
-    <aside class="shell-sidebar" [class.open]="sidebarAberta">
-      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSidebar()">Dashboard</a>
-      <a routerLink="/dashboard/alunos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSidebar()">Alunos</a>
-      <a routerLink="/dashboard/alunos/novo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSidebar()">Novo aluno</a>
-      <a routerLink="/dashboard/treinos/novo" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="fecharSidebar()">Novo treino</a>
-    </aside>
+  <aside class="shell-sidebar" [class.open]="sidebarAberta">
+    <div class="sidebar-brand">
+      <p class="brand-mark">CoachTraining</p>
+      <p class="brand-context">Workspace do professor</p>
+      <p class="brand-copy">Leituras, alunos e treinos em uma rotina guiada, clara e mais leve.</p>
+    </div>
+
+    <nav class="shell-nav" aria-label="Navegacao principal">
+      @for (item of navItems; track item.routerLink) {
+        <a
+          class="nav-item"
+          [routerLink]="item.routerLink"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact }"
+          (click)="fecharSidebar()"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <button class="logout-button" mat-stroked-button type="button" (click)="logout()">Sair</button>
+  </aside>
+
+  <div class="shell-content">
+    <header class="shell-header">
+      <button class="menu-button" type="button" (click)="toggleSidebar()" aria-label="Abrir menu">
+        &#9776;
+      </button>
+      <div class="header-copy">
+        <p class="header-brand">CoachTraining</p>
+        <h1>Leituras do workspace</h1>
+      </div>
+      <p class="header-context">Workspace do professor</p>
+    </header>
 
     <main class="shell-main" (click)="fecharSidebar()">
-      <router-outlet></router-outlet>
+      <div class="shell-main-surface">
+        <router-outlet></router-outlet>
+      </div>
     </main>
   </div>
 </div>
