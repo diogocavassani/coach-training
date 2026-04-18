@@ -450,3 +450,93 @@ app-professor-landing-page .mat-mdc-button.mat-mdc-button-base {
 :is(app-professor-landing-page, app-login-page) .mat-mdc-form-field-error {
   color: #cf6666;
 }
+
+app-shell .mat-mdc-form-field {
+  --mat-form-field-container-height: 56px;
+  --mat-form-field-container-vertical-padding: 16px;
+  --mdc-outlined-text-field-container-color: rgb(255 255 255 / 90%);
+  --mdc-outlined-text-field-outline-color: rgb(22 61 87 / 16%);
+  --mdc-outlined-text-field-hover-outline-color: var(--es-color-primary-400);
+  --mdc-outlined-text-field-focus-outline-color: var(--es-color-primary-500);
+  --mdc-outlined-text-field-input-text-color: var(--es-color-text);
+  --mdc-outlined-text-field-label-text-color: var(--es-color-text-muted);
+  --mdc-outlined-text-field-focus-label-text-color: var(--es-color-primary-500);
+  --mdc-outlined-text-field-caret-color: var(--es-color-primary-500);
+  --mat-sys-on-surface: var(--es-color-text);
+  --mat-sys-on-surface-variant: var(--es-color-text-muted);
+}
+
+app-shell .mat-mdc-text-field-wrapper {
+  background-color: rgb(255 255 255 / 90%);
+}
+
+app-shell .mat-mdc-form-field-infix {
+  min-height: 56px;
+  padding-top: 18px !important;
+  padding-bottom: 6px !important;
+}
+
+app-shell .mat-mdc-form-field-type-mat-select .mat-mdc-form-field-infix {
+  padding-top: 14px !important;
+  padding-bottom: 10px !important;
+}
+
+app-shell textarea.mat-mdc-input-element {
+  margin: 0;
+}
+
+app-shell .mat-mdc-form-field-textarea-control .mat-mdc-form-field-infix,
+app-shell .mat-mdc-form-field:has(textarea) .mat-mdc-form-field-infix {
+  min-height: 120px;
+  padding-top: 24px !important;
+  padding-bottom: 12px !important;
+}
+
+app-shell .mdc-floating-label {
+  color: var(--es-color-text-muted) !important;
+}
+
+app-shell .mdc-text-field--focused .mdc-floating-label,
+app-shell .mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: var(--es-color-primary-500) !important;
+}
+
+app-shell .mat-mdc-form-field .mdc-text-field__input,
+app-shell .mat-mdc-input-element,
+app-shell input.mat-mdc-input-element,
+app-shell textarea.mat-mdc-input-element,
+app-shell .mat-mdc-select-value-text,
+app-shell .mat-mdc-select-min-line {
+  color: var(--es-color-text) !important;
+  -webkit-text-fill-color: var(--es-color-text) !important;
+  caret-color: var(--es-color-primary-500) !important;
+  line-height: 1.4 !important;
+  opacity: 1 !important;
+}
+
+app-shell .mat-mdc-input-element::placeholder,
+app-shell .mdc-text-field__input::placeholder {
+  color: var(--es-color-text-soft) !important;
+  -webkit-text-fill-color: var(--es-color-text-soft) !important;
+  opacity: 0;
+}
+
+app-shell .mat-mdc-form-field.mat-focused .mat-mdc-input-element::placeholder,
+app-shell .mat-mdc-form-field.mat-focused .mdc-text-field__input::placeholder,
+app-shell .mat-mdc-form-field.mat-mdc-form-field-label-always-float .mat-mdc-input-element::placeholder,
+app-shell .mat-mdc-form-field.mat-mdc-form-field-label-always-float .mdc-text-field__input::placeholder {
+  opacity: 1;
+}
+
+app-shell .mat-mdc-select-arrow svg {
+  fill: var(--es-color-primary-500);
+}
+
+app-shell .mat-mdc-form-field-hint,
+app-shell .mat-mdc-form-field-helper-text {
+  color: var(--es-color-text-muted);
+}
+
+app-shell .mat-mdc-form-field-error {
+  color: var(--es-color-error);
+}

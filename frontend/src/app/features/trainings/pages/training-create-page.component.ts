@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -26,6 +27,7 @@ interface TipoDeTreinoOpcao {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -76,7 +78,7 @@ export class TrainingCreatePageComponent implements OnInit {
     private readonly router: Router
   ) {
     this.form = this.formBuilder.nonNullable.group({
-      buscaAtleta: [''],
+      buscaAtleta: ['', [Validators.required]],
       atletaId: ['', [Validators.required]],
       data: [this.obterDataAtual(), [Validators.required]],
       tipo: [0, [Validators.required]],
@@ -87,6 +89,11 @@ export class TrainingCreatePageComponent implements OnInit {
 
     this.form.controls.buscaAtleta.valueChanges.subscribe((valorBusca) => {
       this.filtrarAtletas(valorBusca);
+
+      if (typeof valorBusca === 'string') {
+        const atletaSelecionado = this.atletas.find((atleta) => this.obterNomeAtleta(atleta.id) === valorBusca);
+        this.form.controls.atletaId.setValue(atletaSelecionado?.id ?? '');
+      }
     });
   }
 
@@ -101,6 +108,12 @@ export class TrainingCreatePageComponent implements OnInit {
 
   get podeSalvar(): boolean {
     return !this.enviando && !this.carregandoAtletas && this.atletas.length > 0;
+  }
+
+  selecionarAtleta(event: MatAutocompleteSelectedEvent): void {
+    const atletaId = event.option.value as string;
+    this.form.controls.atletaId.setValue(atletaId);
+    this.form.controls.buscaAtleta.setValue(this.obterNomeAtleta(atletaId), { emitEvent: false });
   }
 
   obterNomeAtleta(atletaId: string): string {

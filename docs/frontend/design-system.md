@@ -149,6 +149,17 @@ Sombras:
 - Layouts devem priorizar hierarquia editorial, respiro e leitura rapida de prioridade.
 - Nao criar paleta paralela por componente sem justificativa tecnica e registro neste documento.
 
+## Superficies operacionais
+
+- Dashboards usam superfices para separar prioridade, nao para repetir mosaicos de cards equivalentes.
+- Formularios usam secoes por intencao: identidade, contexto, sessao e esforco.
+- Tabelas devem priorizar leitura e acao, com cabecalhos discretos e estados vazios orientadores.
+
+## Landing e autenticacao
+
+- Landing usa hero com prova de produto e contexto editorial.
+- Login deve parecer extensao direta da landing, com a mesma paleta e hierarquia.
+
 ## Tokens CSS oficiais
 
 Os tokens globais estao em `frontend/src/styles.css`.

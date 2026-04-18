@@ -147,6 +147,14 @@ describe('StudentDashboardPageComponent', () => {
     expect(fixture.nativeElement.textContent).toContain('3 de 5 treinos na semana');
   });
 
+  it('renderiza a nova hierarquia com leitura de performance e contexto competitivo', () => {
+    const text = fixture.nativeElement.textContent;
+
+    expect(text).toContain('Leitura de performance');
+    expect(text).toContain('Planejamento e contexto competitivo');
+    expect(text).toContain('Insights prioritarios');
+  });
+
   it('exibe erro quando API falha', async () => {
     dashboardApiService.obterPorAtletaId.and.returnValue(
       throwError(() => ({ error: { erro: 'Falha ao carregar dashboard' } }))

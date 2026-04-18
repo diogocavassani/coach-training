@@ -1,38 +1,48 @@
 <section class="student-create" aria-label="Cadastro de aluno">
-  <header>
-    <p class="eyebrow">Sprint 3</p>
-    <h1>Novo aluno</h1>
-    <p>Preencha os dados basicos para cadastrar um novo aluno no seu workspace.</p>
+  <header class="page-surface">
+    <p class="section-label">Novo atleta</p>
+    <h1>Cadastrar atleta</h1>
+    <p>Preencha primeiro a identidade do atleta e depois o contexto tecnico que ajuda a leitura do dashboard.</p>
   </header>
 
-  <form [formGroup]="form" (ngSubmit)="salvar()" novalidate>
-    <mat-form-field appearance="outline">
-      <mat-label>Nome</mat-label>
-      <input matInput formControlName="nome" placeholder="Ex.: Joao Silva" />
-      <mat-error *ngIf="form.controls.nome.hasError('required')">O nome e obrigatorio.</mat-error>
-      <mat-error *ngIf="form.controls.nome.hasError('minlength')">Informe ao menos 3 caracteres.</mat-error>
-    </mat-form-field>
+  <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="create-form page-surface">
+    <section class="form-section">
+      <p class="section-label">Identidade do atleta</p>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" placeholder="Ex.: Joao Silva" />
+          <mat-error *ngIf="form.controls.nome.hasError('required')">O nome e obrigatorio.</mat-error>
+          <mat-error *ngIf="form.controls.nome.hasError('minlength')">Informe ao menos 3 caracteres.</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Email (opcional)</mat-label>
-      <input matInput formControlName="email" placeholder="aluno@email.com" />
-      <mat-error *ngIf="form.controls.email.hasError('email')">Informe um email valido.</mat-error>
-    </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email (opcional)</mat-label>
+          <input matInput formControlName="email" placeholder="aluno@email.com" />
+          <mat-error *ngIf="form.controls.email.hasError('email')">Informe um email valido.</mat-error>
+        </mat-form-field>
+      </div>
+    </section>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Nivel esportivo (opcional)</mat-label>
-      <input matInput formControlName="nivelEsportivo" placeholder="Ex.: Iniciante, Intermediario, Avancado" />
-    </mat-form-field>
+    <section class="form-section">
+      <p class="section-label">Contexto tecnico</p>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Nivel esportivo (opcional)</mat-label>
+          <input matInput formControlName="nivelEsportivo" placeholder="Ex.: Iniciante, Intermediario, Avancado" />
+        </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Observacoes clinicas (opcional)</mat-label>
-      <textarea
-        matInput
-        formControlName="observacoesClinicas"
-        rows="4"
-        placeholder="Ex.: lesoes, restricoes, medicacoes, alergias"
-      ></textarea>
-    </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Observacoes clinicas (opcional)</mat-label>
+          <textarea
+            matInput
+            formControlName="observacoesClinicas"
+            rows="4"
+            placeholder="Ex.: lesoes, restricoes, medicacoes, alergias"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </section>
 
     <div class="actions">
       <a mat-button routerLink="/dashboard/alunos">Cancelar</a>

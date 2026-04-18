@@ -84,4 +84,11 @@ describe('StudentCreatePageComponent', () => {
     expect(component.enviando).toBeFalse();
     expect(router.navigateByUrl).not.toHaveBeenCalled();
   });
+
+  it('renderiza secoes de identidade e contexto tecnico no cadastro', () => {
+    const text = fixture.nativeElement.textContent;
+
+    expect(text).toContain('Identidade do atleta');
+    expect(text).toContain('Contexto tecnico');
+  });
 });
