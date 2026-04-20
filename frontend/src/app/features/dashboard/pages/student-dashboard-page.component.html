@@ -156,6 +156,60 @@
       </article>
     </div>
 
+    <section class="page-surface training-entry-section" aria-label="Registro de treino do atleta aberto">
+      <div class="training-entry-header">
+        <div>
+          <p class="section-label">Registro contextual</p>
+          <h2>Registrar treino deste atleta</h2>
+          <p class="helper">Esta acao registra uma nova sessao diretamente para {{ dashboard.nome }}, sem trocar de aluno.</p>
+        </div>
+      </div>
+
+      <div *ngIf="mensagemErroTreino" class="feedback error">{{ mensagemErroTreino }}</div>
+
+      <form class="training-entry-form" [formGroup]="treinoForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Data</mat-label>
+          <input matInput type="date" formControlName="data" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de treino</mat-label>
+          <mat-select formControlName="tipo">
+            @for (tipo of tiposDeTreino; track tipo.valor) {
+              <mat-option [value]="tipo.valor">{{ tipo.nome }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Duracao (min)</mat-label>
+          <input matInput type="number" min="1" step="1" formControlName="duracaoMinutos" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Distancia (km)</mat-label>
+          <input matInput type="number" min="0" step="0.1" formControlName="distanciaKm" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>RPE (1 a 10)</mat-label>
+          <input matInput type="number" min="1" max="10" step="1" formControlName="rpe" />
+          <mat-hint>Percepcao subjetiva de esforco: 1 = muito facil, 10 = exaustivo.</mat-hint>
+        </mat-form-field>
+      </form>
+
+      @if (descricaoTipoTreinoCadastro) {
+        <p class="helper">{{ descricaoTipoTreinoCadastro }}</p>
+      }
+
+      <div class="panel-actions">
+        <button mat-flat-button type="button" (click)="salvarTreino()" [disabled]="salvandoTreino">
+          {{ salvandoTreino ? 'Registrando...' : 'Registrar treino' }}
+        </button>
+      </div>
+    </section>
+
     <section class="page-surface">
       <p class="section-label">Historico operacional</p>
       <h2>Treinos da janela (12 semanas)</h2>

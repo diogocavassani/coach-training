@@ -135,6 +135,24 @@
   font-size: var(--font-size-heading-m);
 }
 
+.training-entry-section {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.training-entry-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.training-entry-form {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
 .target-form {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -216,6 +234,7 @@ thead th {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .training-entry-form,
   .planning-grid,
   .charts-grid {
     grid-template-columns: 1fr;
@@ -251,6 +270,10 @@ thead th {
   .adherence-grid,
   .target-form {
     grid-template-columns: 1fr;
+  }
+
+  .training-entry-header {
+    flex-direction: column;
   }
 
   .target-form-wide {

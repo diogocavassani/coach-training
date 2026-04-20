@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -15,6 +16,13 @@ import * as XLSX from 'xlsx';
 import { DashboardAtleta, DashboardTreinoJanela } from '../models/dashboard.model';
 import { DashboardApiService } from '../services/dashboard-api.service';
 import { StudentsApiService } from '../../students/services/students-api.service';
+import { TrainingsApiService } from '../../trainings/services/trainings-api.service';
+
+interface TipoDeTreinoOpcao {
+  readonly valor: number;
+  readonly nome: string;
+  readonly descricao: string;
+}
 
 @Component({
   selector: 'app-student-dashboard-page',
@@ -26,6 +34,7 @@ import { StudentsApiService } from '../../students/services/students-api.service
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatSnackBarModule
   ],
   templateUrl: './student-dashboard-page.component.html',
@@ -44,9 +53,34 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
   mensagemErroPlanejamentoBase = '';
   carregandoPlanejamentoBase = true;
   salvandoPlanejamentoBase = false;
+  salvandoTreino = false;
+  mensagemErroTreino = '';
 
   readonly provaAlvoForm;
   readonly planejamentoBaseForm;
+  readonly treinoForm;
+  readonly tiposDeTreino: ReadonlyArray<TipoDeTreinoOpcao> = [
+    {
+      valor: 0,
+      nome: 'Leve',
+      descricao: 'Treino de baixa intensidade para recuperacao ou manutencao de volume.'
+    },
+    {
+      valor: 1,
+      nome: 'Ritmo',
+      descricao: 'Treino em ritmo sustentado, proximo da intensidade-alvo de prova.'
+    },
+    {
+      valor: 2,
+      nome: 'Intervalado',
+      descricao: 'Treino com repeticoes mais intensas e pausas de recuperacao.'
+    },
+    {
+      valor: 3,
+      nome: 'Longo',
+      descricao: 'Treino de maior duracao para desenvolver resistencia aerobica.'
+    }
+  ];
 
   private chartCarga?: Chart;
   private chartPace?: Chart;
@@ -58,6 +92,7 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
     private readonly route: ActivatedRoute,
     private readonly dashboardApiService: DashboardApiService,
     private readonly studentsApiService: StudentsApiService,
+    private readonly trainingsApiService: TrainingsApiService,
     private readonly snackBar: MatSnackBar
   ) {
     this.provaAlvoForm = this.formBuilder.group({
@@ -67,6 +102,13 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
     });
     this.planejamentoBaseForm = this.formBuilder.group({
       treinosPlanejadosPorSemana: [null as number | null, [Validators.required, Validators.min(1), Validators.max(14)]]
+    });
+    this.treinoForm = this.formBuilder.group({
+      data: [this.obterDataAtual(), [Validators.required]],
+      tipo: [0, [Validators.required]],
+      duracaoMinutos: [30, [Validators.required, Validators.min(1)]],
+      distanciaKm: [0, [Validators.required, Validators.min(0)]],
+      rpe: [5, [Validators.required, Validators.min(1), Validators.max(10)]]
     });
   }
 
@@ -157,6 +199,53 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
     }
 
     return `${this.dashboard.treinosRealizadosNaSemana} de ${this.dashboard.treinosPlanejadosPorSemana} treinos na semana`;
+  }
+
+  get descricaoTipoTreinoCadastro(): string {
+    const tipoSelecionado = this.tiposDeTreino.find((tipo) => tipo.valor === this.treinoForm.controls.tipo.value);
+    return tipoSelecionado?.descricao ?? '';
+  }
+
+  salvarTreino(): void {
+    if (!this.atletaId) {
+      return;
+    }
+
+    if (this.treinoForm.invalid) {
+      this.treinoForm.markAllAsTouched();
+      return;
+    }
+
+    const valor = this.treinoForm.getRawValue();
+    this.salvandoTreino = true;
+    this.mensagemErroTreino = '';
+
+    this.trainingsApiService
+      .cadastrar({
+        atletaId: this.atletaId,
+        data: valor.data ?? '',
+        tipo: Number(valor.tipo),
+        duracaoMinutos: Number(valor.duracaoMinutos),
+        distanciaKm: Number(valor.distanciaKm),
+        rpe: Number(valor.rpe)
+      })
+      .pipe(finalize(() => (this.salvandoTreino = false)))
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Treino registrado com sucesso.', 'Fechar', { duration: 3000 });
+          this.treinoForm.reset({
+            data: this.obterDataAtual(),
+            tipo: 0,
+            duracaoMinutos: 30,
+            distanciaKm: 0,
+            rpe: 5
+          });
+          this.carregarDashboard(this.atletaId!);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.mensagemErroTreino = error.error?.erro ?? 'Nao foi possivel registrar o treino deste atleta.';
+        }
+      });
   }
 
   salvarProvaAlvo(): void {
@@ -572,5 +661,9 @@ export class StudentDashboardPageComponent implements OnInit, AfterViewInit, OnD
 
   private salvarDocumentoPdf(doc: jsPDF, nomeArquivo: string): void {
     doc.save(nomeArquivo);
+  }
+
+  private obterDataAtual(): string {
+    return new Date().toISOString().slice(0, 10);
   }
 }
