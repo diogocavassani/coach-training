@@ -1,66 +1,83 @@
 <section class="dashboard" aria-label="Tela inicial do professor">
-  <header class="hero">
-    <div>
-      <p class="eyebrow">Painel inicial</p>
-      <h1>Resumo operacional dos atletas</h1>
-      <p>
-        Acompanhe quem pede atencao agora, veja os treinos mais recentes e avance rapido para as acoes principais do dia.
+  <header class="hero page-surface">
+    <div class="hero-copy">
+      <p class="section-label">Workspace do professor</p>
+      <h1>Leituras do workspace</h1>
+      <p class="hero-summary">
+        Priorize risco, taper e aderencia com uma leitura unica do dia. Quem pede atencao agora, o que acabou de ser
+        registrado e quais proximos passos destravam o trabalho do professor.
       </p>
+
+      <div class="actions">
+        <a mat-flat-button routerLink="/dashboard/alunos/novo">Cadastrar aluno</a>
+        <a mat-stroked-button routerLink="/dashboard/treinos/novo">Registrar treino</a>
+      </div>
     </div>
 
-    <div class="actions">
-      <a mat-flat-button routerLink="/dashboard/alunos/novo">Cadastrar aluno</a>
-      <a mat-stroked-button routerLink="/dashboard/treinos/novo">Registrar treino</a>
-      <a mat-stroked-button routerLink="/dashboard/alunos">Ver alunos</a>
-    </div>
+    <aside class="hero-aside">
+      <p class="hero-aside-label">Prioridade do dia</p>
+      <strong>Comece pelos sinais que pedem intervencao agora.</strong>
+      <p>
+        O workspace organiza atletas prioritarios, treinos recentes e indicadores-chave em um fluxo mais calmo e
+        operacional.
+      </p>
+    </aside>
   </header>
 
   @if (carregando) {
-    <p class="helper">Carregando resumo operacional...</p>
+    <p class="feedback state-card page-surface">Carregando resumo operacional...</p>
   }
 
   @if (!carregando && mensagemErro) {
-    <div class="feedback error">{{ mensagemErro }}</div>
+    <div class="feedback error state-card page-surface">{{ mensagemErro }}</div>
   }
 
   @if (!carregando && resumo) {
     @if (resumo.totalAtletas === 0) {
-      <section class="empty-state">
-        <h2>Seu painel ainda esta vazio</h2>
-        <p>Cadastre o primeiro atleta para liberar indicadores, treinos recentes e acompanhamento por dashboard.</p>
+      <section class="empty-state page-surface">
+        <div class="empty-copy">
+          <p class="section-label">Primeiros passos</p>
+          <h2>Seu painel ainda esta vazio</h2>
+          <p>Cadastre o primeiro atleta para liberar indicadores, treinos recentes e acompanhamento por dashboard.</p>
+        </div>
+
         <div class="actions">
           <a mat-flat-button routerLink="/dashboard/alunos/novo">Cadastrar primeiro aluno</a>
           <a mat-stroked-button routerLink="/dashboard/treinos/novo">Ir para treinos</a>
         </div>
       </section>
     } @else {
-      <div class="kpi-grid">
-        <article>
+      <section class="kpi-strip" aria-label="Indicadores do workspace">
+        <article class="kpi-card page-surface">
           <span>Atletas ativos</span>
           <strong>{{ resumo.totalAtletas }}</strong>
           <small>{{ resumo.atletasComPlanejamentoConfigurado }} com planejamento base configurado</small>
         </article>
-        <article>
+
+        <article class="kpi-card page-surface">
           <span>Atencao ou risco</span>
           <strong>{{ resumo.atletasEmAtencao }}</strong>
           <small class="warning">{{ resumo.atletasEmRisco }} em risco alto neste momento</small>
         </article>
-        <article>
+
+        <article class="kpi-card page-surface">
           <span>Treinos na semana</span>
           <strong>{{ resumo.treinosRegistradosNaSemana }}</strong>
           <small>Janela movel dos ultimos 7 dias</small>
         </article>
-        <article>
+
+        <article class="kpi-card page-surface">
           <span>Em taper</span>
           <strong>{{ resumo.atletasEmTaper }}</strong>
           <small>Atletas com prova alvo na janela de polimento</small>
         </article>
-      </div>
+      </section>
 
       <div class="content-grid">
-        <section class="panel">
+        <section class="panel page-surface">
           <div class="panel-header">
             <div>
+              <p class="section-label">Ordem de intervencao</p>
               <h2>Atletas prioritarios</h2>
               <p class="helper">Lista ordenada por risco, taper e aderencia ao planejamento.</p>
             </div>
@@ -68,7 +85,7 @@
           </div>
 
           @if (resumo.atletasPrioritarios.length === 0) {
-            <div class="feedback">Nenhum atleta pedindo acao imediata neste momento.</div>
+            <div class="feedback inline-feedback">Nenhum atleta pedindo acao imediata neste momento.</div>
           } @else {
             <ul class="priority-list">
               <li *ngFor="let atleta of resumo.atletasPrioritarios">
@@ -91,9 +108,10 @@
           }
         </section>
 
-        <section class="panel">
+        <section class="panel page-surface">
           <div class="panel-header">
             <div>
+              <p class="section-label">Recencia do workspace</p>
               <h2>Treinos recentes</h2>
               <p class="helper">Ultimos treinos registrados no workspace do professor.</p>
             </div>
@@ -101,7 +119,7 @@
           </div>
 
           @if (resumo.treinosRecentes.length === 0) {
-            <div class="feedback">Nenhum treino registrado ainda.</div>
+            <div class="feedback inline-feedback">Nenhum treino registrado ainda.</div>
           } @else {
             <ul class="recent-list">
               <li *ngFor="let treino of resumo.treinosRecentes">
@@ -116,7 +134,7 @@
         </section>
       </div>
 
-      <p class="helper">Ultima atualizacao: {{ resumo.dataUltimaAtualizacao | date: 'dd/MM/yyyy HH:mm' }}</p>
+      <p class="helper update-note">Ultima atualizacao: {{ resumo.dataUltimaAtualizacao | date: 'dd/MM/yyyy HH:mm' }}</p>
     }
   }
 </section>

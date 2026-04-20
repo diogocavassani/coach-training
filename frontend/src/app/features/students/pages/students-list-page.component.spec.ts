@@ -63,8 +63,16 @@ describe('StudentsListPageComponent', () => {
   it('exibe acao de ver dashboard para os alunos listados', () => {
     fixture.detectChanges();
 
-    const botoesDashboard = fixture.debugElement.queryAll(By.css('a[mat-stroked-button]'));
+    const botoesDashboard = fixture.debugElement.queryAll(By.css('a[mat-button]'));
     expect(botoesDashboard.length).toBe(2);
-    expect(botoesDashboard[0].nativeElement.textContent).toContain('Ver dashboard');
+    expect(botoesDashboard[0].nativeElement.textContent).toContain('Abrir dashboard');
+  });
+
+  it('renderiza a lista como workspace de atletas', () => {
+    fixture.detectChanges();
+
+    const text = fixture.nativeElement.textContent;
+    expect(text).toContain('Atletas do workspace');
+    expect(text).toContain('Lista operacional');
   });
 });

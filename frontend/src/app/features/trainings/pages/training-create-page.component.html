@@ -1,10 +1,10 @@
 <section class="training-create-page">
   <a routerLink="/dashboard" class="back-link">Voltar</a>
-  <header>
-    <h1>Cadastrar treino</h1>
+  <header class="page-surface">
+    <p class="section-label">Novo treino</p>
+    <h1>Registrar sessao de treino</h1>
     <p>
-      Selecione o aluno, informe o tipo de treino e preencha os dados da sessao para registrar a carga com
-      consistencia.
+      Selecione o atleta, descreva a sessao e informe o esforco percebido para manter a leitura de carga consistente.
     </p>
   </header>
 
@@ -13,7 +13,7 @@
   }
 
   @if (!carregandoAtletas && !atletas.length) {
-    <div class="empty-state">
+    <div class="empty-state page-surface">
       <h2>Nenhum aluno disponivel para lancamento.</h2>
       <p>Cadastre ao menos um aluno antes de registrar treinos.</p>
       <a mat-flat-button routerLink="/dashboard/alunos/novo">Cadastrar aluno</a>
@@ -24,62 +24,82 @@
     <p class="error">{{ mensagemErroAtletas }}</p>
   }
 
-  <form [formGroup]="form" (ngSubmit)="salvar()" class="training-form">
-    <mat-form-field appearance="outline">
-      <mat-label>Buscar aluno</mat-label>
-      <input matInput formControlName="buscaAtleta" placeholder="Digite nome ou email do aluno" />
-    </mat-form-field>
+  <form [formGroup]="form" (ngSubmit)="salvar()" class="training-form page-surface">
+    <section class="form-block">
+      <p class="section-label">Selecionar atleta</p>
+      <div class="form-grid single-column athlete-picker-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Aluno</mat-label>
+          <input
+            matInput
+            formControlName="buscaAtleta"
+            placeholder="Digite nome ou email do aluno"
+            [matAutocomplete]="atletaAutocomplete" />
+          <mat-hint>Pesquise e selecione o aluno para o qual este treino sera registrado.</mat-hint>
+          @if (form.controls.atletaId.hasError('required') && form.controls.atletaId.touched) {
+            <mat-error>Selecione um aluno valido.</mat-error>
+          }
+          <mat-autocomplete #atletaAutocomplete="matAutocomplete" (optionSelected)="selecionarAtleta($event)">
+            @for (atleta of atletasFiltrados; track atleta.id) {
+              <mat-option [value]="atleta.id">{{ obterNomeAtleta(atleta.id) }}</mat-option>
+            }
+            @if (!atletasFiltrados.length && form.controls.buscaAtleta.value.trim()) {
+              <mat-option disabled>Nenhum aluno encontrado</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </section>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Aluno</mat-label>
-      <mat-select formControlName="atletaId">
-        @for (atleta of atletasFiltrados; track atleta.id) {
-          <mat-option [value]="atleta.id">{{ obterNomeAtleta(atleta.id) }}</mat-option>
-        }
-      </mat-select>
-      <mat-hint>Selecione o aluno para o qual este treino sera registrado.</mat-hint>
-      @if (form.controls.atletaId.hasError('required') && form.controls.atletaId.touched) {
-        <mat-error>Selecione um aluno.</mat-error>
+    <section class="form-block">
+      <p class="section-label">Detalhes da sessao</p>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Data</mat-label>
+          <input matInput type="date" formControlName="data" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de treino</mat-label>
+          <mat-select formControlName="tipo">
+            @for (tipo of tiposDeTreino; track tipo.valor) {
+              <mat-option [value]="tipo.valor">{{ tipo.nome }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Define o contexto fisiologico da sessao para analise do ciclo.</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Duracao (min)</mat-label>
+          <input matInput type="number" formControlName="duracaoMinutos" min="1" step="1" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Distancia (km)</mat-label>
+          <input matInput type="number" formControlName="distanciaKm" min="0" step="0.1" />
+        </mat-form-field>
+      </div>
+
+      @if (descricaoTipoSelecionado) {
+        <p class="helper">{{ descricaoTipoSelecionado }}</p>
       }
-    </mat-form-field>
+    </section>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Data</mat-label>
-      <input matInput type="date" formControlName="data" />
-    </mat-form-field>
+    <section class="form-block">
+      <p class="section-label">Esforco percebido</p>
+      <div class="form-grid single-column">
+        <mat-form-field appearance="outline">
+          <mat-label>RPE (1 a 10)</mat-label>
+          <input matInput type="number" formControlName="rpe" min="1" max="10" step="1" />
+          <mat-hint>Percepcao subjetiva de esforco: 1 = muito facil, 10 = exaustivo.</mat-hint>
+        </mat-form-field>
+      </div>
+    </section>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Tipo de treino</mat-label>
-      <mat-select formControlName="tipo">
-        @for (tipo of tiposDeTreino; track tipo.valor) {
-          <mat-option [value]="tipo.valor">{{ tipo.nome }}</mat-option>
-        }
-      </mat-select>
-      <mat-hint>Define o contexto fisiologico da sessao para analise do ciclo.</mat-hint>
-    </mat-form-field>
-
-    @if (descricaoTipoSelecionado) {
-      <p class="helper">{{ descricaoTipoSelecionado }}</p>
-    }
-
-    <mat-form-field appearance="outline">
-      <mat-label>Duracao (min)</mat-label>
-      <input matInput type="number" formControlName="duracaoMinutos" min="1" step="1" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Distancia (km)</mat-label>
-      <input matInput type="number" formControlName="distanciaKm" min="0" step="0.1" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>RPE (1 a 10)</mat-label>
-      <input matInput type="number" formControlName="rpe" min="1" max="10" step="1" />
-      <mat-hint>Percepcao subjetiva de esforco: 1 = muito facil, 10 = exaustivo.</mat-hint>
-    </mat-form-field>
-
-    <button mat-flat-button color="primary" type="submit" [disabled]="!podeSalvar">
-      {{ enviando ? 'Salvando...' : 'Salvar treino' }}
-    </button>
+    <div class="form-actions">
+      <button mat-flat-button color="primary" type="submit" [disabled]="!podeSalvar">
+        {{ enviando ? 'Salvando...' : 'Salvar treino' }}
+      </button>
+    </div>
   </form>
 </section>

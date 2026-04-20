@@ -1,22 +1,22 @@
 <section class="students" aria-label="Listagem de alunos">
-  <header>
+  <header class="page-surface">
     <div>
-      <p class="eyebrow">Sprint 3</p>
-      <h1>Alunos</h1>
-      <p>Visualize os alunos vinculados ao professor autenticado.</p>
+      <p class="section-label">Lista operacional</p>
+      <h1>Atletas do workspace</h1>
+      <p>Visualize rapidamente quem ja esta ativo e siga para o dashboard individual sem ruido visual.</p>
     </div>
     <a mat-flat-button routerLink="/dashboard/alunos/novo">Novo aluno</a>
   </header>
 
   <p *ngIf="carregando" class="muted">Carregando alunos...</p>
 
-  <div *ngIf="!carregando && alunos.length === 0" class="empty-state">
-    <h2>Voce ainda nao possui alunos cadastrados.</h2>
-    <p>Comece criando seu primeiro aluno para liberar o dashboard individual na proxima sprint.</p>
+  <div *ngIf="!carregando && alunos.length === 0" class="empty-state page-surface">
+    <h2>Nenhum atleta cadastrado ainda.</h2>
+    <p>Comece adicionando o primeiro atleta para liberar dashboards individuais e registros de treino.</p>
     <a mat-flat-button routerLink="/dashboard/alunos/novo">Cadastrar aluno</a>
   </div>
 
-  <div *ngIf="!carregando && alunos.length > 0" class="table-wrapper">
+  <div *ngIf="!carregando && alunos.length > 0" class="table-wrapper page-surface">
     <table>
       <thead>
         <tr>
@@ -35,7 +35,7 @@
           <td>{{ aluno.nivelEsportivo || '-' }}</td>
           <td>{{ aluno.observacoesClinicas || '-' }}</td>
           <td>{{ formatarData(aluno.dataCriacao) }}</td>
-          <td><a mat-stroked-button [routerLink]="['/dashboard/alunos', aluno.id]">Ver dashboard</a></td>
+          <td><a mat-button [routerLink]="['/dashboard/alunos', aluno.id]">Abrir dashboard</a></td>
         </tr>
       </tbody>
     </table>

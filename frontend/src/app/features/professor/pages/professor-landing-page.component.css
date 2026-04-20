@@ -1,135 +1,150 @@
-.landing-page {
-  min-height: 100dvh;
-  background:
-    linear-gradient(155deg, rgb(11 18 32 / 96%) 0%, rgb(17 24 39 / 92%) 50%, rgb(22 101 52 / 16%) 100%),
-    var(--color-bg);
+:host {
+  display: block;
 }
 
 .topbar {
-  position: fixed;
-  inset: 0 0 auto 0;
+  position: sticky;
+  top: 0;
   z-index: 10;
+  padding: var(--space-4) clamp(1.2rem, 3vw, 2.5rem);
+}
+
+.topbar-inner,
+.hero-actions,
+.topbar-actions,
+.signup-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: var(--space-4) clamp(1.2rem, 3vw, 3rem);
-  border-bottom: 1px solid rgb(255 255 255 / 6%);
-  backdrop-filter: blur(8px);
-  background: rgb(11 18 32 / 74%);
+}
+
+.topbar-inner {
+  justify-content: space-between;
+  gap: var(--space-4);
 }
 
 .brand {
-  margin: 0;
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
 }
 
-.hero {
-  position: relative;
-  min-height: 100dvh;
-  padding: min(16vh, 8rem) clamp(1.2rem, 4vw, 4rem) var(--space-12);
+.topbar-actions {
+  gap: var(--space-1);
+}
+
+.hero-grid,
+.flow-layout,
+.signup {
   display: grid;
-  align-items: end;
-  background-image: url('https://images.unsplash.com/photo-1517960413843-0aee8e2b3285?auto=format&fit=crop&w=1800&q=80');
-  background-size: cover;
-  background-position: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(118deg, rgb(11 18 32 / 95%) 20%, rgb(17 24 39 / 62%) 62%, rgb(20 83 45 / 75%) 100%),
-    linear-gradient(180deg, rgb(11 18 32 / 30%) 0%, rgb(11 18 32 / 90%) 100%);
+.hero-grid {
+  min-height: calc(100dvh - 81px);
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  align-items: center;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.2rem, 4vw, 3rem) clamp(4rem, 7vw, 5.5rem);
 }
 
-.hero-content {
-  position: relative;
-  width: min(720px, 100%);
+.hero-copy {
+  width: min(700px, 100%);
   animation: hero-enter 700ms ease-out;
 }
 
-.eyebrow {
-  color: var(--color-primary-300);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: var(--font-size-caption);
+.hero-actions {
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-8);
+}
+
+.hero-proof,
+.signals-list,
+.flow-note,
+.signup-form {
+  padding: clamp(1.3rem, 3vw, 2rem);
+}
+
+.hero-proof {
+  display: grid;
+  gap: var(--space-6);
+  animation: hero-enter 900ms ease-out;
+}
+
+.proof-label,
+.note-label {
+  color: var(--es-color-support-600);
   font-weight: var(--font-weight-bold);
 }
 
-h1 {
-  margin-top: var(--space-3);
-  max-width: 12ch;
+.hero-proof h2,
+.section-header h2,
+.signup-copy h2 {
+  margin-top: var(--space-4);
+  font-size: clamp(2rem, 4vw, 3rem);
 }
 
-.subtitle {
-  margin-top: var(--space-6);
-  max-width: 48ch;
-  color: var(--color-text-muted);
-  font-size: 1.0625rem;
-}
-
-.hero-actions {
-  margin-top: var(--space-8);
-  display: flex;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.benefits {
+.proof-stack,
+.flow-steps {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-4);
-  padding: var(--space-6) clamp(1.2rem, 3vw, 4rem);
 }
 
-.benefits article {
-  padding: var(--space-6);
-  background: rgb(31 41 55 / 86%);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  transition: border-color 180ms ease, transform 180ms ease;
+.landing-content {
+  padding: 0 clamp(1.2rem, 4vw, 3rem) clamp(5rem, 8vw, 6rem);
 }
 
-.benefits article:hover {
-  border-color: var(--color-primary-500);
-  transform: translateY(-2px);
+.content-section {
+  padding-top: clamp(3.5rem, 6vw, 5rem);
+  scroll-margin-top: 8.5rem;
 }
 
-.benefits h2 {
-  font-size: 1.25rem;
+.section-header {
+  max-width: 760px;
 }
 
-.benefits p {
-  margin-top: var(--space-3);
-  color: var(--color-text-muted);
+.signal-item,
+.flow-step {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: auto minmax(0, 1fr);
+  padding: var(--space-4) 0;
 }
 
-.signup-intro {
-  padding: var(--space-8) clamp(1.2rem, 3vw, 4rem) var(--space-12);
+.signal-item:first-child {
+  padding-top: 0;
 }
 
-.signup-intro > h2 {
-  font-size: clamp(2rem, 5vw, 2.4rem);
+.signal-item:last-child {
+  padding-bottom: 0;
 }
 
-.signup-intro > p {
-  margin-top: var(--space-3);
-  color: var(--color-text-muted);
+.flow-layout {
+  margin-top: var(--space-8);
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.7fr);
+}
+
+.flow-step {
+  padding-bottom: var(--space-4);
+}
+
+.flow-step:last-child {
+  padding-bottom: 0;
+}
+
+.flow-note {
+  align-self: start;
+}
+
+.signup {
+  grid-template-columns: minmax(0, 0.8fr) minmax(320px, 1fr);
+  align-items: start;
 }
 
 .signup-form {
-  margin-top: var(--space-6);
-  width: min(760px, 100%);
-  padding: var(--space-6);
   display: grid;
   gap: var(--space-3);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border);
-  background: rgb(31 41 55 / 78%);
-  box-shadow: var(--shadow-elevated);
+  width: min(760px, 100%);
 }
 
 .signup-form mat-form-field {
@@ -137,13 +152,9 @@ h1 {
 }
 
 .signup-actions {
+  gap: var(--space-2);
+  flex-wrap: wrap;
   margin-top: var(--space-2);
-}
-
-.signup-error {
-  margin-top: var(--space-2);
-  color: #f87171;
-  font-weight: var(--font-weight-semibold);
 }
 
 @keyframes hero-enter {
@@ -158,17 +169,55 @@ h1 {
   }
 }
 
-@media (max-width: 900px) {
-  .hero {
-    min-height: 88dvh;
-    padding-top: 8.5rem;
-  }
-
-  .benefits {
+@media (max-width: 980px) {
+  .hero-grid,
+  .flow-layout,
+  .signup {
     grid-template-columns: 1fr;
   }
 
-  .signup-form {
-    padding: var(--space-4);
+  .hero-grid {
+    min-height: auto;
+    padding-top: clamp(1.5rem, 6vw, 3rem);
+  }
+
+  .landing-page h1 {
+    max-width: 12ch;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    padding-inline: 1rem;
+  }
+
+  .topbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .topbar-actions,
+  .hero-actions,
+  .signup-actions {
+    width: 100%;
+  }
+
+  .landing-content,
+  .hero-grid {
+    padding-inline: 1rem;
+  }
+
+  .hero-grid {
+    padding-bottom: 3rem;
+  }
+
+  .content-section {
+    scroll-margin-top: 9.5rem;
+  }
+
+  .signal-item,
+  .flow-step {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
   }
 }

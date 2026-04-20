@@ -8,12 +8,14 @@ import { StudentDashboardPageComponent } from './student-dashboard-page.componen
 import { DashboardApiService } from '../services/dashboard-api.service';
 import { DashboardAtleta } from '../models/dashboard.model';
 import { StudentsApiService } from '../../students/services/students-api.service';
+import { TrainingsApiService } from '../../trainings/services/trainings-api.service';
 
 describe('StudentDashboardPageComponent', () => {
   let fixture: ComponentFixture<StudentDashboardPageComponent>;
   let component: StudentDashboardPageComponent;
   let dashboardApiService: jasmine.SpyObj<DashboardApiService>;
   let studentsApiService: jasmine.SpyObj<StudentsApiService>;
+  let trainingsApiService: jasmine.SpyObj<TrainingsApiService>;
   let snackBar: jasmine.SpyObj<MatSnackBar>;
 
   const mockDashboard: DashboardAtleta = {
@@ -63,6 +65,18 @@ describe('StudentDashboardPageComponent', () => {
   beforeEach(async () => {
     dashboardApiService = jasmine.createSpyObj<DashboardApiService>('DashboardApiService', ['obterPorAtletaId']);
     dashboardApiService.obterPorAtletaId.and.returnValue(of(mockDashboard));
+    trainingsApiService = jasmine.createSpyObj<TrainingsApiService>('TrainingsApiService', ['cadastrar']);
+    trainingsApiService.cadastrar.and.returnValue(
+      of({
+        id: 'treino-novo',
+        atletaId: 'atleta-1',
+        data: '2026-04-18',
+        tipo: 2,
+        duracaoMinutos: 45,
+        distanciaKm: 8,
+        rpe: 7
+      })
+    );
     studentsApiService = jasmine.createSpyObj<StudentsApiService>('StudentsApiService', [
       'obterProvaAlvo',
       'salvarProvaAlvo',
@@ -107,6 +121,7 @@ describe('StudentDashboardPageComponent', () => {
       providers: [
         { provide: DashboardApiService, useValue: dashboardApiService },
         { provide: StudentsApiService, useValue: studentsApiService },
+        { provide: TrainingsApiService, useValue: trainingsApiService },
         { provide: MatSnackBar, useValue: snackBar },
         provideRouter([]),
         {
@@ -145,6 +160,15 @@ describe('StudentDashboardPageComponent', () => {
     expect(component.resumoAderenciaPlanejamento).toBe('3 de 5 treinos na semana');
     expect(fixture.nativeElement.textContent).toContain('Aderencia ao planejamento');
     expect(fixture.nativeElement.textContent).toContain('3 de 5 treinos na semana');
+  });
+
+  it('renderiza a nova hierarquia com leitura de performance e contexto competitivo', () => {
+    const text = fixture.nativeElement.textContent;
+
+    expect(text).toContain('Leitura de performance');
+    expect(text).toContain('Planejamento e contexto competitivo');
+    expect(text).toContain('Insights prioritarios');
+    expect(text).toContain('Registrar treino deste atleta');
   });
 
   it('exibe erro quando API falha', async () => {
@@ -225,6 +249,30 @@ describe('StudentDashboardPageComponent', () => {
     });
     expect(dashboardApiService.obterPorAtletaId).toHaveBeenCalledWith('atleta-1');
     expect(component.mensagemErroPlanejamentoBase).toBe('');
+  });
+
+  it('registra treino preso ao atleta aberto e recarrega o dashboard', () => {
+    dashboardApiService.obterPorAtletaId.calls.reset();
+    component.treinoForm.setValue({
+      data: '2026-04-18',
+      tipo: 2,
+      duracaoMinutos: 45,
+      distanciaKm: 8,
+      rpe: 7
+    });
+
+    component.salvarTreino();
+
+    expect(trainingsApiService.cadastrar).toHaveBeenCalledWith({
+      atletaId: 'atleta-1',
+      data: '2026-04-18',
+      tipo: 2,
+      duracaoMinutos: 45,
+      distanciaKm: 8,
+      rpe: 7
+    });
+    expect(dashboardApiService.obterPorAtletaId).toHaveBeenCalledWith('atleta-1');
+    expect(component.mensagemErroTreino).toBe('');
   });
 
   it('exporta excel com os treinos carregados', () => {

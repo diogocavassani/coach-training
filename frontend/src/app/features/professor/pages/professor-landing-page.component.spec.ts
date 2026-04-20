@@ -44,6 +44,50 @@ describe('ProfessorLandingPageComponent', () => {
     fixture.detectChanges();
   });
 
+  it('renderiza a arquitetura de informacao Executive Signal com as secoes esperadas', () => {
+    const page = fixture.nativeElement as HTMLElement;
+    const hero = page.querySelector<HTMLElement>('section.hero');
+    const landingContent = page.querySelector<HTMLElement>('main.landing-content');
+    const topLevelSections = Array.from(landingContent?.querySelectorAll(':scope > section') ?? []);
+    const [signals, trainerFlow, signup] = topLevelSections as HTMLElement[];
+    const heroSection = hero as HTMLElement;
+    const landingMain = landingContent as HTMLElement;
+
+    expect(hero).withContext('hero section').not.toBeNull();
+    expect(landingContent).withContext('landing content main').not.toBeNull();
+    expect(heroSection.compareDocumentPosition(landingMain) & Node.DOCUMENT_POSITION_FOLLOWING).not.toBe(0);
+    expect(hero?.querySelector('.section-label')?.textContent).toContain('Workspace premium para treinadores');
+    expect(hero?.querySelector('h1')?.textContent).toContain(
+      'Controle o ciclo do atleta com leitura precisa e decisoes mais confiantes.'
+    );
+
+    expect(topLevelSections.map((section) => section.id)).toEqual(['sinais', 'fluxo', 'cadastro']);
+
+    expect(signals).withContext('signals section').not.toBeNull();
+    expect(signals.id).toBe('sinais');
+    expect(signals?.querySelector('h2')?.textContent).toContain('Sinais que importam');
+
+    expect(trainerFlow).withContext('trainer flow section').not.toBeNull();
+    expect(trainerFlow.id).toBe('fluxo');
+    expect(trainerFlow?.querySelector('h2')?.textContent).toContain('Fluxo do treinador');
+
+    expect(signup).withContext('signup section').not.toBeNull();
+    expect(signup.id).toBe('cadastro');
+    expect(signup?.querySelector('.section-label')?.textContent).toContain('Criar conta de professor');
+    expect(signup?.querySelector('form')).withContext('signup form').not.toBeNull();
+  });
+
+  it('reserva espaco de scroll para os links internos sob o header fixo', () => {
+    const page = fixture.nativeElement as HTMLElement;
+    const signals = page.querySelector<HTMLElement>('#sinais') as HTMLElement;
+    const signup = page.querySelector<HTMLElement>('#cadastro') as HTMLElement;
+    const signalsScrollMarginTop = Number.parseFloat(getComputedStyle(signals).scrollMarginTop);
+    const signupScrollMarginTop = Number.parseFloat(getComputedStyle(signup).scrollMarginTop);
+
+    expect(signalsScrollMarginTop).withContext('#sinais scroll margin').toBeGreaterThanOrEqual(136);
+    expect(signupScrollMarginTop).withContext('#cadastro scroll margin').toBeGreaterThanOrEqual(136);
+  });
+
   it('inicia com formulario invalido', () => {
     expect(component.cadastroForm.valid).toBeFalse();
   });

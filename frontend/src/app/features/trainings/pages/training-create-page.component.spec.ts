@@ -62,8 +62,17 @@ describe('TrainingCreatePageComponent', () => {
     expect(component.atletasFiltrados.length).toBe(2);
   });
 
+  it('filtra os alunos no campo unico de pesquisa e selecao', () => {
+    component.form.controls.buscaAtleta.setValue('dois');
+
+    expect(component.atletasFiltrados.length).toBe(1);
+    expect(component.atletasFiltrados[0].id).toBe('atleta-2');
+    expect(component.form.controls.atletaId.value).toBe('');
+  });
+
   it('nao envia cadastro quando formulario for invalido', () => {
     component.form.patchValue({
+      buscaAtleta: '',
       atletaId: '',
       data: '',
       tipo: 0
@@ -76,7 +85,7 @@ describe('TrainingCreatePageComponent', () => {
 
   it('envia treino quando formulario estiver valido', () => {
     component.form.setValue({
-      buscaAtleta: '',
+      buscaAtleta: 'Aluno Um (um@teste.com)',
       atletaId: 'atleta-1',
       data: '2026-03-29',
       tipo: 2,
@@ -101,7 +110,7 @@ describe('TrainingCreatePageComponent', () => {
   it('exibe erro e nao redireciona quando API falha', () => {
     trainingsApiService.cadastrar.and.returnValue(throwError(() => new Error('Falha ao cadastrar treino')));
     component.form.setValue({
-      buscaAtleta: '',
+      buscaAtleta: 'Aluno Um (um@teste.com)',
       atletaId: 'atleta-1',
       data: '2026-03-29',
       tipo: 1,
@@ -115,5 +124,22 @@ describe('TrainingCreatePageComponent', () => {
     expect(trainingsApiService.cadastrar).toHaveBeenCalled();
     expect(component.enviando).toBeFalse();
     expect(router.navigateByUrl).not.toHaveBeenCalled();
+  });
+
+  it('renderiza o formulario em blocos de selecao, sessao e esforco', () => {
+    const text = fixture.nativeElement.textContent;
+
+    expect(text).toContain('Selecionar atleta');
+    expect(text).toContain('Detalhes da sessao');
+    expect(text).toContain('Esforco percebido');
+  });
+
+  it('sincroniza o campo visivel ao selecionar um atleta', () => {
+    component.selecionarAtleta({
+      option: { value: 'atleta-1' }
+    } as never);
+
+    expect(component.form.controls.atletaId.value).toBe('atleta-1');
+    expect(component.form.controls.buscaAtleta.value).toBe('Aluno Um (um@teste.com)');
   });
 });

@@ -59,7 +59,9 @@ describe('DashboardPageComponent', () => {
     expect(dashboardApiService.obterResumoProfessor).toHaveBeenCalled();
     expect(component.resumo?.totalAtletas).toBe(3);
     expect(component.carregando).toBeFalse();
+    expect(fixture.nativeElement.textContent).toContain('Leituras do workspace');
     expect(fixture.nativeElement.textContent).toContain('Atletas prioritarios');
+    expect(fixture.nativeElement.textContent).toContain('Treinos recentes');
     expect(fixture.nativeElement.textContent).toContain('Atleta Risco');
   });
 
