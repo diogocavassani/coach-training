@@ -55,6 +55,7 @@ public class CoachTrainingDbContext : DbContext
             builder.ToTable("links_publicos_integracao");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.TokenHash).HasMaxLength(200).IsRequired();
+            builder.Property(x => x.TokenProtegido).IsRequired();
             builder.Property(x => x.Ativo).IsRequired();
             builder.Property(x => x.CriadoEmUtc).IsRequired();
             builder.HasIndex(x => x.TokenHash).IsUnique();

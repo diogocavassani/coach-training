@@ -1,4 +1,5 @@
 using System.Text;
+using CoachTraining.App.Services.Integrations;
 using CoachTraining.App.Abstractions.Security;
 using CoachTraining.App.Services;
 using CoachTraining.Infra;
@@ -69,6 +70,9 @@ builder.Services.AddScoped<ObterResumoDashboardProfessorService>();
 builder.Services.AddScoped<CadastrarSessaoDeTreinoService>();
 builder.Services.AddScoped<GerenciarProvaAlvoService>();
 builder.Services.AddScoped<GerenciarPlanejamentoBaseService>();
+builder.Services.AddScoped<GerarLinkPublicoIntegracaoService>();
+builder.Services.AddScoped<ConsultarIntegracoesAtletaService>();
+builder.Services.AddScoped<ResolverPaginaPublicaIntegracaoService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
