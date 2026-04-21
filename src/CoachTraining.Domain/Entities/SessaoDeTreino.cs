@@ -13,6 +13,7 @@ public class SessaoDeTreino
     public int DuracaoMinutos { get; private set; }
     public double DistanciaKm { get; private set; }
     public RPE Rpe { get; private set; }
+    public OrigemTreino Origem { get; private set; }
 
     public SessaoDeTreino(
         Guid atletaId,
@@ -21,6 +22,7 @@ public class SessaoDeTreino
         int duracaoMinutos,
         double distanciaKm,
         RPE rpe,
+        OrigemTreino origem = OrigemTreino.Manual,
         Guid? id = null)
     {
         if (atletaId == Guid.Empty) throw new ArgumentException("AtletaId obrigatorio", nameof(atletaId));
@@ -35,6 +37,7 @@ public class SessaoDeTreino
         DuracaoMinutos = duracaoMinutos;
         DistanciaKm = distanciaKm;
         Rpe = rpe;
+        Origem = origem;
     }
 
     public CargaTreino CalcularCarga() => CargaTreino.FromDuracaoAndRpe(DuracaoMinutos, Rpe);

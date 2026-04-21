@@ -26,7 +26,8 @@ public class SessaoDeTreinoRepository : ISessaoDeTreinoRepository
             Tipo = (int)sessao.Tipo,
             DuracaoMinutos = sessao.DuracaoMinutos,
             DistanciaKm = sessao.DistanciaKm,
-            Rpe = sessao.Rpe.Valor
+            Rpe = sessao.Rpe.Valor,
+            OrigemTreino = (int)sessao.Origem
         };
 
         _context.SessoesDeTreino.Add(model);
@@ -50,6 +51,7 @@ public class SessaoDeTreinoRepository : ISessaoDeTreinoRepository
                 duracaoMinutos: s.DuracaoMinutos,
                 distanciaKm: s.DistanciaKm,
                 rpe: new RPE(s.Rpe),
+                origem: ObterOrigemTreinoValida(s.OrigemTreino, s.Id),
                 id: s.Id))
             .ToList();
     }
@@ -63,5 +65,16 @@ public class SessaoDeTreinoRepository : ISessaoDeTreinoRepository
         }
 
         return (TipoDeTreino)tipoPersistido;
+    }
+
+    private static OrigemTreino ObterOrigemTreinoValida(int origemPersistida, Guid sessaoId)
+    {
+        if (!Enum.IsDefined(typeof(OrigemTreino), origemPersistida))
+        {
+            throw new InvalidOperationException(
+                $"Erro de integridade: origem de treino invalida '{origemPersistida}' na sessao '{sessaoId}'.");
+        }
+
+        return (OrigemTreino)origemPersistida;
     }
 }

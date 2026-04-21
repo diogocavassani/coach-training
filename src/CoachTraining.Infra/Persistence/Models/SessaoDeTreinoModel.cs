@@ -9,5 +9,6 @@ public class SessaoDeTreinoModel
     public int DuracaoMinutos { get; set; }
     public double DistanciaKm { get; set; }
     public int Rpe { get; set; }
+    public int OrigemTreino { get; set; }
     public AtletaModel Atleta { get; set; } = null!;
 }

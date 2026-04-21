@@ -17,6 +17,25 @@ public class SessaoDeTreinoTests
         Assert.Equal(atletaId, sessao.AtletaId);
         Assert.Equal(60, sessao.DuracaoMinutos);
         Assert.Equal(7, sessao.Rpe.Valor);
+        Assert.Equal(OrigemTreino.Manual, sessao.Origem);
+    }
+
+    [Fact]
+    public void Deve_CriarSessaoImportada_QuandoOrigemInformada()
+    {
+        var atletaId = Guid.NewGuid();
+        var hoje = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var sessao = new SessaoDeTreino(
+            atletaId,
+            hoje,
+            TipoDeTreino.Leve,
+            45,
+            8,
+            new RPE(5),
+            origem: OrigemTreino.Strava);
+
+        Assert.Equal(OrigemTreino.Strava, sessao.Origem);
     }
 
     [Fact]
