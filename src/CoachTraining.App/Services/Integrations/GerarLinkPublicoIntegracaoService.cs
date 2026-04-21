@@ -98,7 +98,7 @@ public class GerarLinkPublicoIntegracaoService
             ?? throw new UnauthorizedAccessException("Atleta nao encontrado para o professor autenticado.");
     }
 
-    internal static string GerarHash(string tokenPublico)
+    public static string GerarHash(string tokenPublico)
     {
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(tokenPublico));
         return Convert.ToHexString(bytes);

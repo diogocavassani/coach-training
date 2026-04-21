@@ -6,6 +6,9 @@ public class LinkPublicoIntegracao
         Guid atletaId,
         string tokenHash,
         DateTime criadoEmUtc,
+        bool ativo,
+        DateTime? regeneradoEmUtc,
+        DateTime? revogadoEmUtc,
         Guid? id = null)
     {
         if (atletaId == Guid.Empty)
@@ -17,7 +20,9 @@ public class LinkPublicoIntegracao
         TokenHash = ValidarTokenHash(tokenHash);
         CriadoEmUtc = criadoEmUtc;
         Id = id ?? Guid.NewGuid();
-        Ativo = true;
+        Ativo = ativo;
+        RegeneradoEmUtc = regeneradoEmUtc;
+        RevogadoEmUtc = revogadoEmUtc;
     }
 
     public Guid Id { get; private set; }
@@ -29,7 +34,17 @@ public class LinkPublicoIntegracao
     public DateTime? RevogadoEmUtc { get; private set; }
 
     public static LinkPublicoIntegracao Criar(Guid atletaId, string tokenHash)
-        => new(atletaId, tokenHash, DateTime.UtcNow);
+        => new(atletaId, tokenHash, DateTime.UtcNow, true, null, null);
+
+    public static LinkPublicoIntegracao Restaurar(
+        Guid id,
+        Guid atletaId,
+        string tokenHash,
+        bool ativo,
+        DateTime criadoEmUtc,
+        DateTime? regeneradoEmUtc,
+        DateTime? revogadoEmUtc)
+        => new(atletaId, tokenHash, criadoEmUtc, ativo, regeneradoEmUtc, revogadoEmUtc, id);
 
     public void Regenerar(string novoTokenHash, DateTime quando)
     {

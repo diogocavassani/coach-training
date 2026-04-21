@@ -48,4 +48,22 @@ public class PublicIntegracoesApiIntegrationTests : IClassFixture<ApiWebApplicat
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
+
+    [Fact]
+    public async Task PostPublicIntegracoesStravaAutorizar_DeveRetornarUrlDoOAuth()
+    {
+        using var client = _factory.CreateClient();
+        var professor = await ApiTestData.CadastrarProfessorAsync(client, $"prof.oauth.{Guid.NewGuid():N}@teste.com");
+        var token = await ApiTestData.LoginAsync(client, professor.Email, "123456");
+        var atleta = await ApiTestData.CadastrarAtletaAsync(client, token, "Atleta OAuth");
+        var link = await ApiTestData.GerarLinkIntegracaoAsync(client, token, atleta.Id);
+
+        var response = await client.PostAsync($"/public/integracoes/{link.TokenPublico}/strava/autorizar", content: null);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var payload = await response.Content.ReadFromJsonAsync<IniciarAutorizacaoResponseDto>();
+        Assert.NotNull(payload);
+        Assert.Contains("https://www.strava.com/oauth/authorize", payload!.AuthorizationUrl);
+    }
 }

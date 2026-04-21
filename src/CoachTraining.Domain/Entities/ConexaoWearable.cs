@@ -11,6 +11,9 @@ public class ConexaoWearable
         string externalAthleteId,
         string scopesConcedidos,
         DateTime conectadoEmUtc,
+        DateTime? desconectadoEmUtc = null,
+        DateTime? ultimaSincronizacaoEmUtc = null,
+        string? ultimoErro = null,
         Guid? id = null)
     {
         if (atletaId == Guid.Empty)
@@ -30,6 +33,9 @@ public class ConexaoWearable
         ExternalAthleteId = externalAthleteId.Trim();
         ScopesConcedidos = scopesConcedidos?.Trim() ?? string.Empty;
         ConectadoEmUtc = conectadoEmUtc;
+        DesconectadoEmUtc = desconectadoEmUtc;
+        UltimaSincronizacaoEmUtc = ultimaSincronizacaoEmUtc;
+        UltimoErro = ultimoErro?.Trim();
     }
 
     public Guid Id { get; private set; }
@@ -64,5 +70,20 @@ public class ConexaoWearable
     {
         Status = StatusConexaoIntegracao.RequerReconexao;
         UltimoErro = ultimoErro?.Trim();
+    }
+
+    public void RegistrarAutorizacao(string externalAthleteId, string scopesConcedidos, DateTime quando)
+    {
+        if (string.IsNullOrWhiteSpace(externalAthleteId))
+        {
+            throw new ArgumentException("ExternalAthleteId obrigatorio.", nameof(externalAthleteId));
+        }
+
+        ExternalAthleteId = externalAthleteId.Trim();
+        ScopesConcedidos = scopesConcedidos?.Trim() ?? string.Empty;
+        Status = StatusConexaoIntegracao.Conectado;
+        ConectadoEmUtc = quando;
+        DesconectadoEmUtc = null;
+        UltimoErro = null;
     }
 }

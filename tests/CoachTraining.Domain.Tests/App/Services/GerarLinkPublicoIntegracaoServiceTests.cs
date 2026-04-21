@@ -59,6 +59,8 @@ public class GerarLinkPublicoIntegracaoServiceTests
     private sealed class PublicLinkUrlBuilderFake : IPublicLinkUrlBuilder
     {
         public string BuildConnectionUrl(string tokenPublico) => $"https://coachtraining.test/conectar/{tokenPublico}";
+        public string BuildStravaCallbackUrl() => "https://api.coachtraining.test/public/integracoes/strava/callback";
+        public string BuildStravaReturnUrl(string status, string? reason = null) => $"https://coachtraining.test/conectar/strava/retorno?status={status}";
     }
 
     [Fact]
