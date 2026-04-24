@@ -50,9 +50,13 @@ public static class DependencyInjection
         services.AddScoped<ISecretProtector, DataProtectionSecretProtector>();
         services.AddSingleton<IPublicLinkUrlBuilder, ConfiguredPublicLinkUrlBuilder>();
         services.AddSingleton(Options.Create(stravaOptions));
+        services.AddSingleton<IStravaWebhookOptions>(provider => provider.GetRequiredService<IOptions<StravaOptions>>().Value);
         services.AddScoped<StravaWearableProvider>(provider => new StravaWearableProvider(new HttpClient(), provider.GetRequiredService<IOptions<StravaOptions>>()));
         services.AddScoped<IWearableProvider>(provider => provider.GetRequiredService<StravaWearableProvider>());
         services.AddScoped<IWearableProviderRegistry, WearableProviderRegistry>();
+        services.AddScoped<IEventoWebhookRepository, EventoWebhookRecebidoRepository>();
+        services.AddScoped<IAtividadeImportadaRepository, AtividadeImportadaRepository>();
+        services.AddSingleton<IStravaWebhookDispatcher, InProcessStravaWebhookDispatcher>();
 
         return services;
     }

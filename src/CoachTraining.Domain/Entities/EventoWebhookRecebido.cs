@@ -82,4 +82,11 @@ public class EventoWebhookRecebido
         StatusProcessamento = "Falhou";
         ErroProcessamento = erro;
     }
+
+    public void MarcarComoIgnorado(DateTime quando, string motivo)
+    {
+        ProcessadoEmUtc = quando;
+        StatusProcessamento = "Ignorado";
+        ErroProcessamento = motivo;
+    }
 }

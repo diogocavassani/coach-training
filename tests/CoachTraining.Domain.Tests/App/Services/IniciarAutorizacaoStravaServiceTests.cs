@@ -50,6 +50,12 @@ public class IniciarAutorizacaoStravaServiceTests
 
         public Task<WearableTokenExchangeResult> ExchangeAuthorizationCodeAsync(string code, CancellationToken cancellationToken)
             => Task.FromResult(new WearableTokenExchangeResult("123", "access", "refresh", DateTime.UtcNow.AddHours(6), "activity:read"));
+
+        public Task<WearableTokenExchangeResult> RefreshAccessTokenAsync(string refreshToken, CancellationToken cancellationToken)
+            => Task.FromResult(new WearableTokenExchangeResult("123", "access", "refresh", DateTime.UtcNow.AddHours(6), "activity:read"));
+
+        public Task<WearableActivityDto> GetActivityAsync(string accessToken, string externalActivityId, CancellationToken cancellationToken)
+            => Task.FromResult(new WearableActivityDto(externalActivityId, "123", "Run", DateTime.UtcNow, 1000, 300, 320));
     }
 
     private sealed class WearableProviderRegistryFake : IWearableProviderRegistry

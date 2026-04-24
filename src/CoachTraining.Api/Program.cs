@@ -76,6 +76,8 @@ builder.Services.AddScoped<ResolverPaginaPublicaIntegracaoService>();
 builder.Services.AddScoped<StravaOAuthStateService>();
 builder.Services.AddScoped<IniciarAutorizacaoStravaService>();
 builder.Services.AddScoped<ConcluirAutorizacaoStravaService>();
+builder.Services.AddScoped<ReceberWebhookStravaService>();
+builder.Services.AddScoped<ProcessarEventoStravaService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
